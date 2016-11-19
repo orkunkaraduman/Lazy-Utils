@@ -1,11 +1,16 @@
-package MyPerl::Utils;
-
+package okPerl::Utils;
 use strict;
 use warnings;
-no warnings qw(qw);
+no warnings qw(qw utf8);
 use v5.10;
-use Exporter qw(import);
+use utf8;
 
+
+BEGIN {
+	require Exporter;
+	our @ISA		= qw(Exporter);
+	our @EXPORT		= qw(ltrim rtrim trim file_get_contents);
+}
 
 sub ltrim
 {
@@ -42,8 +47,4 @@ sub file_get_contents
 	return $document;
 }
 
-
-our @EXPORT_OK = qw(ltrim rtrim trim file_get_contents);
-our @EXPORT = @EXPORT_OK;
-
-return 1;
+1;
