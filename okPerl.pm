@@ -1,4 +1,4 @@
-package okPerl::Utils;
+package okPerl;
 use strict;
 use warnings;
 no warnings qw(qw utf8);
