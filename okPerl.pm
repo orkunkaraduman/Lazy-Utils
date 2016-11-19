@@ -12,6 +12,7 @@ BEGIN {
 	our @EXPORT		= qw(ltrim rtrim trim file_get_contents);
 }
 
+
 sub ltrim
 {
 	my $s = shift;
