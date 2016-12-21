@@ -32,7 +32,7 @@ BEGIN
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(trim ltrim rtrim file_get_contents shellmeta _system);
+	our @EXPORT      = qw(trim ltrim rtrim file_get_contents shellmeta _system bashReadLine);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
@@ -199,6 +199,30 @@ sub _system
 		return 511;
 	}
 	return $? >> 8;
+}
+
+=head3 bashReadLine
+
+reads a line using bash
+
+=over
+
+bashReadLine($prompt)
+
+B<$prompt:> prompt
+
+B<return value:> line
+
+=back
+
+=cut
+sub bashReadLine
+{
+	my ($prompt) = @_;
+	$prompt = shellmeta(shellmeta($prompt));
+	my $cmd = '/bin/bash -c "read -p \"'.$prompt.'\" -r -e && echo -n \"\$REPLY\""';
+	$_ = `$cmd`;
+	return (not $?)? $_: undef;
 }
 
 

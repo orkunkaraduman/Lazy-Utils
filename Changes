@@ -1,6 +1,7 @@
 1.02	2016-12-21
 		- Fix for shellmeta
 		- Added _system function
+		- Added bashReadLine function
 
 1.01	2016-12-21
 		- Package name changed to Lazy::Utils
