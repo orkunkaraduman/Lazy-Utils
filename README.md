@@ -4,7 +4,7 @@ Lazy::Utils - Utilities for lazy
 
 # VERSION
 
-version 1.01
+version 1.02
 
 # SYNOPSIS
 
@@ -61,6 +61,42 @@ escape metacharacters for double-quoted shell string
 > **$s:** double-quoted shell string
 >
 > **return value:** escaped string
+
+### \_system
+
+executes a system command like Perl system call
+
+> \_system($cmd, @argv)
+>
+> **$cmd:** command
+>
+> **@argv:** command line arguments
+>
+> **return value:** exit code of command. 511 if fatal error occurs
+>
+> **returned $?:** return code of wait call, like Perl system call
+>
+> **returned $!:** system error message, like Perl system call
+
+### bashReadLine
+
+reads a line using bash
+
+> bashReadLine($prompt)
+>
+> **$prompt:** prompt
+>
+> **return value:** line
+
+### cmdArgs
+
+resolves command line arguments, eg: -opt1 --opt2 val2 command\_string parameter1 parameter2 ...
+
+> cmdArgs(@argv)
+>
+> **@argv:** command line arguments
+>
+> **return value:** { -opt1 =&gt; &#39;opt1&#39;, --opt2 =&gt; &#39;val2&#39;, command =&gt; &#39;command\_string&#39;, parameters =&gt; \[&#39;parameter1&#39;, &#39;parameter2&#39;, ...\] }
 
 # INSTALLATION
 
