@@ -219,6 +219,11 @@ B<return value:> line
 sub bashReadLine
 {
 	my ($prompt) = @_;
+	unless ( -t *STDIN ) {
+		my $line = <STDIN>;
+		chomp $line if defined $line;
+		return $line;
+	}
 	$prompt = shellmeta(shellmeta($prompt));
 	my $cmd = '/bin/bash -c "read -p \"'.$prompt.'\" -r -e && echo -n \"\$REPLY\""';
 	$_ = `$cmd`;
