@@ -1,7 +1,7 @@
 #! /usr/bin/perl
 =head1 NAME
 
-readme-gen.pl - README and MANIFEST generator
+dist.pl - distribution generator
 
 =head1 VERSION
 
@@ -9,13 +9,13 @@ version not defined
 
 =head1 SYNOPSIS
 
-README and MANIFEST generator
+distribution generator
 
 =cut
 use strict;
 use warnings;
 no warnings qw(qw utf8);
-use v5.10;
+use v5.14;
 use utf8;
 use open qw(:std :locale);
 use Config;
@@ -23,14 +23,16 @@ use FindBin;
 use Cwd;
 
 
+my $module = "Lazy::Utils";
+my $modulePath = "lib/" . $module =~ s/\:\:/\//gr . ".pm";
 my $base = "${FindBin::Bin}/..";
 cwd($base);
 
-
-system('pod2markdown --html-encode-chars 1 lib/Lazy/Utils.pm > README.md');
-system('pod2text lib/Lazy/Utils.pm > README');
-system('git ls-files | grep -v "^\.gitignore" > MANIFEST');
-
+system("perl Makefile.PL");
+system("pod2markdown --html-encode-chars 1 $modulePath > README.md");
+system("pod2text $modulePath > README");
+system("make manifest");
+system("make dist");
 
 exit 0;
 __END__

@@ -5,7 +5,7 @@ Lazy::Utils - Utilities for lazy
 
 =head1 VERSION
 
-version 1.01
+version 1.02
 
 =head1 SYNOPSIS
 
@@ -28,11 +28,11 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.01';
+	our $VERSION     = '1.02';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(trim ltrim rtrim file_get_contents shellmeta);
+	our @EXPORT      = qw(trim ltrim rtrim file_get_contents shellmeta _system bashReadLine cmdArgs);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
@@ -156,8 +156,132 @@ sub shellmeta
 {
 	my ($s) = @_;
 	return unless defined $s;
-	$s =~ s/(\\|\")/\\$1/g;
+	$s =~ s/(\\|\"|\$)/\\$1/g;
 	return $s;
+}
+
+=head3 _system
+
+executes a system command like Perl system call
+
+=over
+
+_system($cmd, @argv)
+
+B<$cmd:> command
+
+B<@argv:> command line arguments
+
+B<return value:> exit code of command. 511 if fatal error occurs
+
+B<returned $?:> return code of wait call, like Perl system call
+
+B<returned $!:> system error message, like Perl system call
+
+=back
+
+=cut
+sub _system
+{
+	my $pid;
+	if (not defined($pid = fork))
+	{
+		return 511;
+	}
+	if (not $pid)
+	{
+		no warnings FATAL => 'exec';
+		exec(@_);
+		exit 511;
+	}
+	if (waitpid($pid, 0) <= 0)
+	{
+		return 511;
+	}
+	return $? >> 8;
+}
+
+=head3 bashReadLine
+
+reads a line using bash
+
+=over
+
+bashReadLine($prompt)
+
+B<$prompt:> prompt
+
+B<return value:> line
+
+=back
+
+=cut
+sub bashReadLine
+{
+	my ($prompt) = @_;
+	unless ( -t *STDIN ) {
+		my $line = <STDIN>;
+		chomp $line if defined $line;
+		return $line;
+	}
+	$prompt = shellmeta(shellmeta($prompt));
+	my $cmd = '/bin/bash -c "read -p \"'.$prompt.'\" -r -e && echo -n \"\$REPLY\""';
+	$_ = `$cmd`;
+	return (not $?)? $_: undef;
+}
+
+=head3 cmdArgs
+
+resolves command line arguments, eg: -opt1 --opt2 val2 command_string parameter1 parameter2 ...
+
+=over
+
+cmdArgs(@argv)
+
+B<@argv:> command line arguments
+
+B<return value:> { -opt1 => 'opt1', --opt2 => 'val2', command => 'command_string', parameters => ['parameter1', 'parameter2', ...] }
+
+=back
+
+=cut
+sub cmdArgs
+{
+	my @argv = @_;
+	my %result;
+	$result{command} = undef;
+	$result{parameters} = [];
+	while (@argv)
+	{
+		my $argv = shift @argv;
+
+		if (@{$result{parameters}})
+		{
+			push @{$result{parameters}}, $argv;
+			next;
+		}
+
+		if (substr($argv, 0, 2) eq '--')
+		{
+			$result{$argv} = shift @argv;
+			next;
+		}
+
+		if (substr($argv, 0, 1) eq '-')
+		{
+			$result{$argv} = substr($argv, 1);
+			next;
+		}
+
+		if (defined $result{command})
+		{
+			push @{$result{parameters}}, $argv;
+			next;
+		}
+
+		$result{command} = $argv;
+	}
+	return \%result;
 }
 
 

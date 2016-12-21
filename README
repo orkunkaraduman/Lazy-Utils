@@ -2,7 +2,7 @@ NAME
     Lazy::Utils - Utilities for lazy
 
 VERSION
-    version 1.01
+    version 1.02
 
 SYNOPSIS
     Utilities for lazy
@@ -52,6 +52,41 @@ SYNOPSIS
         $s: double-quoted shell string
 
         return value: escaped string
+
+   _system
+    executes a system command like Perl system call
+
+        _system($cmd, @argv)
+
+        $cmd: command
+
+        @argv: command line arguments
+
+        return value: exit code of command. 511 if fatal error occurs
+
+        returned $?: return code of wait call, like Perl system call
+
+        returned $!: system error message, like Perl system call
+
+   bashReadLine
+    reads a line using bash
+
+        bashReadLine($prompt)
+
+        $prompt: prompt
+
+        return value: line
+
+   cmdArgs
+    resolves command line arguments, eg: -opt1 --opt2 val2 command_string
+    parameter1 parameter2 ...
+
+        cmdArgs(@argv)
+
+        @argv: command line arguments
+
+        return value: { -opt1 => 'opt1', --opt2 => 'val2', command =>
+        'command_string', parameters => ['parameter1', 'parameter2', ...] }
 
 INSTALLATION
     To install this module type the following
