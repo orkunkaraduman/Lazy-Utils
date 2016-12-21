@@ -1,15 +1,15 @@
-package OK::Utils;
+package Lazy::Utils;
 =head1 NAME
 
-OK::Utils - Orkun Karaduman's utilities
+Lazy::Utils - Utilities for lazy
 
 =head1 VERSION
 
-version 1.01_01
+version 1.01
 
 =head1 SYNOPSIS
 
-Orkun Karaduman's utilities
+Utilities for lazy
 
 =head1 INSTALLATION
 
@@ -22,7 +22,31 @@ To install this module type the following
 
 from CPAN
 
-	cpan -i OK::Utils
+	cpan -i Lazy::Utils
+
+=head1 DEPENDENCIES
+
+This module requires these other modules and libraries:
+
+=over
+
+=item *
+
+Switch
+
+=item *
+
+FindBin
+
+=item *
+
+Cwd
+
+=item *
+
+File::Basename
+
+=back
 
 =cut
 use strict;
@@ -30,13 +54,18 @@ use warnings;
 no warnings qw(qw utf8);
 use v5.14;
 use utf8;
+use Config;
+use Switch;
+use FindBin;
+use Cwd;
+use File::Basename;
 
 
 BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.01_01';
+	our $VERSION     = '1.01';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -84,6 +113,12 @@ sub file_get_contents
 
 1;
 __END__
+=head1 REPOSITORY
+
+B<GitHub> L<https://github.com/orkunkaraduman/Lazy-Utils>
+
+B<CPAN> L<https://metacpan.org/release/Lazy-Utils>
+
 =head1 AUTHOR
 
 Orkun Karaduman <orkunkaraduman@gmail.com>

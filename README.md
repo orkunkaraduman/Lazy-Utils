@@ -1,14 +1,14 @@
 # NAME
 
-OK::Utils - Orkun Karaduman&#39;s utilities
+Lazy::Utils - Utilities for lazy
 
 # VERSION
 
-version 1.01\_01
+version 1.01
 
 # SYNOPSIS
 
-Orkun Karaduman&#39;s utilities
+Utilities for lazy
 
 # INSTALLATION
 
@@ -21,7 +21,22 @@ To install this module type the following
 
 from CPAN
 
-        cpan -i OK::Utils
+        cpan -i Lazy::Utils
+
+# DEPENDENCIES
+
+This module requires these other modules and libraries:
+
+- Switch
+- FindBin
+- Cwd
+- File::Basename
+
+# REPOSITORY
+
+**GitHub** [https://github.com/orkunkaraduman/Lazy-Utils](https://github.com/orkunkaraduman/Lazy-Utils)
+
+**CPAN** [https://metacpan.org/release/Lazy-Utils](https://metacpan.org/release/Lazy-Utils)
 
 # AUTHOR
 

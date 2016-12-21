@@ -6,5 +6,5 @@ use Test::More tests => 1;
 
 BEGIN
 {
-	use_ok('OK::Utils');
+	use_ok('Lazy::Utils');
 }
