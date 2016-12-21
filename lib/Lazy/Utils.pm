@@ -11,6 +11,158 @@ version 1.01
 
 Utilities for lazy
 
+=cut
+use strict;
+use warnings;
+no warnings qw(qw utf8);
+use v5.10;
+use utf8;
+use Config;
+use Switch;
+use FindBin;
+use Cwd;
+use File::Basename;
+
+
+BEGIN
+{
+	require Exporter;
+	# set the version for version checking
+	our $VERSION     = '1.01';
+	# Inherit from Exporter to export functions and variables
+	our @ISA         = qw(Exporter);
+	# Functions and variables which are exported by default
+	our @EXPORT      = qw(trim ltrim rtrim file_get_contents shellmeta);
+	# Functions and variables which can be optionally exported
+	our @EXPORT_OK   = qw();
+}
+
+
+=head2 Methods
+
+=cut
+
+=head3 trim
+
+trims given string
+
+=over
+
+trim($str)
+
+B<$str:> string will be trimed
+
+B<return value:> trimed string
+
+=back
+
+=cut
+sub trim
+{
+	my ($s) = @_;
+	$s =~ s/^\s+|\s+$//g;
+	return $s
+}
+
+=head3 ltrim
+
+trims left given string
+
+=over
+
+ltrim($str)
+
+B<$str:> string will be trimed
+
+B<return value:> trimed string
+
+=back
+
+=cut
+sub ltrim
+{
+	my ($s) = @_;
+	$s =~ s/^\s+//;
+	return $s
+}
+
+=head3 rtrim
+
+trims right given string
+
+=over
+
+rtrim($str)
+
+B<$str:> string will be trimed
+
+B<return value:> trimed string
+
+=back
+
+=cut
+sub rtrim
+{
+	my ($s) = @_;
+	$s =~ s/\s+$//;
+	return $s
+}
+
+=head3 file_get_contents
+
+get all contents of file, by string type
+
+=over
+
+file_get_contents($path)
+
+B<$path:> path of file
+
+B<return value:> file contents by string type
+
+=back
+
+=cut
+sub file_get_contents
+{
+	my ($path) = @_;
+	my $document = do
+	{
+		local $/ = undef;
+		open my $fh, "<", $path or return;
+		my $result = <$fh>;
+		close $fh;
+		$result;
+	};
+	return $document;
+}
+
+=head3 shellmeta
+
+escape metacharacters for double-quoted shell string
+
+=over
+
+shellmeta($s)
+
+B<$s:> double-quoted shell string
+
+B<return value:> escaped string
+
+=back
+
+=cut
+sub shellmeta
+{
+	my ($s) = @_;
+	return unless defined $s;
+	$s =~ s/\\|\"/\\$1/;
+	return $s;
+}
+
+
+1;
+__END__
 =head1 INSTALLATION
 
 To install this module type the following
@@ -48,80 +200,6 @@ File::Basename
 
 =back
 
-=cut
-use strict;
-use warnings;
-no warnings qw(qw utf8);
-use v5.10;
-use utf8;
-use Config;
-use Switch;
-use FindBin;
-use Cwd;
-use File::Basename;
-
-
-BEGIN
-{
-	require Exporter;
-	# set the version for version checking
-	our $VERSION     = '1.01';
-	# Inherit from Exporter to export functions and variables
-	our @ISA         = qw(Exporter);
-	# Functions and variables which are exported by default
-	our @EXPORT      = qw(trim ltrim rtrim file_get_contents shellmeta);
-	# Functions and variables which can be optionally exported
-	our @EXPORT_OK   = qw();
-}
-
-
-sub trim
-{
-	my ($s) = @_;
-	$s =~ s/^\s+|\s+$//g;
-	return $s
-}
-
-sub ltrim
-{
-	my ($s) = @_;
-	$s =~ s/^\s+//;
-	return $s
-}
-
-sub rtrim
-{
-	my ($s) = @_;
-	$s =~ s/\s+$//;
-	return $s
-}
-
-sub file_get_contents
-{
-	my ($file) = @_;
-	my $document = do
-	{
-		local $/ = undef;
-		open my $fh, "<", $file or return;
-		my $result = <$fh>;
-		close $fh;
-		$result;
-	};
-	return $document;
-}
-
-sub shellmeta
-{
-	my ($s) = @_;
-	return unless defined $s;
-	$s =~ s/\\/\\\\/;
-	$s =~ s/\"/\\\"/;
-	return $s;
-}
-
-
-1;
-__END__
 =head1 REPOSITORY
 
 B<GitHub> L<https://github.com/orkunkaraduman/Lazy-Utils>

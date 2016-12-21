@@ -10,6 +10,58 @@ version 1.01
 
 Utilities for lazy
 
+## Methods
+
+### trim
+
+trims given string
+
+> trim($str)
+>
+> **$str:** string will be trimed
+>
+> **return value:** trimed string
+
+### ltrim
+
+trims left given string
+
+> ltrim($str)
+>
+> **$str:** string will be trimed
+>
+> **return value:** trimed string
+
+### rtrim
+
+trims right given string
+
+> rtrim($str)
+>
+> **$str:** string will be trimed
+>
+> **return value:** trimed string
+
+### file\_get\_contents
+
+get all contents of file, by string type
+
+> file\_get\_contents($path)
+>
+> **$path:** path of file
+>
+> **return value:** file contents by string type
+
+### shellmeta
+
+escape metacharacters for double-quoted shell string
+
+> shellmeta($s)
+>
+> **$s:** double-quoted shell string
+>
+> **return value:** escaped string
+
 # INSTALLATION
 
 To install this module type the following
