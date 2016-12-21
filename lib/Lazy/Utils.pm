@@ -32,7 +32,7 @@ BEGIN
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(trim ltrim rtrim file_get_contents shellmeta _system bashReadLine);
+	our @EXPORT      = qw(trim ltrim rtrim file_get_contents shellmeta _system bashReadLine cmdArgs);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
@@ -166,11 +166,11 @@ executes a system command like Perl system call
 
 =over
 
-_system($cmd, @args)
+_system($cmd, @argv)
 
 B<$cmd:> command
 
-B<@args:> command line arguments
+B<@argv:> command line arguments
 
 B<return value:> exit code of command. 511 if fatal error occurs
 
@@ -228,6 +228,60 @@ sub bashReadLine
 	my $cmd = '/bin/bash -c "read -p \"'.$prompt.'\" -r -e && echo -n \"\$REPLY\""';
 	$_ = `$cmd`;
 	return (not $?)? $_: undef;
+}
+
+=head3 cmdArgs
+
+resolves command line arguments, eg: -opt1 --opt2 val2 command_string parameter1 parameter2 ...
+
+=over
+
+cmdArgs(@argv)
+
+B<@argv:> command line arguments
+
+B<return value:> { -opt1 => 'opt1', --opt2 => 'val2', command => 'command_string', parameters => ['parameter1', 'parameter2', ...] }
+
+=back
+
+=cut
+sub cmdArgs
+{
+	my @argv = @_;
+	my %result;
+	$result{command} = undef;
+	$result{parameters} = [];
+	while (@argv)
+	{
+		my $argv = shift @argv;
+
+		if (@{$result{parameters}})
+		{
+			push @{$result{parameters}}, $argv;
+			next;
+		}
+
+		if (substr($argv, 0, 2) eq '--')
+		{
+			$result{$argv} = shift @argv;
+			next;
+		}
+
+		if (substr($argv, 0, 1) eq '-')
+		{
+			$result{$argv} = substr($argv, 1);
+			next;
+		}
+
+		if (defined $result{command})
+		{
+			push @{$result{parameters}}, $argv;
+			next;
+		}
+
+		$result{command} = $argv;
+	}
+	return \%result;
 }
 
 
