@@ -156,7 +156,7 @@ sub shellmeta
 {
 	my ($s) = @_;
 	return unless defined $s;
-	$s =~ s/\\|\"/\\$1/;
+	$s =~ s/(\\|\")/\\$1/;
 	return $s;
 }
 
