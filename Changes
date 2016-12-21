@@ -3,6 +3,7 @@
 		- Added _system function
 		- Added bashReadLine function
 		- Added cmdArgs function
+		- Added distribution generator
 
 1.01	2016-12-21
 		- Package name changed to Lazy::Utils
