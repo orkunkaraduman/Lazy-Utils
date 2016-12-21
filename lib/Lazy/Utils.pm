@@ -1,16 +1,168 @@
-package OK::Utils;
+package Lazy::Utils;
 =head1 NAME
 
-OK::Utils - Orkun Karaduman's utilities
+Lazy::Utils - Utilities for lazy
 
 =head1 VERSION
 
-version 1.01_01
+version 1.01
 
 =head1 SYNOPSIS
 
-Orkun Karaduman's utilities
+Utilities for lazy
 
+=cut
+use strict;
+use warnings;
+no warnings qw(qw utf8);
+use v5.10;
+use utf8;
+use Config;
+use Switch;
+use FindBin;
+use Cwd;
+use File::Basename;
+
+
+BEGIN
+{
+	require Exporter;
+	# set the version for version checking
+	our $VERSION     = '1.01';
+	# Inherit from Exporter to export functions and variables
+	our @ISA         = qw(Exporter);
+	# Functions and variables which are exported by default
+	our @EXPORT      = qw(trim ltrim rtrim file_get_contents shellmeta);
+	# Functions and variables which can be optionally exported
+	our @EXPORT_OK   = qw();
+}
+
+
+=head2 Methods
+
+=cut
+
+=head3 trim
+
+trims given string
+
+=over
+
+trim($str)
+
+B<$str:> string will be trimed
+
+B<return value:> trimed string
+
+=back
+
+=cut
+sub trim
+{
+	my ($s) = @_;
+	$s =~ s/^\s+|\s+$//g;
+	return $s
+}
+
+=head3 ltrim
+
+trims left given string
+
+=over
+
+ltrim($str)
+
+B<$str:> string will be trimed
+
+B<return value:> trimed string
+
+=back
+
+=cut
+sub ltrim
+{
+	my ($s) = @_;
+	$s =~ s/^\s+//;
+	return $s
+}
+
+=head3 rtrim
+
+trims right given string
+
+=over
+
+rtrim($str)
+
+B<$str:> string will be trimed
+
+B<return value:> trimed string
+
+=back
+
+=cut
+sub rtrim
+{
+	my ($s) = @_;
+	$s =~ s/\s+$//;
+	return $s
+}
+
+=head3 file_get_contents
+
+get all contents of file, by string type
+
+=over
+
+file_get_contents($path)
+
+B<$path:> path of file
+
+B<return value:> file contents by string type
+
+=back
+
+=cut
+sub file_get_contents
+{
+	my ($path) = @_;
+	my $document = do
+	{
+		local $/ = undef;
+		open my $fh, "<", $path or return;
+		my $result = <$fh>;
+		close $fh;
+		$result;
+	};
+	return $document;
+}
+
+=head3 shellmeta
+
+escape metacharacters for double-quoted shell string
+
+=over
+
+shellmeta($s)
+
+B<$s:> double-quoted shell string
+
+B<return value:> escaped string
+
+=back
+
+=cut
+sub shellmeta
+{
+	my ($s) = @_;
+	return unless defined $s;
+	$s =~ s/(\\|\")/\\$1/g;
+	return $s;
+}
+
+
+1;
+__END__
 =head1 INSTALLATION
 
 To install this module type the following
@@ -22,68 +174,38 @@ To install this module type the following
 
 from CPAN
 
-	cpan -i OK::Utils
+	cpan -i Lazy::Utils
 
-=cut
-use strict;
-use warnings;
-no warnings qw(qw utf8);
-use v5.14;
-use utf8;
+=head1 DEPENDENCIES
 
+This module requires these other modules and libraries:
 
-BEGIN
-{
-	require Exporter;
-	# set the version for version checking
-	our $VERSION     = '1.01_01';
-	# Inherit from Exporter to export functions and variables
-	our @ISA         = qw(Exporter);
-	# Functions and variables which are exported by default
-	our @EXPORT      = qw();
-	# Functions and variables which can be optionally exported
-	our @EXPORT_OK   = qw(str_trim str_ltrim str_rtrim file_get_contents);
-}
+=over
 
+=item *
 
-sub str_trim
-{
-	my $s = shift;
-	$s =~ s/^\s+|\s+$//g;
-	return $s
-}
+Switch
 
-sub str_ltrim
-{
-	my $s = shift;
-	$s =~ s/^\s+//;
-	return $s
-}
+=item *
 
-sub str_rtrim
-{
-	my $s = shift;
-	$s =~ s/\s+$//;
-	return $s
-}
+FindBin
 
-sub file_get_contents
-{
-	my $file = $_[0];
-	my $document = do
-	{
-		local $/ = undef;
-		open my $fh, "<", $file or return;
-		my $result = <$fh>;
-		close $fh;
-		$result;
-	};
-	return $document;
-}
+=item *
 
+Cwd
 
-1;
-__END__
+=item *
+
+File::Basename
+
+=back
+
+=head1 REPOSITORY
+
+B<GitHub> L<https://github.com/orkunkaraduman/Lazy-Utils>
+
+B<CPAN> L<https://metacpan.org/release/Lazy-Utils>
+
 =head1 AUTHOR
 
 Orkun Karaduman <orkunkaraduman@gmail.com>

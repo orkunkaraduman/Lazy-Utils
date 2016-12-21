@@ -4,5 +4,7 @@ MANIFEST
 Makefile.PL
 README
 README.md
-lib/OK/Utils.pm
-t/OK-Utils.t
+lib/Lazy/Utils.pm
+scripts/readme-gen.pl
+scripts/test.pl
+t/Lazy-Utils.t

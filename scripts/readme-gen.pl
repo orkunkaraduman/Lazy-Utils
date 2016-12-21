@@ -15,7 +15,7 @@ README and MANIFEST generator
 use strict;
 use warnings;
 no warnings qw(qw utf8);
-use v5.14;
+use v5.10;
 use utf8;
 use open qw(:std :locale);
 use Config;
