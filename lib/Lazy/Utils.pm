@@ -5,7 +5,7 @@ Lazy::Utils - Utilities for lazy
 
 =head1 VERSION
 
-version 1.02
+version 1.03
 
 =head1 SYNOPSIS
 
@@ -28,7 +28,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.02';
+	our $VERSION     = '1.03';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -110,7 +110,7 @@ sub rtrim
 
 =head3 file_get_contents
 
-get all contents of file, by string type
+gets all contents of file, by string type
 
 =over
 
@@ -139,7 +139,7 @@ sub file_get_contents
 
 =head3 shellmeta
 
-escape metacharacters for double-quoted shell string
+escapes metacharacters for double-quoted shell string
 
 =over
 
