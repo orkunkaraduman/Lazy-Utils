@@ -52,7 +52,7 @@ File::Basename
 use strict;
 use warnings;
 no warnings qw(qw utf8);
-use v5.14;
+use v5.10;
 use utf8;
 use Config;
 use Switch;
@@ -69,7 +69,7 @@ BEGIN
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(trim ltrim rtrim file_get_contents);
+	our @EXPORT      = qw(trim ltrim rtrim file_get_contents shellmeta);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
@@ -108,6 +108,15 @@ sub file_get_contents
 		$result;
 	};
 	return $document;
+}
+
+sub shellmeta
+{
+	my ($s) = @_;
+	return unless defined $s;
+	$s =~ s/\\/\\\\/;
+	$s =~ s/\"/\\\"/;
+	return $s;
 }
 
 

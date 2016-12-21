@@ -6,7 +6,7 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
 	NAME				=> 'Lazy::Utils',
 	VERSION_FROM		=> 'lib/Lazy/Utils.pm',
-	MIN_PERL_VERSION	=> '5.014',
+	MIN_PERL_VERSION	=> '5.010',
 	PREREQ_PM			=> {
 		'Switch' => 0,
 		'FindBin' => 0,
