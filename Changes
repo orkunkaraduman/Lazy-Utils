@@ -1,12 +1,13 @@
 1.02	2016-12-21
-		- shellmeta fix
+		- Fix for shellmeta
+		- Added _system function
 
 1.01	2016-12-21
 		- Package name changed to Lazy::Utils
 		- Lazy::Utils init
 		- Removed str_ prefix for trim functions
-		- Added shellmeta method
-		- Export all functions
+		- Added shellmeta function
+		- Exported all functions
 
 1.01_01	2016-12-16
 		- OK::Utils init

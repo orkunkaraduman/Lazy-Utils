@@ -32,7 +32,7 @@ BEGIN
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(trim ltrim rtrim file_get_contents shellmeta);
+	our @EXPORT      = qw(trim ltrim rtrim file_get_contents shellmeta _system);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
@@ -158,6 +158,47 @@ sub shellmeta
 	return unless defined $s;
 	$s =~ s/(\\|\"|\$)/\\$1/g;
 	return $s;
+}
+
+=head3 _system
+
+executes a system command like Perl system call
+
+=over
+
+_system($cmd, @args)
+
+B<$cmd:> command
+
+B<@args:> command line arguments
+
+B<return value:> exit code of command. 511 if fatal error occurs
+
+B<returned $?:> return code of wait call, like Perl system call
+
+B<returned $!:> system error message, like Perl system call
+
+=back
+
+=cut
+sub _system
+{
+	my $pid;
+	if (not defined($pid = fork))
+	{
+		return 511;
+	}
+	if (not $pid)
+	{
+		no warnings FATAL => 'exec';
+		exec(@_);
+		exit 511;
+	}
+	if (waitpid($pid, 0) <= 0)
+	{
+		return 511;
+	}
+	return $? >> 8;
 }
 
 
