@@ -69,36 +69,36 @@ BEGIN
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw();
+	our @EXPORT      = qw(trim ltrim rtrim file_get_contents);
 	# Functions and variables which can be optionally exported
-	our @EXPORT_OK   = qw(str_trim str_ltrim str_rtrim file_get_contents);
+	our @EXPORT_OK   = qw();
 }
 
 
-sub str_trim
+sub trim
 {
-	my $s = shift;
+	my ($s) = @_;
 	$s =~ s/^\s+|\s+$//g;
 	return $s
 }
 
-sub str_ltrim
+sub ltrim
 {
-	my $s = shift;
+	my ($s) = @_;
 	$s =~ s/^\s+//;
 	return $s
 }
 
-sub str_rtrim
+sub rtrim
 {
-	my $s = shift;
+	my ($s) = @_;
 	$s =~ s/\s+$//;
 	return $s
 }
 
 sub file_get_contents
 {
-	my $file = $_[0];
+	my ($file) = @_;
 	my $document = do
 	{
 		local $/ = undef;
