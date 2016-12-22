@@ -1,3 +1,6 @@
+1.03	2016-12-22
+		- Improved documentation
+
 1.02	2016-12-21
 		- Fix for shellmeta
 		- Added _system function
@@ -11,6 +14,3 @@
 		- Removed str_ prefix for trim functions
 		- Added shellmeta function
 		- Exported all functions
-
-1.01_01	2016-12-16
-		- OK::Utils init

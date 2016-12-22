@@ -31,7 +31,7 @@ cwd($base);
 system("perl Makefile.PL");
 system("pod2markdown --html-encode-chars 1 $modulePath > README.md");
 system("pod2text $modulePath > README");
-system("make manifest");
+system("rm MANIFEST; make manifest");
 system("make dist");
 
 exit 0;

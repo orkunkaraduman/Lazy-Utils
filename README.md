@@ -4,7 +4,7 @@ Lazy::Utils - Utilities for lazy
 
 # VERSION
 
-version 1.02
+version 1.03
 
 # SYNOPSIS
 
@@ -12,91 +12,75 @@ Utilities for lazy
 
 ## Methods
 
-### trim
+### trim($str)
 
 trims given string
 
-> trim($str)
->
-> **$str:** string will be trimed
->
-> **return value:** trimed string
+$str: _string will be trimed_
 
-### ltrim
+return value: _trimed string_
+
+### ltrim($str)
 
 trims left given string
 
-> ltrim($str)
->
-> **$str:** string will be trimed
->
-> **return value:** trimed string
+$str: _string will be trimed_
 
-### rtrim
+return value: _trimed string_
+
+### rtrim($str)
 
 trims right given string
 
-> rtrim($str)
->
-> **$str:** string will be trimed
->
-> **return value:** trimed string
+$str: _string will be trimed_
 
-### file\_get\_contents
+return value: _trimed string_
 
-get all contents of file, by string type
+### file\_get\_contents($path)
 
-> file\_get\_contents($path)
->
-> **$path:** path of file
->
-> **return value:** file contents by string type
+gets all contents of file in string type
 
-### shellmeta
+$path: _path of file_
 
-escape metacharacters for double-quoted shell string
+return value: _file contents in string type_
 
-> shellmeta($s)
->
-> **$s:** double-quoted shell string
->
-> **return value:** escaped string
+### shellmeta($s)
 
-### \_system
+escapes metacharacters of double-quoted shell string
+
+$s: _double-quoted shell string_
+
+return value: _escaped string_
+
+### \_system($cmd, @argv)
 
 executes a system command like Perl system call
 
-> \_system($cmd, @argv)
->
-> **$cmd:** command
->
-> **@argv:** command line arguments
->
-> **return value:** exit code of command. 511 if fatal error occurs
->
-> **returned $?:** return code of wait call, like Perl system call
->
-> **returned $!:** system error message, like Perl system call
+$cmd: _command_
 
-### bashReadLine
+@argv: _command line arguments_
+
+return value: _exit code of command. 511 if fatal error occurs_
+
+returned $?: _return code of wait call like on Perl system call_
+
+returned $!: _system error message like on Perl system call_
+
+### bashReadLine($prompt)
 
 reads a line using bash
 
-> bashReadLine($prompt)
->
-> **$prompt:** prompt
->
-> **return value:** line
+$prompt: _prompt_
 
-### cmdArgs
+return value: _line_
+
+### cmdArgs(@argv)
 
 resolves command line arguments, eg: -opt1 --opt2 val2 command\_string parameter1 parameter2 ...
 
-> cmdArgs(@argv)
->
-> **@argv:** command line arguments
->
-> **return value:** { -opt1 =&gt; &#39;opt1&#39;, --opt2 =&gt; &#39;val2&#39;, command =&gt; &#39;command\_string&#39;, parameters =&gt; \[&#39;parameter1&#39;, &#39;parameter2&#39;, ...\] }
+@argv: _command line arguments_
+
+return value: _{ -opt1 =&gt; &#39;opt1&#39;, --opt2 =&gt; &#39;val2&#39;, command =&gt; &#39;command\_string&#39;, parameters =&gt; \[&#39;parameter1&#39;, &#39;parameter2&#39;, ...\] }_
 
 # INSTALLATION
 
