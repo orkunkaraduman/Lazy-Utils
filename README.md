@@ -12,11 +12,9 @@ Utilities for lazy
 
 ## Methods
 
-### trim
+### trim($str)
 
 trims given string
-
-**trim($str)**
 
 $str: _string will be trimed_
 

@@ -8,10 +8,8 @@ SYNOPSIS
     Utilities for lazy
 
   Methods
-   trim
+   trim($str)
     trims given string
-
-    trim($str)
 
     $str: *string will be trimed*
 

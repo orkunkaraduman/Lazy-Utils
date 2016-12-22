@@ -42,11 +42,9 @@ BEGIN
 
 =cut
 
-=head3 trim
+=head3 trim($str)
 
 trims given string
-
-B<trim($str)>
 
 $str: I<string will be trimed>
 
