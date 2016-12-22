@@ -11,80 +11,66 @@ SYNOPSIS
    trim($str)
     trims given string
 
-    $str: string will be trimed
+    $str: *string will be trimed*
 
-    return value: trimed string
+    return value: *trimed string*
 
-   ltrim
+   ltrim($str)
     trims left given string
 
-        ltrim($str)
+    $str: *string will be trimed*
 
-        $str: string will be trimed
+    return value: *trimed string*
 
-        return value: trimed string
-
-   rtrim
+   rtrim($str)
     trims right given string
 
-        rtrim($str)
+    $str: *string will be trimed*
 
-        $str: string will be trimed
+    return value: *trimed string*
 
-        return value: trimed string
-
-   file_get_contents
+   file_get_contents($path)
     gets all contents of file, by string type
 
-        file_get_contents($path)
+    $path: *path of file*
 
-        $path: path of file
+    return value: *file contents by string type*
 
-        return value: file contents by string type
-
-   shellmeta
+   shellmeta($s)
     escapes metacharacters for double-quoted shell string
 
-        shellmeta($s)
+    $s: *double-quoted shell string*
 
-        $s: double-quoted shell string
+    return value: *escaped string*
 
-        return value: escaped string
-
-   _system
+   _system($cmd, @argv)
     executes a system command like Perl system call
 
-        _system($cmd, @argv)
+    $cmd: *command*
 
-        $cmd: command
+    @argv: *command line arguments*
 
-        @argv: command line arguments
+    return value: *exit code of command. 511 if fatal error occurs*
 
-        return value: exit code of command. 511 if fatal error occurs
+    returned $?: *return code of wait call, like Perl system call*
 
-        returned $?: return code of wait call, like Perl system call
+    returned $!: *system error message, like Perl system call*
 
-        returned $!: system error message, like Perl system call
-
-   bashReadLine
+   bashReadLine($prompt)
     reads a line using bash
 
-        bashReadLine($prompt)
+    $prompt: *prompt*
 
-        $prompt: prompt
+    return value: *line*
 
-        return value: line
-
-   cmdArgs
+   cmdArgs(@argv)
     resolves command line arguments, eg: -opt1 --opt2 val2 command_string
     parameter1 parameter2 ...
 
-        cmdArgs(@argv)
+    @argv: *command line arguments*
 
-        @argv: command line arguments
-
-        return value: { -opt1 => 'opt1', --opt2 => 'val2', command =>
-        'command_string', parameters => ['parameter1', 'parameter2', ...] }
+    return value: *{ -opt1 =* 'opt1', --opt2 => 'val2', command =>
+    'command_string', parameters => ['parameter1', 'parameter2', ...] }>
 
 INSTALLATION
     To install this module type the following

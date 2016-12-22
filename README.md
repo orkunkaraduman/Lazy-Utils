@@ -16,85 +16,71 @@ Utilities for lazy
 
 trims given string
 
-**$str:** string will be trimed
+$str: _string will be trimed_
 
-**return value:** trimed string
+return value: _trimed string_
 
-### ltrim
+### ltrim($str)
 
 trims left given string
 
-> ltrim($str)
->
-> **$str:** string will be trimed
->
-> **return value:** trimed string
+$str: _string will be trimed_
 
-### rtrim
+return value: _trimed string_
+
+### rtrim($str)
 
 trims right given string
 
-> rtrim($str)
->
-> **$str:** string will be trimed
->
-> **return value:** trimed string
+$str: _string will be trimed_
 
-### file\_get\_contents
+return value: _trimed string_
+
+### file\_get\_contents($path)
 
 gets all contents of file, by string type
 
-> file\_get\_contents($path)
->
-> **$path:** path of file
->
-> **return value:** file contents by string type
+$path: _path of file_
 
-### shellmeta
+return value: _file contents by string type_
+
+### shellmeta($s)
 
 escapes metacharacters for double-quoted shell string
 
-> shellmeta($s)
->
-> **$s:** double-quoted shell string
->
-> **return value:** escaped string
+$s: _double-quoted shell string_
 
-### \_system
+return value: _escaped string_
+
+### \_system($cmd, @argv)
 
 executes a system command like Perl system call
 
-> \_system($cmd, @argv)
->
-> **$cmd:** command
->
-> **@argv:** command line arguments
->
-> **return value:** exit code of command. 511 if fatal error occurs
->
-> **returned $?:** return code of wait call, like Perl system call
->
-> **returned $!:** system error message, like Perl system call
+$cmd: _command_
 
-### bashReadLine
+@argv: _command line arguments_
+
+return value: _exit code of command. 511 if fatal error occurs_
+
+returned $?: _return code of wait call, like Perl system call_
+
+returned $!: _system error message, like Perl system call_
+
+### bashReadLine($prompt)
 
 reads a line using bash
 
-> bashReadLine($prompt)
->
-> **$prompt:** prompt
->
-> **return value:** line
+$prompt: _prompt_
 
-### cmdArgs
+return value: _line_
+
+### cmdArgs(@argv)
 
 resolves command line arguments, eg: -opt1 --opt2 val2 command\_string parameter1 parameter2 ...
 
-> cmdArgs(@argv)
->
-> **@argv:** command line arguments
->
-> **return value:** { -opt1 =&gt; &#39;opt1&#39;, --opt2 =&gt; &#39;val2&#39;, command =&gt; &#39;command\_string&#39;, parameters =&gt; \[&#39;parameter1&#39;, &#39;parameter2&#39;, ...\] }
+@argv: _command line arguments_
+
+return value: _{ -opt1 =_ &#39;opt1&#39;, --opt2 =&gt; &#39;val2&#39;, command =&gt; &#39;command\_string&#39;, parameters =&gt; \[&#39;parameter1&#39;, &#39;parameter2&#39;, ...\] }&gt;
 
 # INSTALLATION
 
@@ -144,3 +130,11 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+
+# POD ERRORS
+
+Hey! **The above document had some coding errors, which are explained below:**
+
+- Around line 147:
+
+    &#x3d;back without =over

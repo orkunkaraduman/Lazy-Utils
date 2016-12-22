@@ -46,9 +46,9 @@ BEGIN
 
 trims given string
 
-B<$str:> string will be trimed
+$str: I<string will be trimed>
 
-B<return value:> trimed string
+return value: I<trimed string>
 
 =cut
 sub trim
@@ -58,19 +58,13 @@ sub trim
 	return $s
 }
 
-=head3 ltrim
+=head3 ltrim($str)
 
 trims left given string
 
-=over
+$str: I<string will be trimed>
 
-ltrim($str)
-
-B<$str:> string will be trimed
-
-B<return value:> trimed string
-
-=back
+return value: I<trimed string>
 
 =cut
 sub ltrim
@@ -80,19 +74,13 @@ sub ltrim
 	return $s
 }
 
-=head3 rtrim
+=head3 rtrim($str)
 
 trims right given string
 
-=over
+$str: I<string will be trimed>
 
-rtrim($str)
-
-B<$str:> string will be trimed
-
-B<return value:> trimed string
-
-=back
+return value: I<trimed string>
 
 =cut
 sub rtrim
@@ -102,19 +90,13 @@ sub rtrim
 	return $s
 }
 
-=head3 file_get_contents
+=head3 file_get_contents($path)
 
 gets all contents of file, by string type
 
-=over
+$path: I<path of file>
 
-file_get_contents($path)
-
-B<$path:> path of file
-
-B<return value:> file contents by string type
-
-=back
+return value: I<file contents by string type>
 
 =cut
 sub file_get_contents
@@ -131,19 +113,13 @@ sub file_get_contents
 	return $document;
 }
 
-=head3 shellmeta
+=head3 shellmeta($s)
 
 escapes metacharacters for double-quoted shell string
 
-=over
+$s: I<double-quoted shell string>
 
-shellmeta($s)
-
-B<$s:> double-quoted shell string
-
-B<return value:> escaped string
-
-=back
+return value: I<escaped string>
 
 =cut
 sub shellmeta
@@ -154,23 +130,19 @@ sub shellmeta
 	return $s;
 }
 
-=head3 _system
+=head3 _system($cmd, @argv)
 
 executes a system command like Perl system call
 
-=over
+$cmd: I<command>
 
-_system($cmd, @argv)
+@argv: I<command line arguments>
 
-B<$cmd:> command
+return value: I<exit code of command. 511 if fatal error occurs>
 
-B<@argv:> command line arguments
+returned $?: I<return code of wait call, like Perl system call>
 
-B<return value:> exit code of command. 511 if fatal error occurs
-
-B<returned $?:> return code of wait call, like Perl system call
-
-B<returned $!:> system error message, like Perl system call
+returned $!: I<system error message, like Perl system call>
 
 =back
 
@@ -195,19 +167,13 @@ sub _system
 	return $? >> 8;
 }
 
-=head3 bashReadLine
+=head3 bashReadLine($prompt)
 
 reads a line using bash
 
-=over
+$prompt: I<prompt>
 
-bashReadLine($prompt)
-
-B<$prompt:> prompt
-
-B<return value:> line
-
-=back
+return value: I<line>
 
 =cut
 sub bashReadLine
@@ -224,19 +190,13 @@ sub bashReadLine
 	return (not $?)? $_: undef;
 }
 
-=head3 cmdArgs
+=head3 cmdArgs(@argv)
 
 resolves command line arguments, eg: -opt1 --opt2 val2 command_string parameter1 parameter2 ...
 
-=over
+@argv: I<command line arguments>
 
-cmdArgs(@argv)
-
-B<@argv:> command line arguments
-
-B<return value:> { -opt1 => 'opt1', --opt2 => 'val2', command => 'command_string', parameters => ['parameter1', 'parameter2', ...] }
-
-=back
+return value: I<{ -opt1 => 'opt1', --opt2 => 'val2', command => 'command_string', parameters => ['parameter1', 'parameter2', ...] }>
 
 =cut
 sub cmdArgs
