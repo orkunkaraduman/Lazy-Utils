@@ -92,11 +92,11 @@ sub rtrim
 
 =head3 file_get_contents($path)
 
-gets all contents of file, by string type
+gets all contents of file in string type
 
 $path: I<path of file>
 
-return value: I<file contents by string type>
+return value: I<file contents in string type>
 
 =cut
 sub file_get_contents
@@ -115,7 +115,7 @@ sub file_get_contents
 
 =head3 shellmeta($s)
 
-escapes metacharacters for double-quoted shell string
+escapes metacharacters of double-quoted shell string
 
 $s: I<double-quoted shell string>
 
@@ -140,9 +140,9 @@ $cmd: I<command>
 
 return value: I<exit code of command. 511 if fatal error occurs>
 
-returned $?: I<return code of wait call, like Perl system call>
+returned $?: I<return code of wait call like on Perl system call>
 
-returned $!: I<system error message, like Perl system call>
+returned $!: I<system error message like on Perl system call>
 
 =back
 

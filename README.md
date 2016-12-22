@@ -38,15 +38,15 @@ return value: _trimed string_
 
 ### file\_get\_contents($path)
 
-gets all contents of file, by string type
+gets all contents of file in string type
 
 $path: _path of file_
 
-return value: _file contents by string type_
+return value: _file contents in string type_
 
 ### shellmeta($s)
 
-escapes metacharacters for double-quoted shell string
+escapes metacharacters of double-quoted shell string
 
 $s: _double-quoted shell string_
 
@@ -62,9 +62,9 @@ $cmd: _command_
 
 return value: _exit code of command. 511 if fatal error occurs_
 
-returned $?: _return code of wait call, like Perl system call_
+returned $?: _return code of wait call like on Perl system call_
 
-returned $!: _system error message, like Perl system call_
+returned $!: _system error message like on Perl system call_
 
 ### bashReadLine($prompt)
 
