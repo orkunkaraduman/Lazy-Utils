@@ -46,9 +46,9 @@ BEGIN
 
 trims given string
 
-$str: I<string will be trimed>
+B<$str:> string will be trimed
 
-return value: I<trimed string>
+B<return value:> trimed string
 
 =cut
 sub trim

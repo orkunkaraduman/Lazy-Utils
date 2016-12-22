@@ -16,9 +16,9 @@ Utilities for lazy
 
 trims given string
 
-$str: _string will be trimed_
+**$str:** string will be trimed
 
-return value: _trimed string_
+**return value:** trimed string
 
 ### ltrim
 

@@ -11,9 +11,9 @@ SYNOPSIS
    trim($str)
     trims given string
 
-    $str: *string will be trimed*
+    $str: string will be trimed
 
-    return value: *trimed string*
+    return value: trimed string
 
    ltrim
     trims left given string
