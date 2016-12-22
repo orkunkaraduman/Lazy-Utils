@@ -144,8 +144,6 @@ returned $?: I<return code of wait call like on Perl system call>
 
 returned $!: I<system error message like on Perl system call>
 
-=back
-
 =cut
 sub _system
 {
