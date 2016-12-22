@@ -194,7 +194,7 @@ resolves command line arguments, eg: -opt1 --opt2 val2 command_string parameter1
 
 @argv: I<command line arguments>
 
-return value: I<{ -opt1 =\> 'opt1', --opt2 =\> 'val2', command => 'command_string', parameters =\> ['parameter1', 'parameter2', ...] }>
+return value: I<{ -opt1 =E<gt> 'opt1', --opt2 =E<gt> 'val2', command =E<gt> 'command_string', parameters =E<gt> ['parameter1', 'parameter2', ...] }>
 
 =cut
 sub cmdArgs
