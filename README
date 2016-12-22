@@ -69,8 +69,8 @@ SYNOPSIS
 
     @argv: *command line arguments*
 
-    return value: *{ -opt1 =*> 'opt1', --opt2 =>> 'val2', command =>
-    'command_string', parameters =>> ['parameter1', 'parameter2', ...] }>
+    return value: *{ -opt1 =\* 'opt1', --opt2 =\> 'val2', command =>
+    'command_string', parameters =\> ['parameter1', 'parameter2', ...] }>
 
 INSTALLATION
     To install this module type the following
