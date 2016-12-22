@@ -80,7 +80,7 @@ resolves command line arguments, eg: -opt1 --opt2 val2 command\_string parameter
 
 @argv: _command line arguments_
 
-return value: _{ -opt1 =_ &#39;opt1&#39;, --opt2 =&gt; &#39;val2&#39;, command =&gt; &#39;command\_string&#39;, parameters =&gt; \[&#39;parameter1&#39;, &#39;parameter2&#39;, ...\] }&gt;
+return value: _{ -opt1 =_&gt; &#39;opt1&#39;, --opt2 =&gt;&gt; &#39;val2&#39;, command =&gt; &#39;command\_string&#39;, parameters =&gt;&gt; \[&#39;parameter1&#39;, &#39;parameter2&#39;, ...\] }&gt;
 
 # INSTALLATION
 
