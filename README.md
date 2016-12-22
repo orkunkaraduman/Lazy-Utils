@@ -4,7 +4,7 @@ Lazy::Utils - Utilities for lazy
 
 # VERSION
 
-version 1.02
+version 1.03
 
 # SYNOPSIS
 
@@ -16,11 +16,11 @@ Utilities for lazy
 
 trims given string
 
-> trim($str)
->
-> **$str:** string will be trimed
->
-> **return value:** trimed string
+**trim($str)**
+
+$str: _string will be trimed_
+
+return value: _trimed string_
 
 ### ltrim
 
@@ -44,7 +44,7 @@ trims right given string
 
 ### file\_get\_contents
 
-get all contents of file, by string type
+gets all contents of file, by string type
 
 > file\_get\_contents($path)
 >
@@ -54,7 +54,7 @@ get all contents of file, by string type
 
 ### shellmeta
 
-escape metacharacters for double-quoted shell string
+escapes metacharacters for double-quoted shell string
 
 > shellmeta($s)
 >

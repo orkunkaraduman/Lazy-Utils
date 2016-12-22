@@ -46,15 +46,11 @@ BEGIN
 
 trims given string
 
-=over
+B<trim($str)>
 
-trim($str)
+$str: I<string will be trimed>
 
-B<$str:> string will be trimed
-
-B<return value:> trimed string
-
-=back
+return value: I<trimed string>
 
 =cut
 sub trim

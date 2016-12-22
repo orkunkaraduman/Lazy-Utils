@@ -2,7 +2,7 @@ NAME
     Lazy::Utils - Utilities for lazy
 
 VERSION
-    version 1.02
+    version 1.03
 
 SYNOPSIS
     Utilities for lazy
@@ -11,11 +11,11 @@ SYNOPSIS
    trim
     trims given string
 
-        trim($str)
+    trim($str)
 
-        $str: string will be trimed
+    $str: *string will be trimed*
 
-        return value: trimed string
+    return value: *trimed string*
 
    ltrim
     trims left given string
@@ -36,7 +36,7 @@ SYNOPSIS
         return value: trimed string
 
    file_get_contents
-    get all contents of file, by string type
+    gets all contents of file, by string type
 
         file_get_contents($path)
 
@@ -45,7 +45,7 @@ SYNOPSIS
         return value: file contents by string type
 
    shellmeta
-    escape metacharacters for double-quoted shell string
+    escapes metacharacters for double-quoted shell string
 
         shellmeta($s)
 

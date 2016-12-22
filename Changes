@@ -1,4 +1,4 @@
-1.03	2016-12-21
+1.03	2016-12-22
 		-
 
 1.02	2016-12-21
@@ -14,6 +14,3 @@
 		- Removed str_ prefix for trim functions
 		- Added shellmeta function
 		- Exported all functions
-
-1.01_01	2016-12-16
-		- OK::Utils init
