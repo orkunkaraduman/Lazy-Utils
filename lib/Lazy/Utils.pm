@@ -207,7 +207,7 @@ sub cmdArgs
 	{
 		my $argv = shift @argv;
 
-		if (@{$result{parameters}})
+		if (defined($result{command}) or @{$result{parameters}})
 		{
 			push @{$result{parameters}}, $argv;
 			next;
@@ -225,7 +225,7 @@ sub cmdArgs
 			next;
 		}
 
-		if (defined $result{command})
+		if (defined($result{command}))
 		{
 			push @{$result{parameters}}, $argv;
 			next;
