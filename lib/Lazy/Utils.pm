@@ -183,7 +183,7 @@ sub bashReadLine
 		return $line;
 	}
 	$prompt = shellmeta(shellmeta($prompt));
-	my $cmd = '/bin/bash -c "read -p \"'.$prompt.'\" -r -e && echo -n \"\$REPLY\""';
+	my $cmd = '/bin/bash -c "read -p \"'.$prompt.'\" -r -e && echo -n \"\$REPLY\"" 2>/dev/null';
 	$_ = `$cmd`;
 	return (not $?)? $_: undef;
 }
