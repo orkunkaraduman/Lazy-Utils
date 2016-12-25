@@ -96,7 +96,7 @@ gets all contents of file in string type
 
 $path: I<path of file>
 
-return value: I<file contents in string type>
+return value: I<file contents in string type, otherwise undef because of errors>
 
 =cut
 sub file_get_contents
