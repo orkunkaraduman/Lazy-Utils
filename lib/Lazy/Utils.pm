@@ -34,7 +34,7 @@ BEGIN
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(trim ltrim rtrim file_get_contents shellmeta _system bashReadLine cmdArgs);
+	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta _system bashReadLine commandArgs cmdArgs whereisBin fileCache);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
@@ -339,7 +339,7 @@ sub fileCache
 				if (not defined($result))
 				{
 					my $tmp;
-					$tmp = read_file($tmpPath, { err_mode => "quiet" });
+					$tmp = file_get_contents($tmpPath);
 					if ($tmp)
 					{
 						if ($tmp =~ /^SCALAR\n(.*)/)
@@ -369,7 +369,7 @@ sub fileCache
 			{
 				eval { $tmp = to_json($result, {pretty => 1}) } if ref($result) eq "ARRAY" or ref($result) eq "HASH";
 			}
-			if ($tmp and write_file("$tmpPrefix$now.$$", { err_mode => "quiet" }, $tmp))
+			if ($tmp and file_put_contents("$tmpPrefix$now.$$", $tmp))
 			{
 				pop @cleanup;
 				for (@cleanup)
