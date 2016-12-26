@@ -1,4 +1,5 @@
 1.04	2016-12-26
+		- Perl min versiom changed to v5.14
 		- Added file_put_contents
 		- Added commandArgs
 		- Added whereisBin
