@@ -332,7 +332,7 @@ sub fileCache
 	my $caller = (caller(1))[3];
 	$caller = (caller(1))[0] unless $caller;
 	$caller = "main"  unless $caller;
-	$caller = __PACKAGE__.",$caller";
+	$caller = (caller(0))[3].",$caller";
 	my $tmpPrefix = "/tmp/".$caller =~ s/\Q::\E/-/gr.".".$tag =~ s/(\W)/uc(sprintf("%%%x", ord($1)))/ger.",";
 	for my $tmpPath (sort {$b cmp $a} glob("$tmpPrefix*"))
 	{
@@ -373,7 +373,7 @@ sub fileCache
 			{
 				eval { $tmp = to_json($result, {pretty => 1}) } if ref($result) eq "ARRAY" or ref($result) eq "HASH";
 			}
-			if ($tmp and file_put_contents("$tmpPrefix$now.$$", $tmp))
+			if ($tmp and file_put_contents("tmp.$tmpPrefix$now.$$", $tmp) and rename("tmp.$tmpPrefix$now.$$", "$tmpPrefix$now.$$"))
 			{
 				pop @cleanup;
 				for (@cleanup)
