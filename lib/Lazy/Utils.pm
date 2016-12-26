@@ -332,7 +332,8 @@ sub fileCache
 	my $caller = (caller(1))[3];
 	$caller = (caller(1))[0] unless $caller;
 	$caller = "main"  unless $caller;
-	my $tmpPrefix = "/tmp/".$caller =~ s/\Q::\E/-/gr.".".$tag =~ s/(\W)/uc(sprintf("%%%x", ord($1)))/ger.".";
+	$caller = __PACKAGE__.",$caller";
+	my $tmpPrefix = "/tmp/".$caller =~ s/\Q::\E/-/gr.".".$tag =~ s/(\W)/uc(sprintf("%%%x", ord($1)))/ger.",";
 	for my $tmpPath (sort {$b cmp $a} glob("$tmpPrefix*"))
 	{
 		if (my ($epoch, $pid) = $tmpPath =~ /^\Q$tmpPrefix\E(\d*)\.(\d*)/)
