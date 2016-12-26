@@ -98,7 +98,7 @@ return value: _{ -opt1 =&gt; &#39;opt1&#39;, --opt2 =&gt; &#39;val2&#39;, comman
 
 ### cmdArgs(@argv)
 
-resolves command line arguments like commandArgs with default preferences
+resolves command line arguments using commandArgs with default preferences
 
 ### whereisBin($name, $path)
 
@@ -149,6 +149,8 @@ This module requires these other modules and libraries:
 - FindBin
 - Cwd
 - File::Basename
+- File::Slurp
+- JSON
 
 # REPOSITORY
 

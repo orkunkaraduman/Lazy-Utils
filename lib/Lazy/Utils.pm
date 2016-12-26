@@ -233,7 +233,7 @@ return value: I<{ -opt1 =E<gt> 'opt1', --opt2 =E<gt> 'val2', command =E<gt> 'cmd
 
 =head3 cmdArgs(@argv)
 
-resolves command line arguments like commandArgs with default preferences
+resolves command line arguments using commandArgs with default preferences
 
 =cut
 sub commandArgs
@@ -419,6 +419,14 @@ Cwd
 =item *
 
 File::Basename
+
+=item *
+
+File::Slurp
+
+=item *
+
+JSON
 
 =back
 

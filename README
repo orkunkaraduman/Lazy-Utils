@@ -88,7 +88,7 @@ SYNOPSIS
     parameters => ['param1', 'param2', ...] }*
 
    cmdArgs(@argv)
-    resolves command line arguments like commandArgs with default
+    resolves command line arguments using commandArgs with default
     preferences
 
    whereisBin($name, $path)
@@ -149,6 +149,10 @@ DEPENDENCIES
     *   Cwd
 
     *   File::Basename
+
+    *   File::Slurp
+
+    *   JSON
 
 REPOSITORY
     GitHub <https://github.com/orkunkaraduman/Lazy-Utils>
