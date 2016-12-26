@@ -2,7 +2,7 @@ NAME
     Lazy::Utils - Utilities for lazy
 
 VERSION
-    version 1.03
+    version 1.04
 
 SYNOPSIS
     Utilities for lazy
@@ -34,7 +34,17 @@ SYNOPSIS
 
     $path: *path of file*
 
-    return value: *file contents in string type*
+    return value: *file contents in string type, otherwise undef because of
+    errors*
+
+   file_put_contents($path, $contents)
+    puts all contents of file in string type
+
+    $path: *path of file*
+
+    $contents: *file contents in string type*
+
+    return value: *success 1, otherwise undef*
 
    shellmeta($s)
     escapes metacharacters of double-quoted shell string
@@ -63,14 +73,59 @@ SYNOPSIS
 
     return value: *line*
 
-   cmdArgs(@argv)
-    resolves command line arguments, eg: -opt1 --opt2 val2 command_string
-    parameter1 parameter2 ...
+   commandArgs($prefs, @argv)
+    resolves command line arguments, eg: -opt1 --opt2 val2 cmd param1 param2
+    ...
+
+    $prefs: *preferences in hash type*
+
+        optionAtAll: *accepts options after command otherwise evaluates as
+        parameter, by default 0*
 
     @argv: *command line arguments*
 
-    return value: *{ -opt1 => 'opt1', --opt2 => 'val2', command =>
-    'command_string', parameters => ['parameter1', 'parameter2', ...] }*
+    return value: *{ -opt1 => 'opt1', --opt2 => 'val2', command => 'cmd',
+    parameters => ['param1', 'param2', ...] }*
+
+   cmdArgs(@argv)
+    resolves command line arguments using commandArgs with default
+    preferences
+
+   whereisBin($name, $path)
+    searches valid binary in search path
+
+    $name: *binary name*
+
+    $path: *search path, by default
+    "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"*
+
+    return value: *binary path founded in search path, otherwise undef*
+
+   fileCache($tag, $expiry, $subref)
+    gets most recent cached value in file cache by given tag and caller
+    function if there is cached value in expiry period. Otherwise tries to
+    get current value using $subref, puts value in cache and cleanups old
+    cache values.
+
+    $tag: *tag for cache*
+
+    $expiry: *cache expiry period*
+
+        <0: *always gets most recent cached value if there is any cached
+        value. Otherwise tries to get current value using $subref, puts and
+        cleanups.*
+
+        =0: *never gets cached value. Always tries to get current value
+        using $subref, puts and cleanups.*
+
+        >0: *gets most recent cached value in cache if there is cached value
+        in expiry period. Otherwise tries to get current value using
+        $subref, puts and cleanups.*
+
+    $subref: *sub reference to get current value*
+
+    return value: *cached or current value, otherwise undef if there isn't
+    cached value and current value doesn't get*
 
 INSTALLATION
     To install this module type the following
@@ -94,6 +149,10 @@ DEPENDENCIES
     *   Cwd
 
     *   File::Basename
+
+    *   File::Slurp
+
+    *   JSON
 
 REPOSITORY
     GitHub <https://github.com/orkunkaraduman/Lazy-Utils>

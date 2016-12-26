@@ -5,7 +5,7 @@ Lazy::Utils - Utilities for lazy
 
 =head1 VERSION
 
-version 1.03
+version 1.04
 
 =head1 SYNOPSIS
 
@@ -15,24 +15,26 @@ Utilities for lazy
 use strict;
 use warnings;
 no warnings qw(qw utf8);
-use v5.10;
+use v5.14;
 use utf8;
 use Config;
 use Switch;
 use FindBin;
 use Cwd;
 use File::Basename;
+use File::Slurp;
+use JSON;
 
 
 BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.03';
+	our $VERSION     = '1.04';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(trim ltrim rtrim file_get_contents shellmeta _system bashReadLine cmdArgs);
+	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta _system bashReadLine commandArgs cmdArgs whereisBin fileCache);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
@@ -96,13 +98,13 @@ gets all contents of file in string type
 
 $path: I<path of file>
 
-return value: I<file contents in string type>
+return value: I<file contents in string type, otherwise undef because of errors>
 
 =cut
 sub file_get_contents
 {
 	my ($path) = @_;
-	my $document = do
+	my $result = do
 	{
 		local $/ = undef;
 		open my $fh, "<", $path or return;
@@ -110,7 +112,32 @@ sub file_get_contents
 		close $fh;
 		$result;
 	};
-	return $document;
+	return $result;
+}
+
+=head3 file_put_contents($path, $contents)
+
+puts all contents of file in string type
+
+$path: I<path of file>
+
+$contents: I<file contents in string type>
+
+return value: I<success 1, otherwise undef>
+
+=cut
+sub file_put_contents
+{
+	my ($path, $contents) = @_;
+	my $result = do
+	{
+		local $/ = undef;
+		open my $fh, ">", $path or return;
+		my $result = print $fh $contents;
+		close $fh;
+		$result;
+	};
+	return $result;
 }
 
 =head3 shellmeta($s)
@@ -183,23 +210,36 @@ sub bashReadLine
 		return $line;
 	}
 	$prompt = shellmeta(shellmeta($prompt));
-	my $cmd = '/bin/bash -c "read -p \"'.$prompt.'\" -r -e && echo -n \"\$REPLY\""';
+	my $cmd = '/bin/bash -c "read -p \"'.$prompt.'\" -r -e && echo -n \"\$REPLY\"" 2>/dev/null';
 	$_ = `$cmd`;
 	return (not $?)? $_: undef;
 }
 
-=head3 cmdArgs(@argv)
+=head3 commandArgs($prefs, @argv)
 
-resolves command line arguments, eg: -opt1 --opt2 val2 command_string parameter1 parameter2 ...
+resolves command line arguments, eg: -opt1 --opt2 val2 cmd param1 param2 ...
+
+$prefs: I<preferences in hash type>
+
+=over
+
+optionAtAll: I<accepts options after command otherwise evaluates as parameter, by default 0>
+
+=back
 
 @argv: I<command line arguments>
 
-return value: I<{ -opt1 =E<gt> 'opt1', --opt2 =E<gt> 'val2', command =E<gt> 'command_string', parameters =E<gt> ['parameter1', 'parameter2', ...] }>
+return value: I<{ -opt1 =E<gt> 'opt1', --opt2 =E<gt> 'val2', command =E<gt> 'cmd', parameters =E<gt> ['param1', 'param2', ...] }>
+
+=head3 cmdArgs(@argv)
+
+resolves command line arguments using commandArgs with default preferences
 
 =cut
-sub cmdArgs
+sub commandArgs
 {
-	my @argv = @_;
+	my ($prefs, @argv) = @_;
+	$prefs = {} unless $prefs;
 	my %result;
 	$result{command} = undef;
 	$result{parameters} = [];
@@ -207,7 +247,7 @@ sub cmdArgs
 	{
 		my $argv = shift @argv;
 
-		if (@{$result{parameters}})
+		if (not $prefs->{optionAtAll} and defined($result{command}))
 		{
 			push @{$result{parameters}}, $argv;
 			next;
@@ -225,7 +265,7 @@ sub cmdArgs
 			next;
 		}
 
-		if (defined $result{command})
+		if (defined($result{command}))
 		{
 			push @{$result{parameters}}, $argv;
 			next;
@@ -234,6 +274,117 @@ sub cmdArgs
 		$result{command} = $argv;
 	}
 	return \%result;
+}
+
+sub cmdArgs
+{
+	my @argv = @_;
+	return commandArgs(undef, @argv);
+}
+
+=head3 whereisBin($name, $path)
+
+searches valid binary in search path
+
+$name: I<binary name>
+
+$path: I<search path, by default "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin">
+
+return value: I<binary path founded in search path, otherwise undef>
+
+=cut
+sub whereisBin
+{
+	my ($name, $path) = @_;
+	$path = "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin" unless $path;
+	return grep(-x $_, map("$_/$name", split(":", $path)));
+}
+
+=head3 fileCache($tag, $expiry, $subref)
+
+gets most recent cached value in file cache by given tag and caller function if there is cached value in expiry period. Otherwise tries to get current value using $subref, puts value in cache and cleanups old cache values.
+
+$tag: I<tag for cache>
+
+$expiry: I<cache expiry period>
+
+=over
+
+E<lt>0: I<always gets most recent cached value if there is any cached value. Otherwise tries to get current value using $subref, puts and cleanups.>
+
+=0: I<never gets cached value. Always tries to get current value using $subref, puts and cleanups.>
+
+E<gt>0: I<gets most recent cached value in cache if there is cached value in expiry period. Otherwise tries to get current value using $subref, puts and cleanups.>
+
+=back
+
+$subref: I<sub reference to get current value>
+
+return value: I<cached or current value, otherwise undef if there isn't cached value and current value doesn't get>
+
+=cut
+sub fileCache
+{
+	my ($tag, $expiry, $subref) = @_;
+	my $result;
+	my $now = time();
+	my @cleanup;
+	my $caller = (caller(1))[3];
+	$caller = (caller(1))[0] unless $caller;
+	$caller = "main"  unless $caller;
+	$caller = (caller(0))[3].",$caller";
+	my $tmpBase = "/tmp/";
+	my $tmpPrefix = $caller =~ s/\Q::\E/-/gr.".".$tag =~ s/(\W)/uc(sprintf("%%%x", ord($1)))/ger.",";
+	for my $tmpPath (sort {$b cmp $a} glob("${tmpBase}$tmpPrefix*"))
+	{
+		if (my ($epoch, $pid) = $tmpPath =~ /^\Q${tmpBase}$tmpPrefix\E(\d*)\.(\d*)/)
+		{
+			if ($expiry < 0 or ($expiry > 0 and $now-$epoch < $expiry))
+			{
+				if (not defined($result))
+				{
+					my $tmp;
+					$tmp = file_get_contents($tmpPath);
+					if ($tmp)
+					{
+						if ($tmp =~ /^SCALAR\n(.*)/)
+						{
+							$result = $1;
+						} else
+						{
+							eval { $result = from_json($tmp) };
+						}
+					}
+				}
+				next;
+			}
+		}
+		unshift @cleanup, $tmpPath;
+	}
+	if (not defined($result))
+	{
+		$result = $subref->() if defined($subref);
+		if (defined($result))
+		{
+			my $tmp;
+			unless (ref($result))
+			{
+				$tmp = "SCALAR\n$result";
+			} else
+			{
+				eval { $tmp = to_json($result, {pretty => 1}) } if ref($result) eq "ARRAY" or ref($result) eq "HASH";
+			}
+			if ($tmp and file_put_contents("${tmpBase}tmp.$tmpPrefix$now.$$", $tmp) and rename("${tmpBase}tmp.$tmpPrefix$now.$$", "${tmpBase}$tmpPrefix$now.$$"))
+			{
+				pop @cleanup;
+				for (@cleanup)
+				{
+					unlink($_);
+				}
+			}
+		}
+	}
+	return $result;
 }
 
 
@@ -273,6 +424,14 @@ Cwd
 =item *
 
 File::Basename
+
+=item *
+
+File::Slurp
+
+=item *
+
+JSON
 
 =back
 
