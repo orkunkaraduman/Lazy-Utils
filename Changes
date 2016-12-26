@@ -1,5 +1,8 @@
-1.04	2016-12-25
-		- 
+1.04	2016-12-26
+		- Added file_put_contents
+		- Added commandArgs
+		- Added whereisBin
+		- Added fileCache
 
 1.03	2016-12-22
 		- Improved documentation

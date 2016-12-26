@@ -42,7 +42,17 @@ gets all contents of file in string type
 
 $path: _path of file_
 
-return value: _file contents in string type_
+return value: _file contents in string type, otherwise undef because of errors_
+
+### file\_put\_contents($path, $contents)
+
+puts all contents of file in string type
+
+$path: _path of file_
+
+$contents: _file contents in string type_
+
+return value: _success 1, otherwise undef_
 
 ### shellmeta($s)
 
@@ -74,13 +84,49 @@ $prompt: _prompt_
 
 return value: _line_
 
-### cmdArgs(@argv)
+### commandArgs($prefs, @argv)
 
-resolves command line arguments, eg: -opt1 --opt2 val2 command\_string parameter1 parameter2 ...
+resolves command line arguments, eg: -opt1 --opt2 val2 cmd param1 param2 ...
+
+$prefs: _preferences in hash type_
+
+> optionAtAll: _accepts options after command otherwise evaluates as parameter, by default 0_
 
 @argv: _command line arguments_
 
-return value: _{ -opt1 =&gt; &#39;opt1&#39;, --opt2 =&gt; &#39;val2&#39;, command =&gt; &#39;command\_string&#39;, parameters =&gt; \[&#39;parameter1&#39;, &#39;parameter2&#39;, ...\] }_
+return value: _{ -opt1 =&gt; &#39;opt1&#39;, --opt2 =&gt; &#39;val2&#39;, command =&gt; &#39;cmd&#39;, parameters =&gt; \[&#39;param1&#39;, &#39;param2&#39;, ...\] }_
+
+### cmdArgs(@argv)
+
+resolves command line arguments like commandArgs with default preferences
+
+### whereisBin($name, $path)
+
+searches valid binary in search path
+
+$name: _binary name_
+
+$path: _search path, by default &quot;/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin&quot;_
+
+return value: _binary path founded in search path, otherwise undef_
+
+### fileCache($tag, $expiry, $subref)
+
+gets most recent cached value in file cache by given tag and caller function if there is cached value in expiry period. Otherwise tries to get current value using $subref, puts value in cache and cleanups old cache values.
+
+$tag: _tag for cache_
+
+$expiry: _cache expiry period_
+
+> &lt;0: _always gets most recent cached value if there is any cached value. Otherwise tries to get current value using $subref, puts and cleanups._
+>
+> &#x3d;0: _never gets cached value. Always tries to get current value using $subref, puts and cleanups._
+>
+> &gt;0: _gets most recent cached value in cache if there is cached value in expiry period. Otherwise tries to get current value using $subref, puts and cleanups._
+
+$subref: _sub reference to get current value_
+
+return value: _cached or current value, otherwise undef if there isn&#39;t cached value and current value doesn&#39;t get_
 
 # INSTALLATION
 

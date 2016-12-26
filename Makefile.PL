@@ -6,12 +6,14 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
 	NAME				=> 'Lazy::Utils',
 	VERSION_FROM		=> 'lib/Lazy/Utils.pm',
-	MIN_PERL_VERSION	=> '5.010',
+	MIN_PERL_VERSION	=> '5.014',
 	PREREQ_PM			=> {
 		'Switch' => 0,
 		'FindBin' => 0,
 		'Cwd' => 0,
 		'File::Basename' => 0,
+		'File::Slurp' => 0,
+		'JSON' => 0,
 	},
 	EXE_FILES			=> [qw(
 	)],
