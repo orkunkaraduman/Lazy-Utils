@@ -5,7 +5,7 @@ Lazy::Utils - Utilities for lazy
 
 =head1 VERSION
 
-version 1.04
+version 1.05
 
 =head1 SYNOPSIS
 
@@ -22,7 +22,6 @@ use Switch;
 use FindBin;
 use Cwd;
 use File::Basename;
-use File::Slurp;
 use JSON;
 
 
@@ -30,7 +29,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.04';
+	our $VERSION     = '1.05';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -427,10 +426,6 @@ File::Basename
 
 =item *
 
-File::Slurp
-
-=item *
-
 JSON
 
 =back
@@ -447,7 +442,7 @@ Orkun Karaduman <orkunkaraduman@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2016  Orkun Karaduman <orkunkaraduman@gmail.com>
+Copyright (C) 2017  Orkun Karaduman <orkunkaraduman@gmail.com>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -12,7 +12,6 @@ WriteMakefile(
 		'FindBin' => 0,
 		'Cwd' => 0,
 		'File::Basename' => 0,
-		'File::Slurp' => 0,
 		'JSON' => 0,
 	},
 	EXE_FILES			=> [qw(
@@ -22,7 +21,7 @@ WriteMakefile(
 	LICENSE				=> 'gpl_3',
 	META_MERGE			=> {
 		'meta-spec' => {
-			version => 2
+			version => 2,
 		},
 		resources => {
 			homepage   => 'https://metacpan.org/release/Lazy-Utils',
