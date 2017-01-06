@@ -241,37 +241,61 @@ sub commandArgs
 	$prefs = {} unless $prefs;
 	my %result;
 	$result{command} = undef;
-	$result{parameters} = [];
+	$result{long} = undef;
+	$result{parameters} = undef;
+
+	my @parameters;
 	while (@argv)
 	{
 		my $argv = shift @argv;
 
-		if (not $prefs->{optionAtAll} and defined($result{command}))
+		if (defined($result{long}))
 		{
-			push @{$result{parameters}}, $argv;
+			$result{long} .= ' ' if $result{long};
+			$result{long} .= $argv;
+			next;
+		}
+
+		if (not $prefs->{optionAtAll} and @parameters)
+		{
+			push @parameters, $argv;
 			next;
 		}
 
 		if (substr($argv, 0, 2) eq '--')
 		{
-			$result{$argv} = shift @argv;
+			if (length($argv) == 2)
+			{
+				$result{long} = "";
+				next;
+			}
+			my @arg = split('=', $argv, 2);
+			$result{$arg[0]} = $arg[1];
+			$result{$arg[0]} = shift @argv unless defined($result{$arg[0]});
+			$result{$arg[0]} = "" unless defined($result{$arg[0]});
 			next;
 		}
 
-		if (substr($argv, 0, 1) eq '-')
+		if (substr($argv, 0, 1) eq '-' and length($argv) > 1)
 		{
-			$result{$argv} = substr($argv, 1);
+			my @arg = split('=', $argv, 2);
+			$result{$arg[0]} = $arg[1];
+			$result{$arg[0]} = "" unless defined($result{$arg[0]});
 			next;
 		}
 
-		if (defined($result{command}))
+		if (@parameters)
 		{
-			push @{$result{parameters}}, $argv;
+			push @parameters, $argv;
 			next;
 		}
 
-		$result{command} = $argv;
+		push @parameters, $argv;
 	}
+
+	$result{command} = shift @parameters if not $prefs->{noCommand};
+	$result{parameters} = \@parameters;
+
 	return \%result;
 }
 
