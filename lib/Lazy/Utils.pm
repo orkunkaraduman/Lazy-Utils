@@ -5,7 +5,7 @@ Lazy::Utils - Utilities for lazy
 
 =head1 VERSION
 
-version 1.04
+version 1.05
 
 =head1 SYNOPSIS
 
@@ -22,7 +22,6 @@ use Switch;
 use FindBin;
 use Cwd;
 use File::Basename;
-use File::Slurp;
 use JSON;
 
 
@@ -30,7 +29,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.04';
+	our $VERSION     = '1.05';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -217,19 +216,21 @@ sub bashReadLine
 
 =head3 commandArgs($prefs, @argv)
 
-resolves command line arguments, eg: -opt1 --opt2 val2 cmd param1 param2 ...
+resolves command line arguments, eg: -opt1 -opt2=val2 --opt3 val3 --opt4=val4 cmd param1 param2 ... -- long parameter
 
 $prefs: I<preferences in hash type>
 
 =over
 
-optionAtAll: I<accepts options after command otherwise evaluates as parameter, by default 0>
+optionAtAll: I<accepts options after command or first parameter otherwise evaluates as parameter, by default 0>
+
+noCommand: I<use first parameter instead of command, by default 0>
 
 =back
 
 @argv: I<command line arguments>
 
-return value: I<{ -opt1 =E<gt> 'opt1', --opt2 =E<gt> 'val2', command =E<gt> 'cmd', parameters =E<gt> ['param1', 'param2', ...] }>
+return value: I<{ -opt1 =E<gt> '', --opt2 =E<gt> 'val2', --opt3 =E<gt> 'val3', --opt4 =E<gt> 'val4', command =E<gt> 'cmd', parameters =E<gt> ['param1', 'param2', ...], long =E<gt> 'long parameter' }>
 
 =head3 cmdArgs(@argv)
 
@@ -242,37 +243,61 @@ sub commandArgs
 	$prefs = {} unless $prefs;
 	my %result;
 	$result{command} = undef;
-	$result{parameters} = [];
+	$result{long} = undef;
+	$result{parameters} = undef;
+
+	my @parameters;
 	while (@argv)
 	{
 		my $argv = shift @argv;
 
-		if (not $prefs->{optionAtAll} and defined($result{command}))
+		if (defined($result{long}))
 		{
-			push @{$result{parameters}}, $argv;
+			$result{long} .= ' ' if $result{long};
+			$result{long} .= $argv;
+			next;
+		}
+
+		if (not $prefs->{optionAtAll} and @parameters)
+		{
+			push @parameters, $argv;
 			next;
 		}
 
 		if (substr($argv, 0, 2) eq '--')
 		{
-			$result{$argv} = shift @argv;
+			if (length($argv) == 2)
+			{
+				$result{long} = "";
+				next;
+			}
+			my @arg = split('=', $argv, 2);
+			$result{$arg[0]} = $arg[1];
+			$result{$arg[0]} = shift @argv unless defined($result{$arg[0]});
+			$result{$arg[0]} = "" unless defined($result{$arg[0]});
 			next;
 		}
 
-		if (substr($argv, 0, 1) eq '-')
+		if (substr($argv, 0, 1) eq '-' and length($argv) > 1)
 		{
-			$result{$argv} = substr($argv, 1);
+			my @arg = split('=', $argv, 2);
+			$result{$arg[0]} = $arg[1];
+			$result{$arg[0]} = "" unless defined($result{$arg[0]});
 			next;
 		}
 
-		if (defined($result{command}))
+		if (@parameters)
 		{
-			push @{$result{parameters}}, $argv;
+			push @parameters, $argv;
 			next;
 		}
 
-		$result{command} = $argv;
+		push @parameters, $argv;
 	}
+
+	$result{command} = shift @parameters if not $prefs->{noCommand};
+	$result{parameters} = \@parameters;
+
 	return \%result;
 }
 
@@ -427,10 +452,6 @@ File::Basename
 
 =item *
 
-File::Slurp
-
-=item *
-
 JSON
 
 =back
@@ -447,7 +468,7 @@ Orkun Karaduman <orkunkaraduman@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2016  Orkun Karaduman <orkunkaraduman@gmail.com>
+Copyright (C) 2017  Orkun Karaduman <orkunkaraduman@gmail.com>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
