@@ -216,19 +216,21 @@ sub bashReadLine
 
 =head3 commandArgs($prefs, @argv)
 
-resolves command line arguments, eg: -opt1 --opt2 val2 cmd param1 param2 ...
+resolves command line arguments, eg: -opt1 -opt2=val2 --opt3 val3 --opt4=val4 cmd param1 param2 ... -- long parameter
 
 $prefs: I<preferences in hash type>
 
 =over
 
-optionAtAll: I<accepts options after command otherwise evaluates as parameter, by default 0>
+optionAtAll: I<accepts options after command or first parameter otherwise evaluates as parameter, by default 0>
+
+noCommand: I<use first parameter instead of command, by default 0>
 
 =back
 
 @argv: I<command line arguments>
 
-return value: I<{ -opt1 =E<gt> 'opt1', --opt2 =E<gt> 'val2', command =E<gt> 'cmd', parameters =E<gt> ['param1', 'param2', ...] }>
+return value: I<{ -opt1 =E<gt> '', --opt2 =E<gt> 'val2', --opt3 =E<gt> 'val3', --opt4 =E<gt> 'val4', command =E<gt> 'cmd', parameters =E<gt> ['param1', 'param2', ...], long =E<gt> 'long parameter' }>
 
 =head3 cmdArgs(@argv)
 

@@ -2,7 +2,7 @@ NAME
     Lazy::Utils - Utilities for lazy
 
 VERSION
-    version 1.04
+    version 1.05
 
 SYNOPSIS
     Utilities for lazy
@@ -74,18 +74,21 @@ SYNOPSIS
     return value: *line*
 
    commandArgs($prefs, @argv)
-    resolves command line arguments, eg: -opt1 --opt2 val2 cmd param1 param2
-    ...
+    resolves command line arguments, eg: -opt1 -opt2=val2 --opt3 val3
+    --opt4=val4 cmd param1 param2 ... -- long parameter
 
     $prefs: *preferences in hash type*
 
-        optionAtAll: *accepts options after command otherwise evaluates as
-        parameter, by default 0*
+        optionAtAll: *accepts options after command or first parameter
+        otherwise evaluates as parameter, by default 0*
+
+        noCommand: *use first parameter instead of command, by default 0*
 
     @argv: *command line arguments*
 
-    return value: *{ -opt1 => 'opt1', --opt2 => 'val2', command => 'cmd',
-    parameters => ['param1', 'param2', ...] }*
+    return value: *{ -opt1 => '', --opt2 => 'val2', --opt3 => 'val3', --opt4
+    => 'val4', command => 'cmd', parameters => ['param1', 'param2', ...],
+    long => 'long parameter' }*
 
    cmdArgs(@argv)
     resolves command line arguments using commandArgs with default
@@ -150,8 +153,6 @@ DEPENDENCIES
 
     *   File::Basename
 
-    *   File::Slurp
-
     *   JSON
 
 REPOSITORY
@@ -163,7 +164,7 @@ AUTHOR
     Orkun Karaduman <orkunkaraduman@gmail.com>
 
 COPYRIGHT AND LICENSE
-    Copyright (C) 2016 Orkun Karaduman <orkunkaraduman@gmail.com>
+    Copyright (C) 2017 Orkun Karaduman <orkunkaraduman@gmail.com>
 
     This program is free software: you can redistribute it and/or modify it
     under the terms of the GNU General Public License as published by the

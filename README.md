@@ -4,7 +4,7 @@ Lazy::Utils - Utilities for lazy
 
 # VERSION
 
-version 1.04
+version 1.05
 
 # SYNOPSIS
 
@@ -86,15 +86,17 @@ return value: _line_
 
 ### commandArgs($prefs, @argv)
 
-resolves command line arguments, eg: -opt1 --opt2 val2 cmd param1 param2 ...
+resolves command line arguments, eg: -opt1 -opt2=val2 --opt3 val3 --opt4=val4 cmd param1 param2 ... -- long parameter
 
 $prefs: _preferences in hash type_
 
-> optionAtAll: _accepts options after command otherwise evaluates as parameter, by default 0_
+> optionAtAll: _accepts options after command or first parameter otherwise evaluates as parameter, by default 0_
+>
+> noCommand: _use first parameter instead of command, by default 0_
 
 @argv: _command line arguments_
 
-return value: _{ -opt1 =&gt; &#39;opt1&#39;, --opt2 =&gt; &#39;val2&#39;, command =&gt; &#39;cmd&#39;, parameters =&gt; \[&#39;param1&#39;, &#39;param2&#39;, ...\] }_
+return value: _{ -opt1 =&gt; &#39;&#39;, --opt2 =&gt; &#39;val2&#39;, --opt3 =&gt; &#39;val3&#39;, --opt4 =&gt; &#39;val4&#39;, command =&gt; &#39;cmd&#39;, parameters =&gt; \[&#39;param1&#39;, &#39;param2&#39;, ...\], long =&gt; &#39;long parameter&#39; }_
 
 ### cmdArgs(@argv)
 
@@ -149,7 +151,6 @@ This module requires these other modules and libraries:
 - FindBin
 - Cwd
 - File::Basename
-- File::Slurp
 - JSON
 
 # REPOSITORY
@@ -164,7 +165,7 @@ Orkun Karaduman &lt;orkunkaraduman@gmail.com&gt;
 
 # COPYRIGHT AND LICENSE
 
-Copyright (C) 2016  Orkun Karaduman &lt;orkunkaraduman@gmail.com&gt;
+Copyright (C) 2017  Orkun Karaduman &lt;orkunkaraduman@gmail.com&gt;
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
