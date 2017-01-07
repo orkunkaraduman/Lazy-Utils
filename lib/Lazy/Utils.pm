@@ -318,7 +318,7 @@ $name: I<binary name>
 
 $path: I<search path, by default "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin">
 
-return value: I<binary path founded in search path, otherwise undef>
+return value: I<array of binary path founded in search path>
 
 =cut
 sub whereisBin
