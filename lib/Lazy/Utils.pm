@@ -324,6 +324,7 @@ return value: I<array of binary path founded in search path>
 sub whereisBin
 {
 	my ($name, $path) = @_;
+	return () unless $name;
 	$path = "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin" unless $path;
 	return grep(-x $_, map("$_/$name", split(":", $path)));
 }
