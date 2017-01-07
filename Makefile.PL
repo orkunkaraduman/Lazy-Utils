@@ -13,6 +13,7 @@ WriteMakefile(
 		'Cwd' => 0,
 		'File::Basename' => 0,
 		'JSON' => 0,
+		'Pod::Text' => 0,
 	},
 	EXE_FILES			=> [qw(
 	)],

@@ -4,7 +4,7 @@ Lazy::Utils - Utilities for lazy
 
 # VERSION
 
-version 1.05
+version 1.06
 
 # SYNOPSIS
 
@@ -54,11 +54,13 @@ $contents: _file contents in string type_
 
 return value: _success 1, otherwise undef_
 
-### shellmeta($s)
+### shellmeta($s, $whitespace)
 
 escapes metacharacters of double-quoted shell string
 
 $s: _double-quoted shell string_
+
+$whitespace: _escape whitespace characters, by default 0_
 
 return value: _escaped string_
 
@@ -110,7 +112,7 @@ $name: _binary name_
 
 $path: _search path, by default &quot;/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin&quot;_
 
-return value: _binary path founded in search path, otherwise undef_
+return value: _array of binary path founded in search path_
 
 ### fileCache($tag, $expiry, $subref)
 
@@ -129,6 +131,16 @@ $expiry: _cache expiry period_
 $subref: _sub reference to get current value_
 
 return value: _cached or current value, otherwise undef if there isn&#39;t cached value and current value doesn&#39;t get_
+
+### getPodText($fileName, $section)
+
+gets a text of pod contents in given file
+
+$fileName: _file name of searching pod, by default running file_
+
+$section: _searching head1 section of pod, by default undef gets all of contents_
+
+return value: _text of pod, otherwise undef if an error occurs_
 
 # INSTALLATION
 
@@ -152,6 +164,7 @@ This module requires these other modules and libraries:
 - Cwd
 - File::Basename
 - JSON
+- Pod::Text
 
 # REPOSITORY
 
