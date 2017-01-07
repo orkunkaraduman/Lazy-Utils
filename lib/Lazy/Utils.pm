@@ -23,6 +23,7 @@ use FindBin;
 use Cwd;
 use File::Basename;
 use JSON;
+use Pod::Text;
 
 
 BEGIN
@@ -33,7 +34,7 @@ BEGIN
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta _system bashReadLine commandArgs cmdArgs whereisBin fileCache);
+	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta _system bashReadLine commandArgs cmdArgs whereisBin fileCache getPodText);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
@@ -416,6 +417,45 @@ sub fileCache
 	return $result;
 }
 
+=head3 getPodText($fileName, $section)
+
+gets a text of pod contents in given file
+
+$fileName: I<file name of searching pod, by default running file>
+
+$section: I<searching head1 section of pod, by default undef gets all of contents>
+
+return value: I<text of pod, otherwise undef if an error occurs>
+
+=cut
+sub getPodText
+{
+	my ($fileName, $section) = @_;
+	$fileName = "$FindBin::Bin/$FindBin::Script" unless $fileName;
+	return unless -e $fileName;
+	my $parser = Pod::Text->new();
+	my $text;
+	$parser->output_string(\$text);
+	eval { $parser->parse_file($fileName) };
+	return if $@;
+	$section = ltrim($section) if $section;
+	return $text unless $section;
+	my @text = split(/^/m, $text);
+	$text = "";
+	for my $line (@text)
+	{
+		chomp $line;
+		unless ($text)
+		{
+			$text = "$line\n" if $line eq $section;
+			next;
+		}
+		last unless not $line or $line =~ /^\s+/;
+		$text .= "$line\n";
+	}
+	return $text;
+}
+
 
 1;
 __END__
@@ -457,6 +497,10 @@ File::Basename
 =item *
 
 JSON
+
+=item *
+
+Pod::Text
 
 =back
 
