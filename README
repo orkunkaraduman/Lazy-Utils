@@ -2,7 +2,7 @@ NAME
     Lazy::Utils - Utilities for lazy
 
 VERSION
-    version 1.05
+    version 1.06
 
 SYNOPSIS
     Utilities for lazy
@@ -46,10 +46,12 @@ SYNOPSIS
 
     return value: *success 1, otherwise undef*
 
-   shellmeta($s)
+   shellmeta($s, $whitespace)
     escapes metacharacters of double-quoted shell string
 
     $s: *double-quoted shell string*
+
+    $whitespace: *escape whitespace characters, by default 0*
 
     return value: *escaped string*
 
@@ -102,7 +104,7 @@ SYNOPSIS
     $path: *search path, by default
     "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"*
 
-    return value: *binary path founded in search path, otherwise undef*
+    return value: *array of binary path founded in search path*
 
    fileCache($tag, $expiry, $subref)
     gets most recent cached value in file cache by given tag and caller
@@ -130,6 +132,16 @@ SYNOPSIS
     return value: *cached or current value, otherwise undef if there isn't
     cached value and current value doesn't get*
 
+   getPodText($fileName, $section)
+    gets a text of pod contents in given file
+
+    $fileName: *file name of searching pod, by default running file*
+
+    $section: *searching head1 section of pod, by default undef gets all of
+    contents*
+
+    return value: *text of pod, otherwise undef if an error occurs*
+
 INSTALLATION
     To install this module type the following
 
@@ -154,6 +166,8 @@ DEPENDENCIES
     *   File::Basename
 
     *   JSON
+
+    *   Pod::Text
 
 REPOSITORY
     GitHub <https://github.com/orkunkaraduman/Lazy-Utils>
