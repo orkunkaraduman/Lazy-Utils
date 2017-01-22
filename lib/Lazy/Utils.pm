@@ -372,6 +372,7 @@ sub fileCache
 					$tmp = file_get_contents($tmpPath);
 					if ($tmp)
 					{
+						utf8::decode($tmp);
 						if ($tmp =~ /^SCALAR\n(.*)/)
 						{
 							$result = $1;
