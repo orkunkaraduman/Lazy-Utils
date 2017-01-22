@@ -4,7 +4,7 @@ Lazy::Utils - Utilities for lazy
 
 # VERSION
 
-version 1.06
+version 1.07
 
 # SYNOPSIS
 
@@ -159,10 +159,6 @@ from CPAN
 
 This module requires these other modules and libraries:
 
-- Switch
-- FindBin
-- Cwd
-- File::Basename
 - JSON
 - Pod::Text
 

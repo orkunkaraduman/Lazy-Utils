@@ -372,13 +372,12 @@ sub fileCache
 					$tmp = file_get_contents($tmpPath);
 					if ($tmp)
 					{
-						utf8::decode($tmp);
 						if ($tmp =~ /^SCALAR\n(.*)/)
 						{
 							$result = $1;
 						} else
 						{
-							eval { $result = from_json($tmp) };
+							eval { $result = from_json($tmp, {utf8 => 1}) };
 						}
 					}
 				}
@@ -398,7 +397,7 @@ sub fileCache
 				$tmp = "SCALAR\n$result";
 			} else
 			{
-				eval { $tmp = to_json($result, {pretty => 1}) } if ref($result) eq "ARRAY" or ref($result) eq "HASH";
+				eval { $tmp = to_json($result, {utf8 => 1, pretty => 1}) } if ref($result) eq "ARRAY" or ref($result) eq "HASH";
 			}
 			if ($tmp and file_put_contents("${tmpBase}tmp.$tmpPrefix$now.$$", $tmp) and rename("${tmpBase}tmp.$tmpPrefix$now.$$", "${tmpBase}$tmpPrefix$now.$$"))
 			{
