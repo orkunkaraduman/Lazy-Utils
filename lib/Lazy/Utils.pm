@@ -5,7 +5,7 @@ Lazy::Utils - Utilities for lazy
 
 =head1 VERSION
 
-version 1.06
+version 1.07
 
 =head1 SYNOPSIS
 
@@ -14,14 +14,9 @@ Utilities for lazy
 =cut
 use strict;
 use warnings;
-no warnings qw(qw utf8);
 use v5.14;
 use utf8;
-use Config;
-use Switch;
 use FindBin;
-use Cwd;
-use File::Basename;
 use JSON;
 use Pod::Text;
 
@@ -30,7 +25,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.06';
+	our $VERSION     = '1.07';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -477,22 +472,6 @@ from CPAN
 This module requires these other modules and libraries:
 
 =over
-
-=item *
-
-Switch
-
-=item *
-
-FindBin
-
-=item *
-
-Cwd
-
-=item *
-
-File::Basename
 
 =item *
 

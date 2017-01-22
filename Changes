@@ -1,3 +1,6 @@
+1.07	2017-01-22
+		- Edited pre-requirements
+
 1.06	2017-01-07
 		- shellmeta: Added whitespace escaping
 		- whereisBin: Always return array
