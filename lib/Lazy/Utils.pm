@@ -126,7 +126,7 @@ sub file_put_contents
 	my ($path, $contents) = @_;
 	my $result = do
 	{
-		local $/ = undef;
+		local $\ = undef;
 		open my $fh, ">", $path or return;
 		my $result = print $fh $contents;
 		close $fh;
