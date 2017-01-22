@@ -16,7 +16,7 @@ use strict;
 use warnings;
 use v5.14;
 use utf8;
-use open IO => ':utf8', ':std';
+use open IN  => ":utf8", OUT => ":utf8", ERR => ":utf8";
 use FindBin;
 use Data::Dumper;
 

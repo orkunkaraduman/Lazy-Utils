@@ -433,6 +433,7 @@ sub getPodText
 	$parser->output_string(\$text);
 	eval { $parser->parse_file($fileName) };
 	return if $@;
+	utf8::decode($text);
 	$section = ltrim($section) if $section;
 	return $text unless $section;
 	my @text = split(/^/m, $text);
