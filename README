@@ -2,11 +2,28 @@ NAME
     Lazy::Utils - Utilities for lazy
 
 VERSION
-    version 1.07
+    version 1.08
 
 SYNOPSIS
     Utilities for lazy
 
+            use Lazy::Utils;
+         
+            trim($str);
+            ltrim($str);
+            rtrim($str);
+            file_get_contents($path, $prefs);
+            file_put_contents($path, $contents, $prefs);
+            shellmeta($s, $whitespace);
+            _system($cmd, @argv);
+            bashReadLine($prompt);
+            commandArgs($prefs, @argv);
+            cmdArgs(@argv);
+            whereisBin($name, $path);
+            fileCache($tag, $expiry, $subref);
+            getPodText($fileName, $section);
+
+DESCRIPTION
   Methods
    trim($str)
     trims given string
@@ -29,20 +46,28 @@ SYNOPSIS
 
     return value: *trimed string*
 
-   file_get_contents($path)
+   file_get_contents($path, $prefs)
     gets all contents of file in string type
 
     $path: *path of file*
 
+    $prefs: *preferences in hash type, by default undef*
+
+        utf8: *opens file-handle as :utf8 mode, by default 0*
+
     return value: *file contents in string type, otherwise undef because of
     errors*
 
-   file_put_contents($path, $contents)
+   file_put_contents($path, $contents, $prefs)
     puts all contents of file in string type
 
     $path: *path of file*
 
     $contents: *file contents in string type*
+
+    $prefs: *preferences in hash type, by default undef*
+
+        utf8: *opens file-handle as :utf8 mode, by default 0*
 
     return value: *success 1, otherwise undef*
 
@@ -71,7 +96,7 @@ SYNOPSIS
    bashReadLine($prompt)
     reads a line using bash
 
-    $prompt: *prompt*
+    $prompt: *prompt, by default ''*
 
     return value: *line*
 

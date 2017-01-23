@@ -4,11 +4,29 @@ Lazy::Utils - Utilities for lazy
 
 # VERSION
 
-version 1.07
+version 1.08
 
 # SYNOPSIS
 
 Utilities for lazy
+
+        use Lazy::Utils;
+         
+        trim($str);
+        ltrim($str);
+        rtrim($str);
+        file_get_contents($path, $prefs);
+        file_put_contents($path, $contents, $prefs);
+        shellmeta($s, $whitespace);
+        _system($cmd, @argv);
+        bashReadLine($prompt);
+        commandArgs($prefs, @argv);
+        cmdArgs(@argv);
+        whereisBin($name, $path);
+        fileCache($tag, $expiry, $subref);
+        getPodText($fileName, $section);
+
+# DESCRIPTION
 
 ## Methods
 
@@ -36,21 +54,29 @@ $str: _string will be trimed_
 
 return value: _trimed string_
 
-### file\_get\_contents($path)
+### file\_get\_contents($path, $prefs)
 
 gets all contents of file in string type
 
 $path: _path of file_
 
+$prefs: _preferences in hash type, by default undef_
+
+> utf8: _opens file-handle as :utf8 mode, by default 0_
+
 return value: _file contents in string type, otherwise undef because of errors_
 
-### file\_put\_contents($path, $contents)
+### file\_put\_contents($path, $contents, $prefs)
 
 puts all contents of file in string type
 
 $path: _path of file_
 
 $contents: _file contents in string type_
+
+$prefs: _preferences in hash type, by default undef_
+
+> utf8: _opens file-handle as :utf8 mode, by default 0_
 
 return value: _success 1, otherwise undef_
 
@@ -82,7 +108,7 @@ returned $!: _system error message like on Perl system call_
 
 reads a line using bash
 
-$prompt: _prompt_
+$prompt: _prompt, by default &#39;&#39;_
 
 return value: _line_
 
