@@ -215,21 +215,33 @@ sub bashReadLine
 
 =head3 commandArgs($prefs, @argv)
 
-resolves command line arguments, eg: -opt1 -opt2=val2 --opt3 val3 --opt4=val4 cmd param1 param2 ... -- long parameter
+resolves command line arguments.
+
+valuableArgs is off, eg:
+
+	-opt1 -opt2=val2 --opt3 --opt4=val4 -opt5 cmd -opt6=val6 param1 -- param2 param3
+
+valuableArgs is on, eg:
+
+	-opt1 -opt2=val2 --opt3 --opt4 val4 -opt5 -opt6 val6 cmd param1 -- param2 param3
+	-opt1 -opt2=val2 --opt3 --opt4 val4 -opt5 -opt6=val6 cmd param1 -- param2 param3
+	-opt1 -opt2=val2 --opt3 --opt4 val4 -opt5 -- cmd param1 param2 param3
 
 $prefs: I<preferences in hash type>
 
 =over
 
-optionAtAll: I<accepts options after command or first parameter otherwise evaluates as parameter, by default 0>
+valuableArgs: I<accepts option value after option if argument is not an option>
 
 noCommand: I<use first parameter instead of command, by default 0>
+
+optionAtAll: I<DEPRECATED: now, it is always on. accepts options after command or first parameter otherwise evaluates as parameter, by default 0>
 
 =back
 
 @argv: I<command line arguments>
 
-return value: I<{ -opt1 =E<gt> '', --opt2 =E<gt> 'val2', --opt3 =E<gt> 'val3', --opt4 =E<gt> 'val4', command =E<gt> 'cmd', parameters =E<gt> ['param1', 'param2', ...], long =E<gt> 'long parameter' }>
+return value: I<{ -opt1 =E<gt> '', --opt2 =E<gt> 'val2', --opt3 =E<gt> '', --opt4 =E<gt> 'val4', -opt5 =E<gt> '', --opt6 =E<gt> 'val6', command =E<gt> 'cmd', parameters =E<gt> ['param1', 'param2', 'param3'] }>
 
 =head3 cmdArgs(@argv)
 
@@ -242,22 +254,16 @@ sub commandArgs
 	$prefs = {} unless $prefs;
 	my %result;
 	$result{command} = undef;
-	$result{long} = undef;
 	$result{parameters} = undef;
 
 	my @parameters;
+	my $opt;
+	my $long;
 	while (@argv)
 	{
 		my $argv = shift @argv;
 
-		if (defined($result{long}))
-		{
-			$result{long} .= ' ' if $result{long};
-			$result{long} .= $argv;
-			next;
-		}
-
-		if (not $prefs->{optionAtAll} and @parameters)
+		if ($long)
 		{
 			push @parameters, $argv;
 			next;
@@ -267,29 +273,41 @@ sub commandArgs
 		{
 			if (length($argv) == 2)
 			{
-				$result{long} = "";
+				$opt = undef;
+				$long = 1;
 				next;
 			}
 			my @arg = split('=', $argv, 2);
 			$result{$arg[0]} = $arg[1];
-			$result{$arg[0]} = shift @argv unless defined($result{$arg[0]});
-			$result{$arg[0]} = "" unless defined($result{$arg[0]});
+			$opt = undef;
+			unless (defined($result{$arg[0]}))
+			{
+				$result{$arg[0]} = "";
+				$opt = $arg[0];
+			}
 			next;
 		}
 
-		if (substr($argv, 0, 1) eq '-' and length($argv) > 1)
+		if (substr($argv, 0, 1) eq '-' and length($argv) != 1)
 		{
 			my @arg = split('=', $argv, 2);
 			$result{$arg[0]} = $arg[1];
-			$result{$arg[0]} = "" unless defined($result{$arg[0]});
+			$opt = undef;
+			unless (defined($result{$arg[0]}))
+			{
+				$result{$arg[0]} = "";
+				$opt = $arg[0];
+			}
 			next;
 		}
 
-		if (@parameters)
+		if ($prefs->{valuableArgs} and $opt)
 		{
-			push @parameters, $argv;
+			$result{$opt} = $argv;
+			$opt = undef;
 			next;
 		}
+		$opt = undef;
 
 		push @parameters, $argv;
 	}
