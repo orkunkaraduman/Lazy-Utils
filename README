@@ -24,6 +24,8 @@ SYNOPSIS
             getPodText($fileName, $section);
 
 DESCRIPTION
+    Collection of utility methods all of exported for lazy
+
   Methods
    trim($str)
     trims given string

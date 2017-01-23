@@ -53,6 +53,8 @@ BEGIN
 
 =head1 DESCRIPTION
 
+Collection of utility methods all of exported for lazy
+
 =head2 Methods
 
 =cut

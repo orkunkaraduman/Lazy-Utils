@@ -28,6 +28,8 @@ Utilities for lazy
 
 # DESCRIPTION
 
+Collection of utility methods all of exported for lazy
+
 ## Methods
 
 ### trim($str)
