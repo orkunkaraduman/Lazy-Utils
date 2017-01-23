@@ -132,7 +132,7 @@ sub file_get_contents
 	{
 		local $/ = undef;
 		my $mode = "";
-		$mode = ":utf8" if $prefs->{utf8};
+		$mode .= " :utf8" if $prefs->{utf8};
 		open my $fh, "<$mode", $path or return;
 		my $result = <$fh>;
 		close $fh;
@@ -168,7 +168,7 @@ sub file_put_contents
 	{
 		local $\ = undef;
 		my $mode = "";
-		$mode = ":utf8" if $prefs->{utf8};
+		$mode .= " :utf8" if $prefs->{utf8};
 		open my $fh, ">$mode", $path or return;
 		my $result = print $fh $contents;
 		close $fh;
