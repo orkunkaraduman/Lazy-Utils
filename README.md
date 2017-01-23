@@ -120,7 +120,11 @@ $prefs: _preferences in hash type_
 
 @argv: _command line arguments_
 
-return value: eg; _{ -opt1 =&gt; &#39;&#39;, --opt2 =&gt; &#39;val2&#39;, command =&gt; &#39;cmd&#39;, parameters =&gt; \[&#39;param1&#39;, &#39;param2&#39;, &#39;param3&#39;\] }_
+return value: eg;
+
+        { --opt1 => '', --opt2 => 'val2', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
+        { -opt1 => '', -opt2 => 'val2', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
+        { -opt1 => '', -opt2 => '', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
 
 ### cmdArgs(@argv)
 
