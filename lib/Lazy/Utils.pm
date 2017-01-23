@@ -87,22 +87,33 @@ sub rtrim
 	return $s
 }
 
-=head3 file_get_contents($path)
+=head3 file_get_contents($path, $prefs)
 
 gets all contents of file in string type
 
 $path: I<path of file>
+
+$prefs: I<preferences in hash type, by default undef>
+
+=over
+
+utf8: I<opens file-handle as :utf8 mode, by default 0>
+
+=back
 
 return value: I<file contents in string type, otherwise undef because of errors>
 
 =cut
 sub file_get_contents
 {
-	my ($path) = @_;
+	my ($path, $prefs) = @_;
+	$prefs = {} unless $prefs;
 	my $result = do
 	{
 		local $/ = undef;
-		open my $fh, "<", $path or return;
+		my $mode = "";
+		$mode = ":utf8" if $prefs->{utf8};
+		open my $fh, "<$mode", $path or return;
 		my $result = <$fh>;
 		close $fh;
 		$result;
@@ -110,7 +121,7 @@ sub file_get_contents
 	return $result;
 }
 
-=head3 file_put_contents($path, $contents)
+=head3 file_put_contents($path, $contents, $prefs)
 
 puts all contents of file in string type
 
@@ -118,16 +129,27 @@ $path: I<path of file>
 
 $contents: I<file contents in string type>
 
+$prefs: I<preferences in hash type, by default undef>
+
+=over
+
+utf8: I<opens file-handle as :utf8 mode, by default 0>
+
+=back
+
 return value: I<success 1, otherwise undef>
 
 =cut
 sub file_put_contents
 {
-	my ($path, $contents) = @_;
+	my ($path, $contents, $prefs) = @_;
+	$prefs = {} unless $prefs;
 	my $result = do
 	{
 		local $\ = undef;
-		open my $fh, ">", $path or return;
+		my $mode = "";
+		$mode = ":utf8" if $prefs->{utf8};
+		open my $fh, ">$mode", $path or return;
 		my $result = print $fh $contents;
 		close $fh;
 		$result;
