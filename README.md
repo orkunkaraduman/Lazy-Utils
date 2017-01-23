@@ -4,7 +4,7 @@ Lazy::Utils - Utilities for lazy
 
 # VERSION
 
-version 1.08
+version 1.09
 
 # SYNOPSIS
 
