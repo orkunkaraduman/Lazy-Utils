@@ -11,6 +11,22 @@ version 1.08
 
 Utilities for lazy
 
+	use Lazy::Utils;
+	 
+	trim($str);
+	ltrim($str);
+	rtrim($str);
+	file_get_contents($path, $prefs);
+	file_put_contents($path, $contents, $prefs);
+	shellmeta($s, $whitespace);
+	_system($cmd, @argv);
+	bashReadLine($prompt);
+	commandArgs($prefs, @argv);
+	cmdArgs(@argv);
+	whereisBin($name, $path);
+	fileCache($tag, $expiry, $subref);
+	getPodText($fileName, $section);
+
 =cut
 use strict;
 use warnings;
@@ -34,6 +50,8 @@ BEGIN
 	our @EXPORT_OK   = qw();
 }
 
+
+=head1 DESCRIPTION
 
 =head2 Methods
 
@@ -216,7 +234,7 @@ sub _system
 
 reads a line using bash
 
-$prompt: I<prompt>
+$prompt: I<prompt, by default ''>
 
 return value: I<line>
 
