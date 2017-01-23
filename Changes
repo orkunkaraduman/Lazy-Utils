@@ -1,5 +1,10 @@
-1.07	2017-01-22
+1.07	2017-01-23
 		- Edited pre-requirements
+		- Fix for file_put_contents
+		- Fix for fileCache utf8 problem
+		- Fix for getPodText utf8 problem
+		- Fix for bashReadLine STDIN problem
+		- Improved commandArgs
 
 1.06	2017-01-07
 		- shellmeta: Added whitespace escaping
