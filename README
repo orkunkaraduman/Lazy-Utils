@@ -91,7 +91,7 @@ SYNOPSIS
     $prefs: *preferences in hash type*
 
         valuableArgs: *accepts option value after option if next argument is
-        not an option*
+        not an option, by default 0*
 
         noCommand: *use first parameter instead of command, by default 0*
 

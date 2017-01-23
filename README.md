@@ -102,7 +102,7 @@ valuableArgs is on, eg;
 
 $prefs: _preferences in hash type_
 
-> valuableArgs: _accepts option value after option if next argument is not an option_
+> valuableArgs: _accepts option value after option if next argument is not an option, by default 0_
 >
 > noCommand: _use first parameter instead of command, by default 0_
 >

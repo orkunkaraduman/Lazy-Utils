@@ -202,13 +202,14 @@ return value: I<line>
 sub bashReadLine
 {
 	my ($prompt) = @_;
-	unless ( -t *STDIN ) {
+	unless ( -t *STDIN )
+	{
 		my $line = <STDIN>;
 		chomp $line if defined $line;
 		return $line;
 	}
 	$prompt = shellmeta(shellmeta($prompt));
-	my $cmd = '/bin/bash -c "read -p \"'.$prompt.'\" -r -e && echo -n \"\$REPLY\"" 2>/dev/null';
+	my $cmd = '/bin/bash -c "read -p \"'.$prompt.'\" -r -e && echo -n \"\$REPLY\" 2>/dev/null"';
 	$_ = `$cmd`;
 	return (not $?)? $_: undef;
 }
@@ -231,7 +232,7 @@ $prefs: I<preferences in hash type>
 
 =over
 
-valuableArgs: I<accepts option value after option if next argument is not an option>
+valuableArgs: I<accepts option value after option if next argument is not an option, by default 0>
 
 noCommand: I<use first parameter instead of command, by default 0>
 
