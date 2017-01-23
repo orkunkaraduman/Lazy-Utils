@@ -112,7 +112,7 @@ $prefs: _preferences in hash type_
 
 return value: eg;
 
-        { -opt1 =E<gt> '', --opt2 =E<gt> 'val2', --opt3 =E<gt> '', --opt4 =E<gt> 'val4', -opt5 =E<gt> '', --opt6 =E<gt> 'val6', command =E<gt> 'cmd', parameters =E<gt> ['param1', 'param2', 'param3'] }
+> { -opt1 =&gt; &#39;&#39;, --opt2 =&gt; &#39;val2&#39;, --opt3 =&gt; &#39;&#39;, --opt4 =&gt; &#39;val4&#39;, -opt5 =&gt; &#39;&#39;, --opt6 =&gt; &#39;val6&#39;, command =&gt; &#39;cmd&#39;, parameters =&gt; \[&#39;param1&#39;, &#39;param2&#39;, &#39;param3&#39;\] }
 
 ### cmdArgs(@argv)
 
