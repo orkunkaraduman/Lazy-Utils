@@ -14,11 +14,10 @@ for internal tests
 =cut
 use strict;
 use warnings;
-no warnings qw(qw utf8);
 use v5.14;
 use utf8;
-use open qw(:std :locale);
-use Config;
+use open qw(:utf8 :std);
+use open IO => ':bytes';
 use FindBin;
 use Data::Dumper;
 

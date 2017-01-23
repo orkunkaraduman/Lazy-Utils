@@ -4,7 +4,7 @@ Lazy::Utils - Utilities for lazy
 
 # VERSION
 
-version 1.06
+version 1.07
 
 # SYNOPSIS
 
@@ -88,17 +88,43 @@ return value: _line_
 
 ### commandArgs($prefs, @argv)
 
-resolves command line arguments, eg: -opt1 -opt2=val2 --opt3 val3 --opt4=val4 cmd param1 param2 ... -- long parameter
+resolves command line arguments.
+
+valuableArgs is off, eg;
+
+        --opt1 --opt2=val2 cmd param1 param2 param3
+        -opt1 -opt2=val2 cmd param1 param2 param3
+        -opt1 -opt2=val2 cmd param1 -- param2 param3
+        -opt1 cmd param1 -opt2=val2 param2 param3
+        -opt1 cmd param1 -opt2=val2 -- param2 param3
+        cmd -opt1 param1 -opt2=val2 param2 param3
+        cmd -opt1 param1 -opt2=val2 -- param2 param3
+
+valuableArgs is on, eg;
+
+        -opt1 -opt2=val2 cmd param1 param2 param3
+        -opt1 -opt2 val2 cmd param1 param2 param3
+        -opt1 -opt2 -- cmd param1 param2 param3
+        cmd -opt1 -opt2 val2 param1 param2 param3
+        cmd -opt1 -opt2 -- param1 param2 param3
+        cmd param1 -opt1 -opt2 val2 param2 param3
+        cmd param1 -opt1 -opt2 -- param2 param3
 
 $prefs: _preferences in hash type_
 
-> optionAtAll: _accepts options after command or first parameter otherwise evaluates as parameter, by default 0_
+> valuableArgs: _accepts option value after option if next argument is not an option, by default 0_
 >
 > noCommand: _use first parameter instead of command, by default 0_
+>
+> optionAtAll: _DEPRECATED: now, it is always on. accepts options after command or first parameter otherwise evaluates as parameter, by default 0_
 
 @argv: _command line arguments_
 
-return value: _{ -opt1 =&gt; &#39;&#39;, --opt2 =&gt; &#39;val2&#39;, --opt3 =&gt; &#39;val3&#39;, --opt4 =&gt; &#39;val4&#39;, command =&gt; &#39;cmd&#39;, parameters =&gt; \[&#39;param1&#39;, &#39;param2&#39;, ...\], long =&gt; &#39;long parameter&#39; }_
+return value: eg;
+
+        { --opt1 => '', --opt2 => 'val2', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
+        { -opt1 => '', -opt2 => 'val2', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
+        { -opt1 => '', -opt2 => '', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
 
 ### cmdArgs(@argv)
 
@@ -159,10 +185,6 @@ from CPAN
 
 This module requires these other modules and libraries:
 
-- Switch
-- FindBin
-- Cwd
-- File::Basename
 - JSON
 - Pod::Text
 

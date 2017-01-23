@@ -5,7 +5,7 @@ Lazy::Utils - Utilities for lazy
 
 =head1 VERSION
 
-version 1.06
+version 1.07
 
 =head1 SYNOPSIS
 
@@ -14,14 +14,9 @@ Utilities for lazy
 =cut
 use strict;
 use warnings;
-no warnings qw(qw utf8);
 use v5.14;
 use utf8;
-use Config;
-use Switch;
 use FindBin;
-use Cwd;
-use File::Basename;
 use JSON;
 use Pod::Text;
 
@@ -30,7 +25,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.06';
+	our $VERSION     = '1.07';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -131,7 +126,7 @@ sub file_put_contents
 	my ($path, $contents) = @_;
 	my $result = do
 	{
-		local $/ = undef;
+		local $\ = undef;
 		open my $fh, ">", $path or return;
 		my $result = print $fh $contents;
 		close $fh;
@@ -207,34 +202,62 @@ return value: I<line>
 sub bashReadLine
 {
 	my ($prompt) = @_;
-	unless ( -t *STDIN ) {
+	unless ( -t *STDIN )
+	{
 		my $line = <STDIN>;
 		chomp $line if defined $line;
 		return $line;
 	}
+	$prompt = "" unless defined($prompt);
 	$prompt = shellmeta(shellmeta($prompt));
-	my $cmd = '/bin/bash -c "read -p \"'.$prompt.'\" -r -e && echo -n \"\$REPLY\"" 2>/dev/null';
+	my $cmd = '/bin/bash -c "read -p \"'.$prompt.'\" -r -e && echo -n \"\$REPLY\" 2>/dev/null"';
 	$_ = `$cmd`;
 	return (not $?)? $_: undef;
 }
 
 =head3 commandArgs($prefs, @argv)
 
-resolves command line arguments, eg: -opt1 -opt2=val2 --opt3 val3 --opt4=val4 cmd param1 param2 ... -- long parameter
+resolves command line arguments.
+
+valuableArgs is off, eg;
+
+	--opt1 --opt2=val2 cmd param1 param2 param3
+	-opt1 -opt2=val2 cmd param1 param2 param3
+	-opt1 -opt2=val2 cmd param1 -- param2 param3
+	-opt1 cmd param1 -opt2=val2 param2 param3
+	-opt1 cmd param1 -opt2=val2 -- param2 param3
+	cmd -opt1 param1 -opt2=val2 param2 param3
+	cmd -opt1 param1 -opt2=val2 -- param2 param3
+
+valuableArgs is on, eg;
+
+	-opt1 -opt2=val2 cmd param1 param2 param3
+	-opt1 -opt2 val2 cmd param1 param2 param3
+	-opt1 -opt2 -- cmd param1 param2 param3
+	cmd -opt1 -opt2 val2 param1 param2 param3
+	cmd -opt1 -opt2 -- param1 param2 param3
+	cmd param1 -opt1 -opt2 val2 param2 param3
+	cmd param1 -opt1 -opt2 -- param2 param3
 
 $prefs: I<preferences in hash type>
 
 =over
 
-optionAtAll: I<accepts options after command or first parameter otherwise evaluates as parameter, by default 0>
+valuableArgs: I<accepts option value after option if next argument is not an option, by default 0>
 
 noCommand: I<use first parameter instead of command, by default 0>
+
+optionAtAll: I<DEPRECATED: now, it is always on. accepts options after command or first parameter otherwise evaluates as parameter, by default 0>
 
 =back
 
 @argv: I<command line arguments>
 
-return value: I<{ -opt1 =E<gt> '', --opt2 =E<gt> 'val2', --opt3 =E<gt> 'val3', --opt4 =E<gt> 'val4', command =E<gt> 'cmd', parameters =E<gt> ['param1', 'param2', ...], long =E<gt> 'long parameter' }>
+return value: eg;
+
+	{ --opt1 => '', --opt2 => 'val2', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
+	{ -opt1 => '', -opt2 => 'val2', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
+	{ -opt1 => '', -opt2 => '', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
 
 =head3 cmdArgs(@argv)
 
@@ -247,22 +270,16 @@ sub commandArgs
 	$prefs = {} unless $prefs;
 	my %result;
 	$result{command} = undef;
-	$result{long} = undef;
 	$result{parameters} = undef;
 
 	my @parameters;
+	my $opt;
+	my $long;
 	while (@argv)
 	{
 		my $argv = shift @argv;
 
-		if (defined($result{long}))
-		{
-			$result{long} .= ' ' if $result{long};
-			$result{long} .= $argv;
-			next;
-		}
-
-		if (not $prefs->{optionAtAll} and @parameters)
+		if ($long)
 		{
 			push @parameters, $argv;
 			next;
@@ -272,29 +289,41 @@ sub commandArgs
 		{
 			if (length($argv) == 2)
 			{
-				$result{long} = "";
+				$opt = undef;
+				$long = 1;
 				next;
 			}
 			my @arg = split('=', $argv, 2);
 			$result{$arg[0]} = $arg[1];
-			$result{$arg[0]} = shift @argv unless defined($result{$arg[0]});
-			$result{$arg[0]} = "" unless defined($result{$arg[0]});
+			$opt = undef;
+			unless (defined($result{$arg[0]}))
+			{
+				$result{$arg[0]} = "";
+				$opt = $arg[0];
+			}
 			next;
 		}
 
-		if (substr($argv, 0, 1) eq '-' and length($argv) > 1)
+		if (substr($argv, 0, 1) eq '-' and length($argv) != 1)
 		{
 			my @arg = split('=', $argv, 2);
 			$result{$arg[0]} = $arg[1];
-			$result{$arg[0]} = "" unless defined($result{$arg[0]});
+			$opt = undef;
+			unless (defined($result{$arg[0]}))
+			{
+				$result{$arg[0]} = "";
+				$opt = $arg[0];
+			}
 			next;
 		}
 
-		if (@parameters)
+		if ($prefs->{valuableArgs} and $opt)
 		{
-			push @parameters, $argv;
+			$result{$opt} = $argv;
+			$opt = undef;
 			next;
 		}
+		$opt = undef;
 
 		push @parameters, $argv;
 	}
@@ -382,7 +411,7 @@ sub fileCache
 							$result = $1;
 						} else
 						{
-							eval { $result = from_json($tmp) };
+							eval { $result = from_json($tmp, {utf8 => 1}) };
 						}
 					}
 				}
@@ -402,7 +431,7 @@ sub fileCache
 				$tmp = "SCALAR\n$result";
 			} else
 			{
-				eval { $tmp = to_json($result, {pretty => 1}) } if ref($result) eq "ARRAY" or ref($result) eq "HASH";
+				eval { $tmp = to_json($result, {utf8 => 1, pretty => 1}) } if ref($result) eq "ARRAY" or ref($result) eq "HASH";
 			}
 			if ($tmp and file_put_contents("${tmpBase}tmp.$tmpPrefix$now.$$", $tmp) and rename("${tmpBase}tmp.$tmpPrefix$now.$$", "${tmpBase}$tmpPrefix$now.$$"))
 			{
@@ -438,6 +467,7 @@ sub getPodText
 	$parser->output_string(\$text);
 	eval { $parser->parse_file($fileName) };
 	return if $@;
+	utf8::decode($text);
 	$section = ltrim($section) if $section;
 	return $text unless $section;
 	my @text = split(/^/m, $text);
@@ -477,22 +507,6 @@ from CPAN
 This module requires these other modules and libraries:
 
 =over
-
-=item *
-
-Switch
-
-=item *
-
-FindBin
-
-=item *
-
-Cwd
-
-=item *
-
-File::Basename
 
 =item *
 
