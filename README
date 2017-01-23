@@ -80,13 +80,23 @@ SYNOPSIS
 
     valuableArgs is off, eg;
 
-            -opt1 -opt2=val2 --opt3 --opt4=val4 -opt5 cmd -opt6=val6 param1 -- param2 param3
+            --opt1 --opt2=val2 cmd param1 param2 param3
+            -opt1 -opt2=val2 cmd param1 param2 param3
+            -opt1 -opt2=val2 cmd param1 -- param2 param3
+            -opt1 cmd param1 -opt2=val2 param2 param3
+            -opt1 cmd param1 -opt2=val2 -- param2 param3
+            cmd -opt1 param1 -opt2=val2 param2 param3
+            cmd -opt1 param1 -opt2=val2 -- param2 param3
 
     valuableArgs is on, eg;
 
-            -opt1 -opt2=val2 --opt3 --opt4 val4 -opt5 -opt6 val6 cmd param1 -- param2 param3
-            -opt1 -opt2=val2 --opt3 --opt4 val4 -opt5 -opt6=val6 cmd param1 -- param2 param3
-            -opt1 -opt2=val2 --opt3 --opt4 val4 -opt5 -- cmd param1 param2 param3
+            -opt1 -opt2=val2 cmd param1 param2 param3
+            -opt1 -opt2 val2 cmd param1 param2 param3
+            -opt1 -opt2 -- cmd param1 param2 param3
+            cmd -opt1 -opt2 val2 param1 param2 param3
+            cmd -opt1 -opt2 -- param1 param2 param3
+            cmd param1 -opt1 -opt2 val2 param2 param3
+            cmd param1 -opt1 -opt2 -- param2 param3
 
     $prefs: *preferences in hash type*
 
@@ -101,9 +111,8 @@ SYNOPSIS
 
     @argv: *command line arguments*
 
-    return value: eg; *{ -opt1 => '', --opt2 => 'val2', --opt3 => '', --opt4
-    => 'val4', -opt5 => '', --opt6 => 'val6', command => 'cmd', parameters
-    => ['param1', 'param2', 'param3'] }*
+    return value: eg; *{ -opt1 => '', --opt2 => 'val2', command => 'cmd',
+    parameters => ['param1', 'param2', 'param3'] }*
 
    cmdArgs(@argv)
     resolves command line arguments using commandArgs with default

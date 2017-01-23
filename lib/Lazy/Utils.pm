@@ -221,13 +221,23 @@ resolves command line arguments.
 
 valuableArgs is off, eg;
 
-	-opt1 -opt2=val2 --opt3 --opt4=val4 -opt5 cmd -opt6=val6 param1 -- param2 param3
+	--opt1 --opt2=val2 cmd param1 param2 param3
+	-opt1 -opt2=val2 cmd param1 param2 param3
+	-opt1 -opt2=val2 cmd param1 -- param2 param3
+	-opt1 cmd param1 -opt2=val2 param2 param3
+	-opt1 cmd param1 -opt2=val2 -- param2 param3
+	cmd -opt1 param1 -opt2=val2 param2 param3
+	cmd -opt1 param1 -opt2=val2 -- param2 param3
 
 valuableArgs is on, eg;
 
-	-opt1 -opt2=val2 --opt3 --opt4 val4 -opt5 -opt6 val6 cmd param1 -- param2 param3
-	-opt1 -opt2=val2 --opt3 --opt4 val4 -opt5 -opt6=val6 cmd param1 -- param2 param3
-	-opt1 -opt2=val2 --opt3 --opt4 val4 -opt5 -- cmd param1 param2 param3
+	-opt1 -opt2=val2 cmd param1 param2 param3
+	-opt1 -opt2 val2 cmd param1 param2 param3
+	-opt1 -opt2 -- cmd param1 param2 param3
+	cmd -opt1 -opt2 val2 param1 param2 param3
+	cmd -opt1 -opt2 -- param1 param2 param3
+	cmd param1 -opt1 -opt2 val2 param2 param3
+	cmd param1 -opt1 -opt2 -- param2 param3
 
 $prefs: I<preferences in hash type>
 
@@ -243,7 +253,7 @@ optionAtAll: I<DEPRECATED: now, it is always on. accepts options after command o
 
 @argv: I<command line arguments>
 
-return value: eg; I<{ -opt1 =E<gt> '', --opt2 =E<gt> 'val2', --opt3 =E<gt> '', --opt4 =E<gt> 'val4', -opt5 =E<gt> '', --opt6 =E<gt> 'val6', command =E<gt> 'cmd', parameters =E<gt> ['param1', 'param2', 'param3'] }>
+return value: eg; I<{ -opt1 =E<gt> '', --opt2 =E<gt> 'val2', command =E<gt> 'cmd', parameters =E<gt> ['param1', 'param2', 'param3'] }>
 
 =head3 cmdArgs(@argv)
 

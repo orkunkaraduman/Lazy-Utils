@@ -92,13 +92,23 @@ resolves command line arguments.
 
 valuableArgs is off, eg;
 
-        -opt1 -opt2=val2 --opt3 --opt4=val4 -opt5 cmd -opt6=val6 param1 -- param2 param3
+        --opt1 --opt2=val2 cmd param1 param2 param3
+        -opt1 -opt2=val2 cmd param1 param2 param3
+        -opt1 -opt2=val2 cmd param1 -- param2 param3
+        -opt1 cmd param1 -opt2=val2 param2 param3
+        -opt1 cmd param1 -opt2=val2 -- param2 param3
+        cmd -opt1 param1 -opt2=val2 param2 param3
+        cmd -opt1 param1 -opt2=val2 -- param2 param3
 
 valuableArgs is on, eg;
 
-        -opt1 -opt2=val2 --opt3 --opt4 val4 -opt5 -opt6 val6 cmd param1 -- param2 param3
-        -opt1 -opt2=val2 --opt3 --opt4 val4 -opt5 -opt6=val6 cmd param1 -- param2 param3
-        -opt1 -opt2=val2 --opt3 --opt4 val4 -opt5 -- cmd param1 param2 param3
+        -opt1 -opt2=val2 cmd param1 param2 param3
+        -opt1 -opt2 val2 cmd param1 param2 param3
+        -opt1 -opt2 -- cmd param1 param2 param3
+        cmd -opt1 -opt2 val2 param1 param2 param3
+        cmd -opt1 -opt2 -- param1 param2 param3
+        cmd param1 -opt1 -opt2 val2 param2 param3
+        cmd param1 -opt1 -opt2 -- param2 param3
 
 $prefs: _preferences in hash type_
 
@@ -110,7 +120,7 @@ $prefs: _preferences in hash type_
 
 @argv: _command line arguments_
 
-return value: eg; _{ -opt1 =&gt; &#39;&#39;, --opt2 =&gt; &#39;val2&#39;, --opt3 =&gt; &#39;&#39;, --opt4 =&gt; &#39;val4&#39;, -opt5 =&gt; &#39;&#39;, --opt6 =&gt; &#39;val6&#39;, command =&gt; &#39;cmd&#39;, parameters =&gt; \[&#39;param1&#39;, &#39;param2&#39;, &#39;param3&#39;\] }_
+return value: eg; _{ -opt1 =&gt; &#39;&#39;, --opt2 =&gt; &#39;val2&#39;, command =&gt; &#39;cmd&#39;, parameters =&gt; \[&#39;param1&#39;, &#39;param2&#39;, &#39;param3&#39;\] }_
 
 ### cmdArgs(@argv)
 
