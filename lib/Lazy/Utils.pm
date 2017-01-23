@@ -127,7 +127,7 @@ return value: I<file contents in string type, otherwise undef because of errors>
 sub file_get_contents
 {
 	my ($path, $prefs) = @_;
-	$prefs = {} unless $prefs;
+	$prefs = {} unless ref($prefs) eq 'HASH';
 	my $result = do
 	{
 		local $/ = undef;
@@ -163,7 +163,7 @@ return value: I<success 1, otherwise undef>
 sub file_put_contents
 {
 	my ($path, $contents, $prefs) = @_;
-	$prefs = {} unless $prefs;
+	$prefs = {} unless ref($prefs) eq 'HASH';
 	my $result = do
 	{
 		local $\ = undef;
@@ -309,7 +309,7 @@ resolves command line arguments using commandArgs with default preferences
 sub commandArgs
 {
 	my ($prefs, @argv) = @_;
-	$prefs = {} unless $prefs;
+	$prefs = {} unless ref($prefs) eq 'HASH';
 	my %result;
 	$result{command} = undef;
 	$result{parameters} = undef;
