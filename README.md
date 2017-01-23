@@ -90,11 +90,11 @@ return value: _line_
 
 resolves command line arguments.
 
-valuableArgs is off, eg:
+valuableArgs is off, eg;
 
         -opt1 -opt2=val2 --opt3 --opt4=val4 -opt5 cmd -opt6=val6 param1 -- param2 param3
 
-valuableArgs is on, eg:
+valuableArgs is on, eg;
 
         -opt1 -opt2=val2 --opt3 --opt4 val4 -opt5 -opt6 val6 cmd param1 -- param2 param3
         -opt1 -opt2=val2 --opt3 --opt4 val4 -opt5 -opt6=val6 cmd param1 -- param2 param3
@@ -102,7 +102,7 @@ valuableArgs is on, eg:
 
 $prefs: _preferences in hash type_
 
-> valuableArgs: _accepts option value after option if argument is not an option_
+> valuableArgs: _accepts option value after option if next argument is not an option_
 >
 > noCommand: _use first parameter instead of command, by default 0_
 >
@@ -110,7 +110,9 @@ $prefs: _preferences in hash type_
 
 @argv: _command line arguments_
 
-return value: _{ -opt1 =&gt; &#39;&#39;, --opt2 =&gt; &#39;val2&#39;, --opt3 =&gt; &#39;&#39;, --opt4 =&gt; &#39;val4&#39;, -opt5 =&gt; &#39;&#39;, --opt6 =&gt; &#39;val6&#39;, command =&gt; &#39;cmd&#39;, parameters =&gt; \[&#39;param1&#39;, &#39;param2&#39;, &#39;param3&#39;\] }_
+return value: eg;
+
+        { -opt1 =E<gt> '', --opt2 =E<gt> 'val2', --opt3 =E<gt> '', --opt4 =E<gt> 'val4', -opt5 =E<gt> '', --opt6 =E<gt> 'val6', command =E<gt> 'cmd', parameters =E<gt> ['param1', 'param2', 'param3'] }
 
 ### cmdArgs(@argv)
 

@@ -217,11 +217,11 @@ sub bashReadLine
 
 resolves command line arguments.
 
-valuableArgs is off, eg:
+valuableArgs is off, eg;
 
 	-opt1 -opt2=val2 --opt3 --opt4=val4 -opt5 cmd -opt6=val6 param1 -- param2 param3
 
-valuableArgs is on, eg:
+valuableArgs is on, eg;
 
 	-opt1 -opt2=val2 --opt3 --opt4 val4 -opt5 -opt6 val6 cmd param1 -- param2 param3
 	-opt1 -opt2=val2 --opt3 --opt4 val4 -opt5 -opt6=val6 cmd param1 -- param2 param3
@@ -231,7 +231,7 @@ $prefs: I<preferences in hash type>
 
 =over
 
-valuableArgs: I<accepts option value after option if argument is not an option>
+valuableArgs: I<accepts option value after option if next argument is not an option>
 
 noCommand: I<use first parameter instead of command, by default 0>
 
@@ -241,7 +241,9 @@ optionAtAll: I<DEPRECATED: now, it is always on. accepts options after command o
 
 @argv: I<command line arguments>
 
-return value: I<{ -opt1 =E<gt> '', --opt2 =E<gt> 'val2', --opt3 =E<gt> '', --opt4 =E<gt> 'val4', -opt5 =E<gt> '', --opt6 =E<gt> 'val6', command =E<gt> 'cmd', parameters =E<gt> ['param1', 'param2', 'param3'] }>
+return value: eg;
+
+	{ -opt1 =E<gt> '', --opt2 =E<gt> 'val2', --opt3 =E<gt> '', --opt4 =E<gt> 'val4', -opt5 =E<gt> '', --opt6 =E<gt> 'val6', command =E<gt> 'cmd', parameters =E<gt> ['param1', 'param2', 'param3'] }
 
 =head3 cmdArgs(@argv)
 
