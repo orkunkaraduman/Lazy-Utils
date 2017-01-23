@@ -5,11 +5,27 @@ Lazy::Utils - Utilities for lazy
 
 =head1 VERSION
 
-version 1.07
+version 1.08
 
 =head1 SYNOPSIS
 
 Utilities for lazy
+
+	use Lazy::Utils;
+	 
+	trim($str);
+	ltrim($str);
+	rtrim($str);
+	file_get_contents($path, $prefs);
+	file_put_contents($path, $contents, $prefs);
+	shellmeta($s, $whitespace);
+	_system($cmd, @argv);
+	bashReadLine($prompt);
+	commandArgs($prefs, @argv);
+	cmdArgs(@argv);
+	whereisBin($name, $path);
+	fileCache($tag, $expiry, $subref);
+	getPodText($fileName, $section);
 
 =cut
 use strict;
@@ -25,7 +41,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.07';
+	our $VERSION     = '1.08';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -34,6 +50,10 @@ BEGIN
 	our @EXPORT_OK   = qw();
 }
 
+
+=head1 DESCRIPTION
+
+Collection of utility methods all of exported for lazy
 
 =head2 Methods
 
@@ -87,22 +107,33 @@ sub rtrim
 	return $s
 }
 
-=head3 file_get_contents($path)
+=head3 file_get_contents($path, $prefs)
 
 gets all contents of file in string type
 
 $path: I<path of file>
+
+$prefs: I<preferences in hash type, by default undef>
+
+=over
+
+utf8: I<opens file-handle as :utf8 mode, by default 0>
+
+=back
 
 return value: I<file contents in string type, otherwise undef because of errors>
 
 =cut
 sub file_get_contents
 {
-	my ($path) = @_;
+	my ($path, $prefs) = @_;
+	$prefs = {} unless $prefs;
 	my $result = do
 	{
 		local $/ = undef;
-		open my $fh, "<", $path or return;
+		my $mode = "";
+		$mode = ":utf8" if $prefs->{utf8};
+		open my $fh, "<$mode", $path or return;
 		my $result = <$fh>;
 		close $fh;
 		$result;
@@ -110,7 +141,7 @@ sub file_get_contents
 	return $result;
 }
 
-=head3 file_put_contents($path, $contents)
+=head3 file_put_contents($path, $contents, $prefs)
 
 puts all contents of file in string type
 
@@ -118,16 +149,27 @@ $path: I<path of file>
 
 $contents: I<file contents in string type>
 
+$prefs: I<preferences in hash type, by default undef>
+
+=over
+
+utf8: I<opens file-handle as :utf8 mode, by default 0>
+
+=back
+
 return value: I<success 1, otherwise undef>
 
 =cut
 sub file_put_contents
 {
-	my ($path, $contents) = @_;
+	my ($path, $contents, $prefs) = @_;
+	$prefs = {} unless $prefs;
 	my $result = do
 	{
 		local $\ = undef;
-		open my $fh, ">", $path or return;
+		my $mode = "";
+		$mode = ":utf8" if $prefs->{utf8};
+		open my $fh, ">$mode", $path or return;
 		my $result = print $fh $contents;
 		close $fh;
 		$result;
@@ -194,7 +236,7 @@ sub _system
 
 reads a line using bash
 
-$prompt: I<prompt>
+$prompt: I<prompt, by default ''>
 
 return value: I<line>
 

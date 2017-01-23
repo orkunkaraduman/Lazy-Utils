@@ -1,3 +1,6 @@
+1.08	2017-01-23
+		- Added utf8 mode to file_get_contents/file_put_contents
+
 1.07	2017-01-23
 		- Edited pre-requirements
 		- Fix for file_put_contents
