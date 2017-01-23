@@ -241,13 +241,7 @@ optionAtAll: I<DEPRECATED: now, it is always on. accepts options after command o
 
 @argv: I<command line arguments>
 
-return value: eg;
-
-=over
-
-{ -opt1 =E<gt> '', --opt2 =E<gt> 'val2', --opt3 =E<gt> '', --opt4 =E<gt> 'val4', -opt5 =E<gt> '', --opt6 =E<gt> 'val6', command =E<gt> 'cmd', parameters =E<gt> ['param1', 'param2', 'param3'] }
-
-=back
+return value: eg; I<{ -opt1 =E<gt> '', --opt2 =E<gt> 'val2', --opt3 =E<gt> '', --opt4 =E<gt> 'val4', -opt5 =E<gt> '', --opt6 =E<gt> 'val6', command =E<gt> 'cmd', parameters =E<gt> ['param1', 'param2', 'param3'] }>
 
 =head3 cmdArgs(@argv)
 

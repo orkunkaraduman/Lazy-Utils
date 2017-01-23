@@ -101,11 +101,9 @@ SYNOPSIS
 
     @argv: *command line arguments*
 
-    return value: eg;
-
-        { -opt1 => '', --opt2 => 'val2', --opt3 => '', --opt4 => 'val4',
-        -opt5 => '', --opt6 => 'val6', command => 'cmd', parameters =>
-        ['param1', 'param2', 'param3'] }
+    return value: eg; *{ -opt1 => '', --opt2 => 'val2', --opt3 => '', --opt4
+    => 'val4', -opt5 => '', --opt6 => 'val6', command => 'cmd', parameters
+    => ['param1', 'param2', 'param3'] }*
 
    cmdArgs(@argv)
     resolves command line arguments using commandArgs with default
