@@ -4,7 +4,7 @@ NAME
 VERSION
     version 1.09
 
-SYNOPSIS
+ABSTRACT
     Utilities for lazy
 
             use Lazy::Utils;

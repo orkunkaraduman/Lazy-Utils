@@ -7,7 +7,7 @@ Lazy::Utils - Utilities for lazy
 
 version 1.09
 
-=head1 SYNOPSIS
+=head1 ABSTRACT
 
 Utilities for lazy
 

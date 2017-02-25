@@ -6,7 +6,7 @@ Lazy::Utils - Utilities for lazy
 
 version 1.09
 
-# SYNOPSIS
+# ABSTRACT
 
 Utilities for lazy
 
