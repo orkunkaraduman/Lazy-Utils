@@ -1,7 +1,7 @@
 package Lazy::Utils;
 =head1 NAME
 
-Lazy::Utils - Utilities for lazy
+Lazy::Utils - Utility functions
 
 =head1 VERSION
 
@@ -9,7 +9,7 @@ version 1.09
 
 =head1 ABSTRACT
 
-Utilities for lazy
+Utility functions
 
 	use Lazy::Utils;
 	 
@@ -40,22 +40,18 @@ use Pod::Text;
 BEGIN
 {
 	require Exporter;
-	# set the version for version checking
 	our $VERSION     = '1.09';
-	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
-	# Functions and variables which are exported by default
 	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta _system bashReadLine commandArgs cmdArgs whereisBin fileCache getPodText);
-	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
 
 
 =head1 DESCRIPTION
 
-Collection of utility methods all of exported for lazy
+Collection of utility functions all of exported by default
 
-=head2 Methods
+=head2 Functions
 
 =cut
 

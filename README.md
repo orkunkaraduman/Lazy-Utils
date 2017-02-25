@@ -1,6 +1,6 @@
 # NAME
 
-Lazy::Utils - Utilities for lazy
+Lazy::Utils - Utility functions
 
 # VERSION
 
@@ -8,7 +8,7 @@ version 1.09
 
 # ABSTRACT
 
-Utilities for lazy
+Utility functions
 
         use Lazy::Utils;
          
@@ -28,9 +28,9 @@ Utilities for lazy
 
 # DESCRIPTION
 
-Collection of utility methods all of exported for lazy
+Collection of utility functions all of exported by default
 
-## Methods
+## Functions
 
 ### trim($str)
 

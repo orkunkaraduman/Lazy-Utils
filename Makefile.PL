@@ -14,7 +14,7 @@ WriteMakefile(
 	EXE_FILES			=> [qw(
 	)],
 	AUTHOR				=> 'Orkun Karaduman <orkunkaraduman@gmail.com>',
-	ABSTRACT			=> "Utilities for lazy",
+	ABSTRACT			=> 'Utility functions',
 	LICENSE				=> 'gpl_3',
 	META_MERGE			=> {
 		'meta-spec' => {
