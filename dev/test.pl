@@ -7,7 +7,7 @@ test.pl - for internal tests
 
 version not defined
 
-=head1 SYNOPSIS
+=head1 ABSTRACT
 
 for internal tests
 
@@ -27,12 +27,6 @@ use Lazy::Utils;
 
 exit 0;
 __END__
-=head1 REPOSITORY
-
-B<GitHub> L<https://github.com/orkunkaraduman/Lazy-Utils>
-
-B<CPAN> L<https://metacpan.org/release/Lazy-Utils>
-
 =head1 AUTHOR
 
 Orkun Karaduman <orkunkaraduman@gmail.com>

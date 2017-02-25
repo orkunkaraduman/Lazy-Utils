@@ -1,15 +1,15 @@
 package Lazy::Utils;
 =head1 NAME
 
-Lazy::Utils - Utilities for lazy
+Lazy::Utils - Utility functions
 
 =head1 VERSION
 
-version 1.08
+version 1.09
 
-=head1 SYNOPSIS
+=head1 ABSTRACT
 
-Utilities for lazy
+Utility functions
 
 	use Lazy::Utils;
 	 
@@ -40,22 +40,18 @@ use Pod::Text;
 BEGIN
 {
 	require Exporter;
-	# set the version for version checking
-	our $VERSION     = '1.08';
-	# Inherit from Exporter to export functions and variables
+	our $VERSION     = '1.09';
 	our @ISA         = qw(Exporter);
-	# Functions and variables which are exported by default
 	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta _system bashReadLine commandArgs cmdArgs whereisBin fileCache getPodText);
-	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
 
 
 =head1 DESCRIPTION
 
-Collection of utility methods all of exported for lazy
+Collection of utility functions all of exported by default
 
-=head2 Methods
+=head2 Functions
 
 =cut
 
@@ -127,12 +123,12 @@ return value: I<file contents in string type, otherwise undef because of errors>
 sub file_get_contents
 {
 	my ($path, $prefs) = @_;
-	$prefs = {} unless $prefs;
+	$prefs = {} unless ref($prefs) eq 'HASH';
 	my $result = do
 	{
 		local $/ = undef;
 		my $mode = "";
-		$mode = ":utf8" if $prefs->{utf8};
+		$mode .= " :utf8" if $prefs->{utf8};
 		open my $fh, "<$mode", $path or return;
 		my $result = <$fh>;
 		close $fh;
@@ -163,12 +159,12 @@ return value: I<success 1, otherwise undef>
 sub file_put_contents
 {
 	my ($path, $contents, $prefs) = @_;
-	$prefs = {} unless $prefs;
+	$prefs = {} unless ref($prefs) eq 'HASH';
 	my $result = do
 	{
 		local $\ = undef;
 		my $mode = "";
-		$mode = ":utf8" if $prefs->{utf8};
+		$mode .= " :utf8" if $prefs->{utf8};
 		open my $fh, ">$mode", $path or return;
 		my $result = print $fh $contents;
 		close $fh;
@@ -309,7 +305,7 @@ resolves command line arguments using commandArgs with default preferences
 sub commandArgs
 {
 	my ($prefs, @argv) = @_;
-	$prefs = {} unless $prefs;
+	$prefs = {} unless ref($prefs) eq 'HASH';
 	my %result;
 	$result{command} = undef;
 	$result{parameters} = undef;

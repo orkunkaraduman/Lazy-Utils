@@ -8,25 +8,25 @@ WriteMakefile(
 	VERSION_FROM		=> 'lib/Lazy/Utils.pm',
 	MIN_PERL_VERSION	=> '5.014',
 	PREREQ_PM			=> {
-		'JSON' => 0,
-		'Pod::Text' => 0,
+		'JSON'			=> '2.90',
+		'Pod::Text'		=> '4.09',
 	},
 	EXE_FILES			=> [qw(
 	)],
 	AUTHOR				=> 'Orkun Karaduman <orkunkaraduman@gmail.com>',
-	ABSTRACT			=> "Utilities for lazy",
+	ABSTRACT			=> 'Utility functions',
 	LICENSE				=> 'gpl_3',
 	META_MERGE			=> {
 		'meta-spec' => {
-			version => 2,
+			version		=> 2,
 		},
 		resources => {
-			homepage   => 'https://metacpan.org/release/Lazy-Utils',
-			license    => 'https://www.gnu.org/licenses/gpl-3.0.html',
-			repository => {
-				type => 'git',
-				url => 'git://git@github.com:orkunkaraduman/Lazy-Utils.git',
-				web => 'https://github.com/orkunkaraduman/Lazy-Utils',
+			homepage	=> 'https://metacpan.org/release/Lazy-Utils',
+			license		=> 'https://www.gnu.org/licenses/gpl-3.0.html',
+			repository	=> {
+				type	=> 'git',
+				url		=> 'git://git@github.com:orkunkaraduman/Lazy-Utils.git',
+				web		=> 'https://github.com/orkunkaraduman/Lazy-Utils',
 			},
 			bugtracker => {
 				web    => 'https://github.com/orkunkaraduman/Lazy-Utils/issues',
