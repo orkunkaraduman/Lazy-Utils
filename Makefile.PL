@@ -17,10 +17,10 @@ WriteMakefile(
 	ABSTRACT			=> 'Utility functions',
 	LICENSE				=> 'gpl_3',
 	META_MERGE			=> {
-		'meta-spec' => {
+		'meta-spec'		=> {
 			version		=> 2,
 		},
-		resources => {
+		resources		=> {
 			homepage	=> 'https://metacpan.org/release/Lazy-Utils',
 			license		=> 'https://www.gnu.org/licenses/gpl-3.0.html',
 			repository	=> {
