@@ -31,7 +31,6 @@ Utility functions
 use strict;
 use warnings;
 use v5.14;
-use utf8;
 use FindBin;
 use JSON;
 use Pod::Text;
