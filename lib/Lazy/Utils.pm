@@ -491,12 +491,14 @@ $fileName: I<file name of searching pod, by default running file>
 
 $section: I<searching head1 section of pod, by default undef gets all of contents>
 
-return value: I<text of pod, otherwise undef if an error occurs>
+$exclude_section: I<excludes section name, by default undef>
+
+return value: I<text of pod in string or array by line, otherwise undef if an error occurs>
 
 =cut
 sub getPodText
 {
-	my ($fileName, $section) = @_;
+	my ($fileName, $section, $exclude_section) = @_;
 	$fileName = "$FindBin::Bin/$FindBin::Script" unless $fileName;
 	return unless -e $fileName;
 	my $parser = Pod::Text->new();
@@ -506,21 +508,34 @@ sub getPodText
 	return if $@;
 	utf8::decode($text);
 	$section = ltrim($section) if $section;
-	return $text unless $section;
 	my @text = split(/^/m, $text);
-	$text = "";
+	my $result;
+	my @result;
 	for my $line (@text)
 	{
 		chomp $line;
-		unless ($text)
+		if (defined($section) and not defined($result))
 		{
-			$text = "$line\n" if $line eq $section;
+			if ($line eq $section)
+			{
+				unless ($exclude_section)
+				{
+					$result = "$line\n";
+					push @result, $line;
+				} else
+				{
+					$result = "";
+				}
+			}
 			next;
 		}
-		last unless not $line or $line =~ /^\s+/;
-		$text .= "$line\n";
+		last if defined($section) and $line and $line !~ /^\s+/;
+		$result = "" unless defined($result);
+		$result .= "$line\n";
+		push @result, $line;
 	}
-	return $text;
+	return @result if wantarray;
+	return $result;
 }
 
 

@@ -194,7 +194,9 @@ $fileName: _file name of searching pod, by default running file_
 
 $section: _searching head1 section of pod, by default undef gets all of contents_
 
-return value: _text of pod, otherwise undef if an error occurs_
+$exclude\_section: _excludes section name, by default undef_
+
+return value: _text of pod in string or array by line, otherwise undef if an error occurs_
 
 # INSTALLATION
 
