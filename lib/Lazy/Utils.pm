@@ -529,7 +529,7 @@ sub getPodText
 			}
 			next;
 		}
-		last if defined($section) and $line and $line !~ /^\s+/;
+		last if defined($section) and $line =~ /^\S+/;
 		$result = "" unless defined($result);
 		$result .= "$line\n";
 		push @result, $line;
