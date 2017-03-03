@@ -33,7 +33,7 @@ use warnings;
 use v5.14;
 use FindBin;
 use JSON;
-use Pod::Text;
+use Pod::Simple::Text;
 
 
 BEGIN
@@ -501,7 +501,7 @@ sub getPodText
 	my ($fileName, $section, $exclude_section) = @_;
 	$fileName = "$FindBin::Bin/$FindBin::Script" unless $fileName;
 	return unless -e $fileName;
-	my $parser = Pod::Text->new();
+	my $parser = Pod::Simple::Text->new();
 	my $text;
 	$parser->output_string(\$text);
 	eval { $parser->parse_file($fileName) };

@@ -9,7 +9,7 @@ WriteMakefile(
 	MIN_PERL_VERSION	=> '5.014',
 	PREREQ_PM			=> {
 		'JSON'			=> '2.90',
-		'Pod::Text'		=> '4.09',
+		'Pod::Simple::Text'	=> '3.35',
 	},
 	EXE_FILES			=> [qw(
 	)],
