@@ -216,7 +216,7 @@ from CPAN
 This module requires these other modules and libraries:
 
 - JSON
-- Pod::Text
+- Pod::Simple::Text
 
 # REPOSITORY
 

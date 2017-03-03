@@ -566,7 +566,7 @@ JSON
 
 =item *
 
-Pod::Text
+Pod::Simple::Text
 
 =back
 

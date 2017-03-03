@@ -214,7 +214,7 @@ DEPENDENCIES
 
     *   JSON
 
-    *   Pod::Text
+    *   Pod::Simple::Text
 
 REPOSITORY
     GitHub <https://github.com/orkunkaraduman/Lazy-Utils>
