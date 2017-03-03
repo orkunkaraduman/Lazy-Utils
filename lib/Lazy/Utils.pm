@@ -27,6 +27,10 @@ Utility functions
 	fileCache($tag, $expiry, $subref);
 	getPodText($fileName, $section, $exclude_section);
 
+=head1 DESCRIPTION
+
+Collection of utility functions all of exported by default
+
 =cut
 use strict;
 use warnings;
@@ -46,13 +50,7 @@ BEGIN
 }
 
 
-=head1 DESCRIPTION
-
-Collection of utility functions all of exported by default
-
 =head2 Functions
-
-=cut
 
 =head3 trim($str)
 
