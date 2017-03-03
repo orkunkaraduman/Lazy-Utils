@@ -4,7 +4,7 @@ Lazy::Utils - Utility functions
 
 # VERSION
 
-version 1.10
+version 1.11
 
 # ABSTRACT
 
@@ -24,7 +24,7 @@ Utility functions
         cmdArgs(@argv);
         whereisBin($name, $path);
         fileCache($tag, $expiry, $subref);
-        getPodText($fileName, $section);
+        getPodText($fileName, $section, $exclude_section);
 
 # DESCRIPTION
 
@@ -186,7 +186,7 @@ $subref: _sub reference to get current value_
 
 return value: _cached or current value, otherwise undef if there isn&#39;t cached value and current value doesn&#39;t get_
 
-### getPodText($fileName, $section)
+### getPodText($fileName, $section, $exclude\_section)
 
 gets a text of pod contents in given file
 

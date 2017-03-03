@@ -5,7 +5,7 @@ Lazy::Utils - Utility functions
 
 =head1 VERSION
 
-version 1.10
+version 1.11
 
 =head1 ABSTRACT
 
@@ -25,7 +25,7 @@ Utility functions
 	cmdArgs(@argv);
 	whereisBin($name, $path);
 	fileCache($tag, $expiry, $subref);
-	getPodText($fileName, $section);
+	getPodText($fileName, $section, $exclude_section);
 
 =cut
 use strict;
@@ -39,7 +39,7 @@ use Pod::Simple::Text;
 BEGIN
 {
 	require Exporter;
-	our $VERSION     = '1.10';
+	our $VERSION     = '1.11';
 	our @ISA         = qw(Exporter);
 	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta _system bashReadLine commandArgs cmdArgs whereisBin fileCache getPodText);
 	our @EXPORT_OK   = qw();
@@ -483,7 +483,7 @@ sub fileCache
 	return $result;
 }
 
-=head3 getPodText($fileName, $section)
+=head3 getPodText($fileName, $section, $exclude_section)
 
 gets a text of pod contents in given file
 

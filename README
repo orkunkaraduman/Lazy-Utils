@@ -2,7 +2,7 @@ NAME
     Lazy::Utils - Utility functions
 
 VERSION
-    version 1.10
+    version 1.11
 
 ABSTRACT
     Utility functions
@@ -21,7 +21,7 @@ ABSTRACT
             cmdArgs(@argv);
             whereisBin($name, $path);
             fileCache($tag, $expiry, $subref);
-            getPodText($fileName, $section);
+            getPodText($fileName, $section, $exclude_section);
 
 DESCRIPTION
     Collection of utility functions all of exported by default
@@ -184,7 +184,7 @@ DESCRIPTION
     return value: *cached or current value, otherwise undef if there isn't
     cached value and current value doesn't get*
 
-   getPodText($fileName, $section)
+   getPodText($fileName, $section, $exclude_section)
     gets a text of pod contents in given file
 
     $fileName: *file name of searching pod, by default running file*
