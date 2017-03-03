@@ -2,7 +2,7 @@ NAME
     Lazy::Utils - Utility functions
 
 VERSION
-    version 1.09
+    version 1.10
 
 ABSTRACT
     Utility functions
@@ -192,7 +192,10 @@ DESCRIPTION
     $section: *searching head1 section of pod, by default undef gets all of
     contents*
 
-    return value: *text of pod, otherwise undef if an error occurs*
+    $exclude_section: *excludes section name, by default undef*
+
+    return value: *text of pod in string or array by line, otherwise undef
+    if an error occurs*
 
 INSTALLATION
     To install this module type the following
@@ -211,7 +214,7 @@ DEPENDENCIES
 
     *   JSON
 
-    *   Pod::Text
+    *   Pod::Simple::Text
 
 REPOSITORY
     GitHub <https://github.com/orkunkaraduman/Lazy-Utils>

@@ -5,7 +5,7 @@ Lazy::Utils - Utility functions
 
 =head1 VERSION
 
-version 1.09
+version 1.10
 
 =head1 ABSTRACT
 
@@ -31,16 +31,15 @@ Utility functions
 use strict;
 use warnings;
 use v5.14;
-use utf8;
 use FindBin;
 use JSON;
-use Pod::Text;
+use Pod::Simple::Text;
 
 
 BEGIN
 {
 	require Exporter;
-	our $VERSION     = '1.09';
+	our $VERSION     = '1.10';
 	our @ISA         = qw(Exporter);
 	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta _system bashReadLine commandArgs cmdArgs whereisBin fileCache getPodText);
 	our @EXPORT_OK   = qw();
@@ -492,36 +491,51 @@ $fileName: I<file name of searching pod, by default running file>
 
 $section: I<searching head1 section of pod, by default undef gets all of contents>
 
-return value: I<text of pod, otherwise undef if an error occurs>
+$exclude_section: I<excludes section name, by default undef>
+
+return value: I<text of pod in string or array by line, otherwise undef if an error occurs>
 
 =cut
 sub getPodText
 {
-	my ($fileName, $section) = @_;
+	my ($fileName, $section, $exclude_section) = @_;
 	$fileName = "$FindBin::Bin/$FindBin::Script" unless $fileName;
 	return unless -e $fileName;
-	my $parser = Pod::Text->new();
+	my $parser = Pod::Simple::Text->new();
 	my $text;
 	$parser->output_string(\$text);
 	eval { $parser->parse_file($fileName) };
 	return if $@;
 	utf8::decode($text);
 	$section = ltrim($section) if $section;
-	return $text unless $section;
 	my @text = split(/^/m, $text);
-	$text = "";
+	my $result;
+	my @result;
 	for my $line (@text)
 	{
 		chomp $line;
-		unless ($text)
+		if (defined($section) and not defined($result))
 		{
-			$text = "$line\n" if $line eq $section;
+			if ($line eq $section)
+			{
+				unless ($exclude_section)
+				{
+					$result = "$line\n";
+					push @result, $line;
+				} else
+				{
+					$result = "";
+				}
+			}
 			next;
 		}
-		last unless not $line or $line =~ /^\s+/;
-		$text .= "$line\n";
+		last if defined($section) and $line =~ /^\S+/;
+		$result = "" unless defined($result);
+		$result .= "$line\n";
+		push @result, $line;
 	}
-	return $text;
+	return @result if wantarray;
+	return $result;
 }
 
 
@@ -552,7 +566,7 @@ JSON
 
 =item *
 
-Pod::Text
+Pod::Simple::Text
 
 =back
 
