@@ -25,7 +25,7 @@ Utility functions
 	cmdArgs(@argv);
 	whereisBin($name, $path);
 	fileCache($tag, $expiry, $subref);
-	getPodText($fileName, $section);
+	getPodText($fileName, $section, $exclude_section);
 
 =cut
 use strict;
@@ -483,7 +483,7 @@ sub fileCache
 	return $result;
 }
 
-=head3 getPodText($fileName, $section)
+=head3 getPodText($fileName, $section, $exclude_section)
 
 gets a text of pod contents in given file
 
