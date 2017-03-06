@@ -14,7 +14,7 @@ ABSTRACT
             rtrim($str);
             file_get_contents($path, $prefs);
             file_put_contents($path, $contents, $prefs);
-            shellmeta($s, $whitespace);
+            shellmeta($s, $nonquoted);
             _system($cmd, @argv);
             bashReadLine($prompt);
             commandArgs($prefs, @argv);
@@ -73,12 +73,13 @@ DESCRIPTION
 
     return value: *success 1, otherwise undef*
 
-   shellmeta($s, $whitespace)
-    escapes metacharacters of double-quoted shell string
+   shellmeta($s, $nonquoted)
+    escapes metacharacters of interpolated shell string
 
-    $s: *double-quoted shell string*
+    $s: *interpolated shell string*
 
-    $whitespace: *escape whitespace characters, by default 0*
+    $nonquoted: *also escapes whitespaces and * character for non-quoted
+    interpolated shell string, by default 0*
 
     return value: *escaped string*
 
@@ -102,8 +103,8 @@ DESCRIPTION
 
     return value: *line*
 
-   commandArgs($prefs, @argv)
-    resolves command line arguments.
+   commandArgs([$prefs, ]@argv)
+    resolves command line arguments
 
     valuableArgs is off, eg;
 
@@ -125,7 +126,7 @@ DESCRIPTION
             cmd param1 -opt1 -opt2 val2 param2 param3
             cmd param1 -opt1 -opt2 -- param2 param3
 
-    $prefs: *preferences in hash type*
+    $prefs: *preferences in HashRef, optional*
 
         valuableArgs: *accepts option value after option if next argument is
         not an option, by default 0*
@@ -144,9 +145,8 @@ DESCRIPTION
             { -opt1 => '', -opt2 => 'val2', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
             { -opt1 => '', -opt2 => '', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
 
-   cmdArgs(@argv)
-    resolves command line arguments using commandArgs with default
-    preferences
+   cmdArgs([$prefs, ]@argv)
+    synonym with commandArgs()
 
    whereisBin($name, $path)
     searches valid binary in search path

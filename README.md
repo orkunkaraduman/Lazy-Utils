@@ -17,7 +17,7 @@ Utility functions
         rtrim($str);
         file_get_contents($path, $prefs);
         file_put_contents($path, $contents, $prefs);
-        shellmeta($s, $whitespace);
+        shellmeta($s, $nonquoted);
         _system($cmd, @argv);
         bashReadLine($prompt);
         commandArgs($prefs, @argv);
@@ -82,13 +82,13 @@ $prefs: _preferences in hash type, by default undef_
 
 return value: _success 1, otherwise undef_
 
-### shellmeta($s, $whitespace)
+### shellmeta($s, $nonquoted)
 
-escapes metacharacters of double-quoted shell string
+escapes metacharacters of interpolated shell string
 
-$s: _double-quoted shell string_
+$s: _interpolated shell string_
 
-$whitespace: _escape whitespace characters, by default 0_
+$nonquoted: _also escapes whitespaces and \* character for non-quoted interpolated shell string, by default 0_
 
 return value: _escaped string_
 
@@ -114,9 +114,9 @@ $prompt: _prompt, by default &#39;&#39;_
 
 return value: _line_
 
-### commandArgs($prefs, @argv)
+### commandArgs(\[$prefs, \]@argv)
 
-resolves command line arguments.
+resolves command line arguments
 
 valuableArgs is off, eg;
 
@@ -138,7 +138,7 @@ valuableArgs is on, eg;
         cmd param1 -opt1 -opt2 val2 param2 param3
         cmd param1 -opt1 -opt2 -- param2 param3
 
-$prefs: _preferences in hash type_
+$prefs: _preferences in HashRef, optional_
 
 > valuableArgs: _accepts option value after option if next argument is not an option, by default 0_
 >
@@ -154,9 +154,9 @@ return value: eg;
         { -opt1 => '', -opt2 => 'val2', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
         { -opt1 => '', -opt2 => '', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
 
-### cmdArgs(@argv)
+### cmdArgs(\[$prefs, \]@argv)
 
-resolves command line arguments using commandArgs with default preferences
+synonym with **commandArgs()**
 
 ### whereisBin($name, $path)
 
