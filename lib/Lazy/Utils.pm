@@ -170,23 +170,23 @@ sub file_put_contents
 	return $result;
 }
 
-=head3 shellmeta($s, $whitespace)
+=head3 shellmeta($s, $nonquoted)
 
-escapes metacharacters of double-quoted shell string
+escapes metacharacters of interpolated shell string
 
-$s: I<double-quoted shell string>
+$s: I<interpolated shell string>
 
-$whitespace: I<escape whitespace characters, by default 0>
+$nonquoted: I<also escape whitespaces and * character for non-quoted interpolated shell string, by default 0>
 
 return value: I<escaped string>
 
 =cut
 sub shellmeta
 {
-	my ($s, $whitespace) = @_;
+	my ($s, $nonquoted) = @_;
 	return unless defined $s;
 	$s =~ s/(\\|\"|\$)/\\$1/g;
-	$s =~ s/(\s)/\\$1/g if $whitespace;
+	$s =~ s/(\s|\*)/\\$1/g if $nonquoted;
 	return $s;
 }
 
