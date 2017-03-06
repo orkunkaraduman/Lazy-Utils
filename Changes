@@ -1,5 +1,7 @@
-1.11	2017-03-03
+1.11	2017-03-06
 		- POD improvements
+		- $whitespace argument changed to $nonquoted in shellmeta()
+		- commandArgs() and cmdArgs() improvements
 
 1.10	2017-03-03
 		- getPodText improvements

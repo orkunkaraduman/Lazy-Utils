@@ -176,7 +176,7 @@ escapes metacharacters of interpolated shell string
 
 $s: I<interpolated shell string>
 
-$nonquoted: I<also escape whitespaces and * character for non-quoted interpolated shell string, by default 0>
+$nonquoted: I<also escapes whitespaces and * character for non-quoted interpolated shell string, by default 0>
 
 return value: I<escaped string>
 
@@ -250,9 +250,9 @@ sub bashReadLine
 	return (not $?)? $_: undef;
 }
 
-=head3 commandArgs($prefs, @argv)
+=head3 commandArgs([$prefs, ]@argv)
 
-resolves command line arguments.
+resolves command line arguments
 
 valuableArgs is off, eg;
 
@@ -274,7 +274,7 @@ valuableArgs is on, eg;
 	cmd param1 -opt1 -opt2 val2 param2 param3
 	cmd param1 -opt1 -opt2 -- param2 param3
 
-$prefs: I<preferences in hash type>
+$prefs: I<preferences in HashRef, optional>
 
 =over
 
@@ -296,13 +296,14 @@ return value: eg;
 
 =head3 cmdArgs(@argv)
 
-resolves command line arguments using commandArgs with default preferences
+synonym with B<commandArgs()>
 
 =cut
 sub commandArgs
 {
-	my ($prefs, @argv) = @_;
-	$prefs = {} unless ref($prefs) eq 'HASH';
+	my $prefs = {};
+	$prefs = shift if @_ >= 1 and ref($_[0]) eq 'HASH';
+	my @argv = @_;
 	my %result;
 	$result{command} = undef;
 	$result{parameters} = undef;
@@ -313,6 +314,7 @@ sub commandArgs
 	while (@argv)
 	{
 		my $argv = shift @argv;
+		next unless defined($argv) and not ref($argv);
 
 		if ($long)
 		{
@@ -371,8 +373,7 @@ sub commandArgs
 
 sub cmdArgs
 {
-	my @argv = @_;
-	return commandArgs(undef, @argv);
+	return commandArgs(@_);
 }
 
 =head3 whereisBin($name, $path)
