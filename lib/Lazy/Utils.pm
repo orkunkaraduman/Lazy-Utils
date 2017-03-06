@@ -496,6 +496,7 @@ return value: I<text of pod in string or array by line, otherwise undef if an er
 =cut
 sub getPodText
 {
+	local $/ = "\n" unless defined($/);
 	my ($fileName, $section, $exclude_section) = @_;
 	$fileName = "$FindBin::Bin/$FindBin::Script" unless $fileName;
 	return unless -e $fileName;
@@ -518,7 +519,7 @@ sub getPodText
 			{
 				unless ($exclude_section)
 				{
-					$result = "$line\n";
+					$result = "$line$/";
 					push @result, $line;
 				} else
 				{
@@ -529,7 +530,7 @@ sub getPodText
 		}
 		last if defined($section) and $line =~ /^\S+/;
 		$result = "" unless defined($result);
-		$result .= "$line\n";
+		$result .= "$line$/";
 		push @result, $line;
 	}
 	return @result if wantarray;
