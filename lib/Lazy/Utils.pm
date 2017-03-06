@@ -5,7 +5,7 @@ Lazy::Utils - Utility functions
 
 =head1 VERSION
 
-version 1.11
+version 1.12
 
 =head1 ABSTRACT
 
@@ -18,7 +18,7 @@ Utility functions
 	rtrim($str);
 	file_get_contents($path, $prefs);
 	file_put_contents($path, $contents, $prefs);
-	shellmeta($s, $whitespace);
+	shellmeta($s, $nonquoted);
 	_system($cmd, @argv);
 	bashReadLine($prompt);
 	commandArgs($prefs, @argv);
@@ -26,6 +26,10 @@ Utility functions
 	whereisBin($name, $path);
 	fileCache($tag, $expiry, $subref);
 	getPodText($fileName, $section, $exclude_section);
+
+=head1 DESCRIPTION
+
+Collection of utility functions all of exported by default
 
 =cut
 use strict;
@@ -39,20 +43,14 @@ use Pod::Simple::Text;
 BEGIN
 {
 	require Exporter;
-	our $VERSION     = '1.11';
+	our $VERSION     = '1.12';
 	our @ISA         = qw(Exporter);
 	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta _system bashReadLine commandArgs cmdArgs whereisBin fileCache getPodText);
 	our @EXPORT_OK   = qw();
 }
 
 
-=head1 DESCRIPTION
-
-Collection of utility functions all of exported by default
-
 =head2 Functions
-
-=cut
 
 =head3 trim($str)
 
@@ -172,23 +170,23 @@ sub file_put_contents
 	return $result;
 }
 
-=head3 shellmeta($s, $whitespace)
+=head3 shellmeta($s, $nonquoted)
 
-escapes metacharacters of double-quoted shell string
+escapes metacharacters of interpolated shell string
 
-$s: I<double-quoted shell string>
+$s: I<interpolated shell string>
 
-$whitespace: I<escape whitespace characters, by default 0>
+$nonquoted: I<also escapes whitespaces and * character for non-quoted interpolated shell string, by default 0>
 
 return value: I<escaped string>
 
 =cut
 sub shellmeta
 {
-	my ($s, $whitespace) = @_;
+	my ($s, $nonquoted) = @_;
 	return unless defined $s;
 	$s =~ s/(\\|\"|\$)/\\$1/g;
-	$s =~ s/(\s)/\\$1/g if $whitespace;
+	$s =~ s/(\s|\*)/\\$1/g if $nonquoted;
 	return $s;
 }
 
@@ -252,9 +250,9 @@ sub bashReadLine
 	return (not $?)? $_: undef;
 }
 
-=head3 commandArgs($prefs, @argv)
+=head3 commandArgs([$prefs, ]@argv)
 
-resolves command line arguments.
+resolves command line arguments
 
 valuableArgs is off, eg;
 
@@ -276,7 +274,7 @@ valuableArgs is on, eg;
 	cmd param1 -opt1 -opt2 val2 param2 param3
 	cmd param1 -opt1 -opt2 -- param2 param3
 
-$prefs: I<preferences in hash type>
+$prefs: I<preferences in HashRef, optional>
 
 =over
 
@@ -296,15 +294,16 @@ return value: eg;
 	{ -opt1 => '', -opt2 => 'val2', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
 	{ -opt1 => '', -opt2 => '', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
 
-=head3 cmdArgs(@argv)
+=head3 cmdArgs([$prefs, ]@argv)
 
-resolves command line arguments using commandArgs with default preferences
+synonym with B<commandArgs()>
 
 =cut
 sub commandArgs
 {
-	my ($prefs, @argv) = @_;
-	$prefs = {} unless ref($prefs) eq 'HASH';
+	my $prefs = {};
+	$prefs = shift if @_ >= 1 and ref($_[0]) eq 'HASH';
+	my @argv = @_;
 	my %result;
 	$result{command} = undef;
 	$result{parameters} = undef;
@@ -315,6 +314,7 @@ sub commandArgs
 	while (@argv)
 	{
 		my $argv = shift @argv;
+		next unless defined($argv) and not ref($argv);
 
 		if ($long)
 		{
@@ -373,8 +373,7 @@ sub commandArgs
 
 sub cmdArgs
 {
-	my @argv = @_;
-	return commandArgs(undef, @argv);
+	return commandArgs(@_);
 }
 
 =head3 whereisBin($name, $path)
@@ -459,7 +458,7 @@ sub fileCache
 	}
 	if (not defined($result))
 	{
-		$result = $subref->() if defined($subref);
+		$result = $subref->() if ref($subref) eq 'CODE';
 		if (defined($result))
 		{
 			my $tmp;

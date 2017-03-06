@@ -1,3 +1,7 @@
+1.12	2017-03-06
+		- $whitespace argument changed to $nonquoted in shellmeta()
+		- commandArgs() and cmdArgs() improvements
+
 1.11	2017-03-03
 		- POD improvements
 
