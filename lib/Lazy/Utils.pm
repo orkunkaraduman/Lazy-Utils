@@ -458,7 +458,7 @@ sub fileCache
 	}
 	if (not defined($result))
 	{
-		$result = $subref->() if defined($subref);
+		$result = $subref->() if ref($subref) eq 'CODE';
 		if (defined($result))
 		{
 			my $tmp;
