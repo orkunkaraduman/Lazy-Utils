@@ -18,7 +18,7 @@ Utility functions
 	rtrim($str);
 	file_get_contents($path, $prefs);
 	file_put_contents($path, $contents, $prefs);
-	shellmeta($s, $whitespace);
+	shellmeta($s, $nonquoted);
 	_system($cmd, @argv);
 	bashReadLine($prompt);
 	commandArgs($prefs, @argv);
@@ -294,7 +294,7 @@ return value: eg;
 	{ -opt1 => '', -opt2 => 'val2', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
 	{ -opt1 => '', -opt2 => '', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
 
-=head3 cmdArgs(@argv)
+=head3 cmdArgs([$prefs, ]@argv)
 
 synonym with B<commandArgs()>
 
