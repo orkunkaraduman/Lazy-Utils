@@ -1,3 +1,5 @@
+1.14
+
 1.13	2017-03-08
 		- bashReadLine: Bash path for every OSes: /usr/bin/env bash
 		- whereisBin: search path order changed
