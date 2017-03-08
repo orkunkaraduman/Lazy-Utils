@@ -5,7 +5,7 @@ Lazy::Utils - Utility functions
 
 =head1 VERSION
 
-version 1.12
+version 1.13
 
 =head1 ABSTRACT
 
@@ -34,7 +34,7 @@ Collection of utility functions all of exported by default
 =cut
 use strict;
 use warnings;
-use v5.14;
+use v5.10.1;
 use FindBin;
 use JSON;
 use Pod::Simple::Text;
@@ -43,7 +43,7 @@ use Pod::Simple::Text;
 BEGIN
 {
 	require Exporter;
-	our $VERSION     = '1.12';
+	our $VERSION     = '1.13';
 	our @ISA         = qw(Exporter);
 	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta _system bashReadLine commandArgs cmdArgs whereisBin fileCache getPodText);
 	our @EXPORT_OK   = qw();
@@ -245,7 +245,7 @@ sub bashReadLine
 	}
 	$prompt = "" unless defined($prompt);
 	$prompt = shellmeta(shellmeta($prompt));
-	my $cmd = '/bin/bash -c "read -p \"'.$prompt.'\" -r -e && echo -n \"\$REPLY\" 2>/dev/null"';
+	my $cmd = '/usr/bin/env bash -c "read -p \"'.$prompt.'\" -r -e && echo -n \"\$REPLY\" 2>/dev/null"';
 	$_ = `$cmd`;
 	return (not $?)? $_: undef;
 }
@@ -382,7 +382,7 @@ searches valid binary in search path
 
 $name: I<binary name>
 
-$path: I<search path, by default "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin">
+$path: I<search path, by default "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin">
 
 return value: I<array of binary path founded in search path>
 
@@ -391,7 +391,7 @@ sub whereisBin
 {
 	my ($name, $path) = @_;
 	return () unless $name;
-	$path = "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin" unless $path;
+	$path = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" unless $path;
 	return grep(-x $_, map("$_/$name", split(":", $path)));
 }
 
@@ -425,11 +425,22 @@ sub fileCache
 	my $now = time();
 	my @cleanup;
 	my $caller = (caller(1))[3];
-	$caller = (caller(1))[0] unless $caller;
-	$caller = "main"  unless $caller;
+	$caller = (caller(0))[0] unless $caller;
 	$caller = (caller(0))[3].",$caller";
+	my $tagEncoded = "";
+	for (0..(bytes::length($tag)-1))
+	{
+		my $c = bytes::substr($tag, $_, 1);
+		if ($c =~ /\W/)
+		{
+			$c = uc(sprintf("%%%x", bytes::ord($c)));
+		}
+		$tagEncoded .= $c;
+	}
 	my $tmpBase = "/tmp/";
-	my $tmpPrefix = $caller =~ s/\Q::\E/-/gr.".".$tag =~ s/(\W)/uc(sprintf("%%%x", ord($1)))/ger.",";
+	my $tmpPrefix = $caller;
+	$tmpPrefix =~ s/\Q::\E/-/g;
+	$tmpPrefix .= ".$tagEncoded,";
 	for my $tmpPath (sort {$b cmp $a} glob("${tmpBase}$tmpPrefix*"))
 	{
 		if (my ($epoch, $pid) = $tmpPath =~ /^\Q${tmpBase}$tmpPrefix\E(\d*)\.(\d*)/)

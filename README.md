@@ -4,7 +4,7 @@ Lazy::Utils - Utility functions
 
 # VERSION
 
-version 1.12
+version 1.13
 
 # ABSTRACT
 
@@ -164,7 +164,7 @@ searches valid binary in search path
 
 $name: _binary name_
 
-$path: _search path, by default &quot;/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin&quot;_
+$path: _search path, by default &quot;/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;_
 
 return value: _array of binary path founded in search path_
 

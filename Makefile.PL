@@ -6,10 +6,10 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
 	NAME				=> 'Lazy::Utils',
 	VERSION_FROM		=> 'lib/Lazy/Utils.pm',
-	MIN_PERL_VERSION	=> '5.014',
+	MIN_PERL_VERSION	=> '5.010001',
 	PREREQ_PM			=> {
 		'JSON'			=> '2.90',
-		'Pod::Simple::Text'	=> '3.35',
+		'Pod::Simple::Text'	=> '3.26',
 	},
 	EXE_FILES			=> [qw(
 	)],

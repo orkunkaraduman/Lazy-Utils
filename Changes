@@ -1,3 +1,10 @@
+1.13	2017-03-08
+		- bashReadLine: Bash path for every OSes: /usr/bin/env bash
+		- whereisBin: search path order changed
+		- fileCache: improved for Perl <v5.14
+		- fileCache: caller fix
+		- Perl v5.10.1 compatibility
+
 1.12	2017-03-06
 		- $whitespace argument changed to $nonquoted in shellmeta()
 		- commandArgs() and cmdArgs() improvements
