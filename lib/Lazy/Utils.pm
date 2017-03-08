@@ -34,7 +34,7 @@ Collection of utility functions all of exported by default
 =cut
 use strict;
 use warnings;
-use v5.14;
+use v5.10.1;
 use FindBin;
 use JSON;
 use Pod::Simple::Text;
