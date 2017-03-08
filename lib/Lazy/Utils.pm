@@ -156,6 +156,7 @@ return value: I<success 1, otherwise undef>
 sub file_put_contents
 {
 	my ($path, $contents, $prefs) = @_;
+	return if not defined($contents) or ref($contents);
 	$prefs = {} unless ref($prefs) eq 'HASH';
 	my $result = do
 	{
