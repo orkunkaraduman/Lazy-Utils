@@ -154,7 +154,7 @@ DESCRIPTION
     $name: *binary name*
 
     $path: *search path, by default
-    "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"*
+    "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"*
 
     return value: *array of binary path founded in search path*
 
