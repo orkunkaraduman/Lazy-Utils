@@ -1,3 +1,6 @@
+1.13	2017-03-08
+		- bashReadLine, Bash path for every OSes: /usr/bin/env bash
+
 1.12	2017-03-06
 		- $whitespace argument changed to $nonquoted in shellmeta()
 		- commandArgs() and cmdArgs() improvements
