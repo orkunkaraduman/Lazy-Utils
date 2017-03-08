@@ -425,8 +425,7 @@ sub fileCache
 	my $now = time();
 	my @cleanup;
 	my $caller = (caller(1))[3];
-	$caller = (caller(1))[0] unless $caller;
-	$caller = "main"  unless $caller;
+	$caller = (caller(0))[0] unless $caller;
 	$caller = (caller(0))[3].",$caller";
 	my $tagEncoded = "";
 	for (0..(bytes::length($tag)-1))
