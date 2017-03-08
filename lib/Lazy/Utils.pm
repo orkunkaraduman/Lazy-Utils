@@ -244,8 +244,7 @@ sub bashReadLine
 		return $line;
 	}
 	$prompt = "" unless defined($prompt);
-	$prompt = shellmeta(shellmeta($prompt));
-	my $cmd = '/usr/bin/env bash -c "read -p \"'.$prompt.'\" -r -e && echo -n \"\$REPLY\" 2>/dev/null"';
+	my $cmd = '/usr/bin/env bash -c "read -p \"'.shellmeta(shellmeta($prompt)).'\" -r -e && echo -n \"\$REPLY\" 2>/dev/null"';
 	$_ = `$cmd`;
 	return (not $?)? $_: undef;
 }
