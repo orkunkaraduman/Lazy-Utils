@@ -5,7 +5,7 @@ Lazy::Utils - Utility functions
 
 =head1 VERSION
 
-version 1.12
+version 1.13
 
 =head1 ABSTRACT
 
@@ -43,7 +43,7 @@ use Pod::Simple::Text;
 BEGIN
 {
 	require Exporter;
-	our $VERSION     = '1.12';
+	our $VERSION     = '1.13';
 	our @ISA         = qw(Exporter);
 	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta _system bashReadLine commandArgs cmdArgs whereisBin fileCache getPodText);
 	our @EXPORT_OK   = qw();
