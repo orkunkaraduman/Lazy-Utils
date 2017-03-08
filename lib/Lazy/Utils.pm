@@ -428,8 +428,20 @@ sub fileCache
 	$caller = (caller(1))[0] unless $caller;
 	$caller = "main"  unless $caller;
 	$caller = (caller(0))[3].",$caller";
+	my $tagEncoded = "";
+	for (0..(bytes::length($tag)-1))
+	{
+		my $c = bytes::substr($tag, $_, 1);
+		if ($c =~ /\W/)
+		{
+			$c = uc(sprintf("%%%x", bytes::ord($c)));
+		}
+		$tagEncoded .= $c;
+	}
 	my $tmpBase = "/tmp/";
-	my $tmpPrefix = $caller =~ s/\Q::\E/-/gr.".".$tag =~ s/(\W)/uc(sprintf("%%%x", ord($1)))/ger.",";
+	my $tmpPrefix = $caller;
+	$tmpPrefix =~ s/\Q::\E/-/g;
+	$tmpPrefix .= ".$tagEncoded,";
 	for my $tmpPath (sort {$b cmp $a} glob("${tmpBase}$tmpPrefix*"))
 	{
 		if (my ($epoch, $pid) = $tmpPath =~ /^\Q${tmpBase}$tmpPrefix\E(\d*)\.(\d*)/)
