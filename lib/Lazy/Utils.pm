@@ -5,7 +5,7 @@ Lazy::Utils - Utility functions
 
 =head1 VERSION
 
-version 1.13
+version 1.14
 
 =head1 ABSTRACT
 
@@ -43,7 +43,7 @@ use Pod::Simple::Text;
 BEGIN
 {
 	require Exporter;
-	our $VERSION     = '1.13';
+	our $VERSION     = '1.14';
 	our @ISA         = qw(Exporter);
 	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta _system bashReadLine commandArgs cmdArgs whereisBin fileCache getPodText);
 	our @EXPORT_OK   = qw();
@@ -156,6 +156,7 @@ return value: I<success 1, otherwise undef>
 sub file_put_contents
 {
 	my ($path, $contents, $prefs) = @_;
+	return if not defined($contents) or ref($contents);
 	$prefs = {} unless ref($prefs) eq 'HASH';
 	my $result = do
 	{
@@ -244,8 +245,7 @@ sub bashReadLine
 		return $line;
 	}
 	$prompt = "" unless defined($prompt);
-	$prompt = shellmeta(shellmeta($prompt));
-	my $cmd = '/usr/bin/env bash -c "read -p \"'.$prompt.'\" -r -e && echo -n \"\$REPLY\" 2>/dev/null"';
+	my $cmd = '/usr/bin/env bash -c "read -p \"'.shellmeta(shellmeta($prompt)).'\" -r -e && echo -n \"\$REPLY\" 2>/dev/null"';
 	$_ = `$cmd`;
 	return (not $?)? $_: undef;
 }
