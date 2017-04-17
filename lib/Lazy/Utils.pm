@@ -34,9 +34,12 @@ Collection of utility functions all of exported by default
 use strict;
 use warnings;
 use v5.10.1;
+use feature qw(switch);
+no if ($] >= 5.018), 'warnings' => 'experimental';
 use FindBin;
 use JSON;
 use Pod::Simple::Text;
+use Term::ReadKey;
 
 
 BEGIN
@@ -46,7 +49,7 @@ BEGIN
 	our @ISA         = qw(Exporter);
 	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta alt_system _system
 		bash_readline bashReadLine cmdargs commandArgs cmdArgs whereis whereisBin file_cache fileCache
-		get_pod_text getPodText);
+		get_pod_text getPodText term_readline);
 	our @EXPORT_OK   = qw();
 }
 
@@ -237,7 +240,7 @@ sub _system
 
 B<bashReadLine($prompt)> I<WILL BE DEPRECATED>
 
-reads a line using bash
+reads a line from STDIN using Bash
 
 $prompt: I<prompt, by default ''>
 
@@ -247,13 +250,14 @@ return value: I<line>
 sub bash_readline
 {
 	my ($prompt) = @_;
+	$prompt = "" unless defined($prompt);
 	unless (-t *STDIN)
 	{
 		my $line = <*STDIN>;
 		chomp $line if defined $line;
 		return $line;
 	}
-	$prompt = "" unless defined($prompt);
+	local $/ = "\n";
 	my $cmd = '/usr/bin/env bash -c "read -p \"'.shellmeta(shellmeta($prompt)).'\" -r -e && echo -n \"\$REPLY\" 2>/dev/null"';
 	$_ = `$cmd`;
 	return (not $?)? $_: undef;
@@ -436,7 +440,7 @@ E<gt>0: I<gets most recent cached value in cache if there is cached value in exp
 
 =back
 
-$subref: I<sub reference to get current value>
+$subref: I<sub reference in CodeRef to get current value>
 
 return value: I<cached or current value, otherwise undef if there isn't cached value and current value doesn't get>
 
@@ -579,6 +583,228 @@ sub get_pod_text
 sub getPodText
 {
 	return get_pod_text(@_);
+}
+
+=head3 term_readline($prompt, $default, $history)
+
+reads a line from STDIN
+
+$prompt: I<prompt, by default ''>
+
+$default: I<initial value of line, by default ''>
+
+$history: I<lines history in ArrayRef, by default undef>
+
+return value: I<line>
+
+=cut
+sub term_readline
+{
+	my ($prompt, $default, $history) = @_;
+	$prompt = "" unless defined($prompt);
+	$default = "" unless defined($default);
+	my ($in, $out) = (\*STDIN, \*STDOUT);
+	unless (-t *$in)
+	{
+		my $line = <*$in>;
+		chomp $line if defined $line;
+		return $line;
+	}
+	local $\ = undef;
+
+	my $old_sigint = $SIG{INT};
+	local $SIG{INT} = sub {
+		Term::ReadKey::ReadMode('restore', $in);
+		if (defined($old_sigint))
+		{
+			$old_sigint->();
+		} else
+		{
+			print "\n";
+			exit 130;
+		}
+	};
+	my $old_sigterm = $SIG{TERM};
+	local $SIG{TERM} = sub {
+		Term::ReadKey::ReadMode('restore', $in);
+		if (defined($old_sigterm))
+		{
+			$old_sigterm->();
+		} else
+		{
+			print "\n";
+			exit 143;
+		}
+	};
+	Term::ReadKey::ReadMode('cbreak', $in);
+
+	my ($line, $index, $history_index) = ("", 0);
+
+	my $write = sub {
+		my ($text) = @_;
+		my $s;
+		$s = "";
+		for my $c (split(/(.)/, $text))
+		{
+			if ($c =~ /[\x00-\x1F]/)
+			{
+				$c = "^".chr(0x40+ord($c));
+			} elsif ($c =~ /[\x7F]/)
+			{
+				$c = "^".chr(0x3F);
+			}
+			$s .= $c;
+		}
+		$text = $s;
+		substr($line, $index) = $text.substr($line, $index);
+		$index += length($text);
+		print $out $text;
+		$s = substr($line, $index);
+		print $out $s;
+		print $out "\e[D" x length($s);
+	};
+	my $set = sub {
+		my ($text) = @_;
+		print $out "\e[D" x $index;
+		$index = 0;
+		print $out "\e[0J";
+		$line = "";
+		$write->($text);
+	};
+	my $backspace = sub {
+		my $s;
+		return if $index <= 0;
+		$index--;
+		substr($line, $index, 1) = "";
+		print $out "\e[D\e[0J";
+		$s = substr($line, $index);
+		print $out $s;
+		print $out "\e[D" x length($s);
+	};
+	my $delete = sub {
+		my $s;
+		substr($line, $index, 1) = "";
+		print $out "\e[0J";
+		$s = substr($line, $index);
+		print $out $s;
+		print $out "\e[D" x length($s);
+	};
+	my $home = sub {
+		print $out "\e[D" x $index;
+		$index = 0;
+	};
+	my $end = sub {
+		my $s;
+		print $out "\e[0J";
+		$s = substr($line, $index);
+		print $out $s;
+		$index += length($s);
+	};
+	my $left = sub {
+		return if $index <= 0;
+		print $out "\e[D";
+		$index--;
+	};
+	my $right = sub {
+		return if $index >= length($line);
+		print $out substr($line, $index, 1);
+		$index++;
+	};
+	my $up = sub {
+		return unless ref($history) eq "ARRAY";
+		return if $history_index <= 0;
+		$history->[$history_index] = $line;
+		$history_index--;
+		$set->($history->[$history_index]);
+	};
+	my $down = sub {
+		return unless ref($history) eq "ARRAY";
+		return if $history_index >= $#$history;
+		$history->[$history_index] = $line;
+		$history_index++;
+		$set->($history->[$history_index]);
+	};
+
+	print $prompt;
+	$set->($default);
+	if (ref($history) eq "ARRAY")
+	{
+		push @$history, $line;
+		$history_index = $#$history;
+	}
+
+	my ($char, $esc) = ("", undef);
+	while (read($in, $char, 1))
+	{
+		unless (defined($esc))
+		{
+			given ($char)
+			{
+				when (/\e/)
+				{
+					$esc = "";
+					next;
+				}
+				when (/\n|\r/)
+				{
+					print $out $char;
+					$history->[$#$history] = $line if ref($history) eq "ARRAY";
+					last;
+				}
+				when (/[\b]|\x7F/)
+				{
+					$backspace->();
+				}
+				default
+				{
+					$write->($char);
+				}
+			}
+			next;
+		}
+		$esc .= $char;
+		if ($esc =~ /^.\d?\D/)
+		{
+			given ($esc)
+			{
+				when (/^\[A/)
+				{
+					$up->();
+				}
+				when (/^\[B/)
+				{
+					$down->();
+				}
+				when (/^\[C/)
+				{
+					$right->();
+				}
+				when (/^\[D/)
+				{
+					$left->();
+				}
+				when (/^\[3~/)
+				{
+					$delete->();
+				}
+				when (/^\[H/)
+				{
+					$home->();
+				}
+				when (/^\[F/)
+				{
+					$end->();
+				}
+				default
+				{
+					$write->("\e$esc");
+				}
+			}
+			$esc = undef;
+		}
+	}
+	Term::ReadKey::ReadMode('restore', $in);
+	return $line;
 }
 
 
