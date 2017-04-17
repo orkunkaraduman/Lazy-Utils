@@ -25,6 +25,7 @@ Utility functions
 	whereis($name, $path);
 	file_cache($tag, $expiry, $subref);
 	get_pod_text($file_name, $section, $exclude_section);
+	term_readline($prompt, $default, $history);
 
 =head1 DESCRIPTION
 
@@ -836,6 +837,10 @@ JSON
 =item *
 
 Pod::Simple::Text
+
+=item *
+
+Term::ReadKey
 
 =back
 

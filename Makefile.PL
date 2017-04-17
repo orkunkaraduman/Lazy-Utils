@@ -10,6 +10,7 @@ WriteMakefile(
 	PREREQ_PM			=> {
 		'JSON'			=> '2.90',
 		'Pod::Simple::Text'	=> '3.26',
+		'Term::ReadKey'	=> '0',
 	},
 	EXE_FILES			=> [qw(
 	)],
