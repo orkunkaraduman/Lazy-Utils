@@ -45,7 +45,9 @@ BEGIN
 	require Exporter;
 	our $VERSION     = '1.15';
 	our @ISA         = qw(Exporter);
-	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta _system bashReadLine commandArgs cmdArgs whereisBin fileCache getPodText);
+	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta system2 _system
+		bash_readline bashReadLine cmdargs commandArgs cmdArgs whereis whereisBin file_cache fileCache
+		get_pod_text getPodText);
 	our @EXPORT_OK   = qw();
 }
 
@@ -106,7 +108,7 @@ gets all contents of file in string type
 
 $path: I<path of file>
 
-$prefs: I<preferences in hash type, by default undef>
+$prefs: I<preferences in HashRef, by default undef>
 
 =over
 
@@ -142,7 +144,7 @@ $path: I<path of file>
 
 $contents: I<file contents in string type>
 
-$prefs: I<preferences in hash type, by default undef>
+$prefs: I<preferences in HashRef, by default undef>
 
 =over
 
@@ -191,7 +193,9 @@ sub shellmeta
 	return $s;
 }
 
-=head3 _system($cmd, @argv)
+=head3 system2($cmd, @argv)
+
+B<_system($cmd, @argv)> I<WILL BE DEPRECATED>
 
 executes a system command like Perl system call
 
@@ -206,7 +210,7 @@ returned $?: I<return code of wait call like on Perl system call>
 returned $!: I<system error message like on Perl system call>
 
 =cut
-sub _system
+sub system2
 {
 	my $pid;
 	if (not defined($pid = fork))
@@ -225,8 +229,14 @@ sub _system
 	}
 	return $? >> 8;
 }
+sub _system
+{
+	return system2(@_);
+}
 
-=head3 bashReadLine($prompt)
+=head3 bash_readline($prompt)
+
+B<bashReadLine($prompt)> I<WILL BE DEPRECATED>
 
 reads a line using bash
 
@@ -235,12 +245,12 @@ $prompt: I<prompt, by default ''>
 return value: I<line>
 
 =cut
-sub bashReadLine
+sub bash_readline
 {
 	my ($prompt) = @_;
-	unless ( -t *STDIN )
+	unless (-t *STDIN)
 	{
-		my $line = <STDIN>;
+		my $line = <*STDIN>;
 		chomp $line if defined $line;
 		return $line;
 	}
@@ -249,8 +259,15 @@ sub bashReadLine
 	$_ = `$cmd`;
 	return (not $?)? $_: undef;
 }
+sub bashReadLine
+{
+	return bash_readline(@_);
+}
 
-=head3 commandArgs([$prefs, ]@argv)
+=head3 cmdargs([$prefs, ]@argv)
+
+B<commandArgs([$prefs, ]@argv)> I<WILL BE DEPRECATED>
+B<cmdArgs([$prefs, ]@argv)> I<WILL BE DEPRECATED>
 
 resolves command line arguments
 
@@ -294,12 +311,8 @@ return value: eg;
 	{ -opt1 => '', -opt2 => 'val2', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
 	{ -opt1 => '', -opt2 => '', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
 
-=head3 cmdArgs([$prefs, ]@argv)
-
-synonym with B<commandArgs()>
-
 =cut
-sub commandArgs
+sub cmdargs
 {
 	my $prefs = {};
 	$prefs = shift if @_ >= 1 and ref($_[0]) eq 'HASH';
@@ -370,13 +383,18 @@ sub commandArgs
 
 	return \%result;
 }
-
+sub commandArgs
+{
+	return cmdargs(@_);
+}
 sub cmdArgs
 {
-	return commandArgs(@_);
+	return cmdargs(@_);
 }
 
-=head3 whereisBin($name, $path)
+=head3 whereis($name, $path)
+
+B<whereisBin($name, $path)> I<WILL BE DEPRECATED>
 
 searches valid binary in search path
 
@@ -387,15 +405,21 @@ $path: I<search path, by default "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/
 return value: I<array of binary path founded in search path>
 
 =cut
-sub whereisBin
+sub whereis
 {
 	my ($name, $path) = @_;
 	return () unless $name;
 	$path = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" unless $path;
 	return grep(-x $_, map("$_/$name", split(":", $path)));
 }
+sub whereisBin
+{
+	return whereis(@_);
+}
 
-=head3 fileCache($tag, $expiry, $subref)
+=head3 file_cache($tag, $expiry, $subref)
+
+B<fileCache($tag, $expiry, $subref)> I<WILL BE DEPRECATED>
 
 gets most recent cached value in file cache by given tag and caller function if there is cached value in expiry period. Otherwise tries to get current value using $subref, puts value in cache and cleanups old cache values.
 
@@ -418,7 +442,7 @@ $subref: I<sub reference to get current value>
 return value: I<cached or current value, otherwise undef if there isn't cached value and current value doesn't get>
 
 =cut
-sub fileCache
+sub file_cache
 {
 	my ($tag, $expiry, $subref) = @_;
 	my $result;
@@ -427,7 +451,7 @@ sub fileCache
 	my $caller = (caller(1))[3];
 	$caller = (caller(0))[0] unless $caller;
 	$caller = (caller(0))[3].",$caller";
-	my $tagEncoded = "";
+	my $tag_encoded = "";
 	for (0..(bytes::length($tag)-1))
 	{
 		my $c = bytes::substr($tag, $_, 1);
@@ -435,22 +459,22 @@ sub fileCache
 		{
 			$c = uc(sprintf("%%%x", bytes::ord($c)));
 		}
-		$tagEncoded .= $c;
+		$tag_encoded .= $c;
 	}
-	my $tmpBase = "/tmp/";
-	my $tmpPrefix = $caller;
-	$tmpPrefix =~ s/\Q::\E/-/g;
-	$tmpPrefix .= ".$tagEncoded,";
-	for my $tmpPath (sort {$b cmp $a} glob("${tmpBase}$tmpPrefix*"))
+	my $tmp_base = "/tmp/";
+	my $tmp_prefix = $caller;
+	$tmp_prefix =~ s/\Q::\E/-/g;
+	$tmp_prefix .= ".$tag_encoded,";
+	for my $tmp_path (sort {$b cmp $a} glob("${tmp_base}$tmp_prefix*"))
 	{
-		if (my ($epoch, $pid) = $tmpPath =~ /^\Q${tmpBase}$tmpPrefix\E(\d*)\.(\d*)/)
+		if (my ($epoch, $pid) = $tmp_path =~ /^\Q${tmp_base}$tmp_prefix\E(\d*)\.(\d*)/)
 		{
 			if ($expiry < 0 or ($expiry > 0 and $now-$epoch < $expiry))
 			{
 				if (not defined($result))
 				{
 					my $tmp;
-					$tmp = file_get_contents($tmpPath);
+					$tmp = file_get_contents($tmp_path);
 					if ($tmp)
 					{
 						if ($tmp =~ /^SCALAR\n(.*)/)
@@ -465,7 +489,7 @@ sub fileCache
 				next;
 			}
 		}
-		unshift @cleanup, $tmpPath;
+		unshift @cleanup, $tmp_path;
 	}
 	if (not defined($result))
 	{
@@ -480,7 +504,7 @@ sub fileCache
 			{
 				eval { $tmp = to_json($result, {utf8 => 1, pretty => 1}) } if ref($result) eq "ARRAY" or ref($result) eq "HASH";
 			}
-			if ($tmp and file_put_contents("${tmpBase}tmp.$tmpPrefix$now.$$", $tmp) and rename("${tmpBase}tmp.$tmpPrefix$now.$$", "${tmpBase}$tmpPrefix$now.$$"))
+			if ($tmp and file_put_contents("${tmp_base}tmp.$tmp_prefix$now.$$", $tmp) and rename("${tmp_base}tmp.$tmp_prefix$now.$$", "${tmp_base}$tmp_prefix$now.$$"))
 			{
 				pop @cleanup;
 				for (@cleanup)
@@ -492,12 +516,18 @@ sub fileCache
 	}
 	return $result;
 }
+sub fileCache
+{
+	return file_cache(@_);
+}
 
-=head3 getPodText($fileName, $section, $exclude_section)
+=head3 get_pod_text($file_name, $section, $exclude_section)
+
+B<getPodText($file_name, $section, $exclude_section)> I<WILL BE DEPRECATED>
 
 gets a text of pod contents in given file
 
-$fileName: I<file name of searching pod, by default running file>
+$file_name: I<file name of searching pod, by default running file>
 
 $section: I<searching head1 section of pod, by default undef gets all of contents>
 
@@ -506,15 +536,15 @@ $exclude_section: I<excludes section name, by default undef>
 return value: I<text of pod in string or array by line, otherwise undef if an error occurs>
 
 =cut
-sub getPodText
+sub get_pod_text
 {
-	my ($fileName, $section, $exclude_section) = @_;
-	$fileName = "$FindBin::Bin/$FindBin::Script" unless $fileName;
-	return unless -e $fileName;
+	my ($file_name, $section, $exclude_section) = @_;
+	$file_name = "$FindBin::Bin/$FindBin::Script" unless $file_name;
+	return unless -e $file_name;
 	my $parser = Pod::Simple::Text->new();
 	my $text;
 	$parser->output_string(\$text);
-	eval { $parser->parse_file($fileName) };
+	eval { $parser->parse_file($file_name) };
 	return if $@;
 	utf8::decode($text);
 	$section = ltrim($section) if $section;
@@ -546,6 +576,10 @@ sub getPodText
 	}
 	return @result if wantarray;
 	return $result;
+}
+sub getPodText
+{
+	return get_pod_text(@_);
 }
 
 
