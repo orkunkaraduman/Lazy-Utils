@@ -7,7 +7,7 @@ Lazy::Utils - Utility functions
 
 version 1.15
 
-=head1 ABSTRACT
+=head1 SYNOPSIS
 
 Utility functions
 
@@ -19,13 +19,12 @@ Utility functions
 	file_get_contents($path, $prefs);
 	file_put_contents($path, $contents, $prefs);
 	shellmeta($s, $nonquoted);
-	_system($cmd, @argv);
-	bashReadLine($prompt);
-	commandArgs($prefs, @argv);
-	cmdArgs(@argv);
-	whereisBin($name, $path);
-	fileCache($tag, $expiry, $subref);
-	getPodText($fileName, $section, $exclude_section);
+	alt_system($cmd, @argv);
+	bash_readline($prompt);
+	cmdargs($prefs, @argv);
+	whereis($name, $path);
+	file_cache($tag, $expiry, $subref);
+	get_pod_text($file_name, $section, $exclude_section);
 
 =head1 DESCRIPTION
 
@@ -45,7 +44,7 @@ BEGIN
 	require Exporter;
 	our $VERSION     = '1.15';
 	our @ISA         = qw(Exporter);
-	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta system2 _system
+	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta alt_system _system
 		bash_readline bashReadLine cmdargs commandArgs cmdArgs whereis whereisBin file_cache fileCache
 		get_pod_text getPodText);
 	our @EXPORT_OK   = qw();
@@ -193,11 +192,11 @@ sub shellmeta
 	return $s;
 }
 
-=head3 system2($cmd, @argv)
+=head3 alt_system($cmd, @argv)
 
 B<_system($cmd, @argv)> I<WILL BE DEPRECATED>
 
-executes a system command like Perl system call
+alternative implementation of perls core system subroutine that executes a system command
 
 $cmd: I<command>
 
@@ -205,12 +204,12 @@ $cmd: I<command>
 
 return value: I<exit code of command. 511 if fatal error occurs>
 
-returned $?: I<return code of wait call like on Perl system call>
+returned $?: I<return code of wait call like on perls system call>
 
-returned $!: I<system error message like on Perl system call>
+returned $!: I<system error message like on perls system call>
 
 =cut
-sub system2
+sub alt_system
 {
 	my $pid;
 	if (not defined($pid = fork))
@@ -231,7 +230,7 @@ sub system2
 }
 sub _system
 {
-	return system2(@_);
+	return alt_system(@_);
 }
 
 =head3 bash_readline($prompt)
