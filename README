@@ -2,9 +2,9 @@ NAME
     Lazy::Utils - Utility functions
 
 VERSION
-    version 1.14
+    version 1.15
 
-ABSTRACT
+SYNOPSIS
     Utility functions
 
             use Lazy::Utils;
@@ -15,13 +15,13 @@ ABSTRACT
             file_get_contents($path, $prefs);
             file_put_contents($path, $contents, $prefs);
             shellmeta($s, $nonquoted);
-            _system($cmd, @argv);
-            bashReadLine($prompt);
-            commandArgs($prefs, @argv);
-            cmdArgs(@argv);
-            whereisBin($name, $path);
-            fileCache($tag, $expiry, $subref);
-            getPodText($fileName, $section, $exclude_section);
+            alt_system($cmd, @argv);
+            bash_readline($prompt);
+            cmdargs($prefs, @argv);
+            whereis($name, $path);
+            file_cache($tag, $expiry, $subref);
+            get_pod_text($file_name, $section, $exclude_section);
+            term_readline($prompt, $default, $history);
 
 DESCRIPTION
     Collection of utility functions all of exported by default
@@ -53,7 +53,7 @@ DESCRIPTION
 
     $path: *path of file*
 
-    $prefs: *preferences in hash type, by default undef*
+    $prefs: *preferences in HashRef, by default undef*
 
         utf8: *opens file-handle as :utf8 mode, by default 0*
 
@@ -67,7 +67,7 @@ DESCRIPTION
 
     $contents: *file contents in string type*
 
-    $prefs: *preferences in hash type, by default undef*
+    $prefs: *preferences in HashRef, by default undef*
 
         utf8: *opens file-handle as :utf8 mode, by default 0*
 
@@ -83,8 +83,11 @@ DESCRIPTION
 
     return value: *escaped string*
 
-   _system($cmd, @argv)
-    executes a system command like Perl system call
+   alt_system($cmd, @argv)
+    _system($cmd, @argv) *WILL BE DEPRECATED*
+
+    alternative implementation of perls core system subroutine that executes
+    a system command
 
     $cmd: *command*
 
@@ -92,18 +95,24 @@ DESCRIPTION
 
     return value: *exit code of command. 511 if fatal error occurs*
 
-    returned $?: *return code of wait call like on Perl system call*
+    returned $?: *return code of wait call like on perls system call*
 
-    returned $!: *system error message like on Perl system call*
+    returned $!: *system error message like on perls system call*
 
-   bashReadLine($prompt)
-    reads a line using bash
+   bash_readline($prompt)
+    bashReadLine($prompt) *WILL BE DEPRECATED*
+
+    reads a line from STDIN using Bash
 
     $prompt: *prompt, by default ''*
 
     return value: *line*
 
-   commandArgs([$prefs, ]@argv)
+   cmdargs([$prefs, ]@argv)
+    commandArgs([$prefs, ]@argv) *WILL BE DEPRECATED*
+
+    cmdArgs([$prefs, ]@argv) *WILL BE DEPRECATED*
+
     resolves command line arguments
 
     valuableArgs is off, eg;
@@ -145,10 +154,9 @@ DESCRIPTION
             { -opt1 => '', -opt2 => 'val2', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
             { -opt1 => '', -opt2 => '', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
 
-   cmdArgs([$prefs, ]@argv)
-    synonym with commandArgs()
+   whereis($name, $path)
+    whereisBin($name, $path) *WILL BE DEPRECATED*
 
-   whereisBin($name, $path)
     searches valid binary in search path
 
     $name: *binary name*
@@ -158,7 +166,9 @@ DESCRIPTION
 
     return value: *array of binary path founded in search path*
 
-   fileCache($tag, $expiry, $subref)
+   file_cache($tag, $expiry, $subref)
+    fileCache($tag, $expiry, $subref) *WILL BE DEPRECATED*
+
     gets most recent cached value in file cache by given tag and caller
     function if there is cached value in expiry period. Otherwise tries to
     get current value using $subref, puts value in cache and cleanups old
@@ -179,15 +189,17 @@ DESCRIPTION
         in expiry period. Otherwise tries to get current value using
         $subref, puts and cleanups.*
 
-    $subref: *sub reference to get current value*
+    $subref: *sub reference in CodeRef to get current value*
 
     return value: *cached or current value, otherwise undef if there isn't
     cached value and current value doesn't get*
 
-   getPodText($fileName, $section, $exclude_section)
+   get_pod_text($file_name, $section, $exclude_section)
+    getPodText($file_name, $section, $exclude_section) *WILL BE DEPRECATED*
+
     gets a text of pod contents in given file
 
-    $fileName: *file name of searching pod, by default running file*
+    $file_name: *file name of searching pod, by default running file*
 
     $section: *searching head1 section of pod, by default undef gets all of
     contents*
@@ -196,6 +208,17 @@ DESCRIPTION
 
     return value: *text of pod in string or array by line, otherwise undef
     if an error occurs*
+
+   term_readline($prompt, $default, $history)
+    reads a line from STDIN
+
+    $prompt: *prompt, by default ''*
+
+    $default: *initial value of line, by default ''*
+
+    $history: *lines history in ArrayRef, by default undef*
+
+    return value: *line*
 
 INSTALLATION
     To install this module type the following
@@ -215,6 +238,8 @@ DEPENDENCIES
     *   JSON
 
     *   Pod::Simple::Text
+
+    *   Term::ReadKey
 
 REPOSITORY
     GitHub <https://github.com/orkunkaraduman/Lazy-Utils>

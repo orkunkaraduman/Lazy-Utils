@@ -1,3 +1,7 @@
+1.15	2017-04-17
+		- Naming convention changed to snake_case from lowerCamelCase
+		- Added term_readline()
+
 1.14	2017-03-16
 		- file_put_contents: defined and not ref check
 

@@ -4,9 +4,9 @@ Lazy::Utils - Utility functions
 
 # VERSION
 
-version 1.14
+version 1.15
 
-# ABSTRACT
+# SYNOPSIS
 
 Utility functions
 
@@ -18,13 +18,13 @@ Utility functions
         file_get_contents($path, $prefs);
         file_put_contents($path, $contents, $prefs);
         shellmeta($s, $nonquoted);
-        _system($cmd, @argv);
-        bashReadLine($prompt);
-        commandArgs($prefs, @argv);
-        cmdArgs(@argv);
-        whereisBin($name, $path);
-        fileCache($tag, $expiry, $subref);
-        getPodText($fileName, $section, $exclude_section);
+        alt_system($cmd, @argv);
+        bash_readline($prompt);
+        cmdargs($prefs, @argv);
+        whereis($name, $path);
+        file_cache($tag, $expiry, $subref);
+        get_pod_text($file_name, $section, $exclude_section);
+        term_readline($prompt, $default, $history);
 
 # DESCRIPTION
 
@@ -62,7 +62,7 @@ gets all contents of file in string type
 
 $path: _path of file_
 
-$prefs: _preferences in hash type, by default undef_
+$prefs: _preferences in HashRef, by default undef_
 
 > utf8: _opens file-handle as :utf8 mode, by default 0_
 
@@ -76,7 +76,7 @@ $path: _path of file_
 
 $contents: _file contents in string type_
 
-$prefs: _preferences in hash type, by default undef_
+$prefs: _preferences in HashRef, by default undef_
 
 > utf8: _opens file-handle as :utf8 mode, by default 0_
 
@@ -92,9 +92,11 @@ $nonquoted: _also escapes whitespaces and \* character for non-quoted interpolat
 
 return value: _escaped string_
 
-### \_system($cmd, @argv)
+### alt\_system($cmd, @argv)
 
-executes a system command like Perl system call
+**\_system($cmd, @argv)** _WILL BE DEPRECATED_
+
+alternative implementation of perls core system subroutine that executes a system command
 
 $cmd: _command_
 
@@ -102,19 +104,25 @@ $cmd: _command_
 
 return value: _exit code of command. 511 if fatal error occurs_
 
-returned $?: _return code of wait call like on Perl system call_
+returned $?: _return code of wait call like on perls system call_
 
-returned $!: _system error message like on Perl system call_
+returned $!: _system error message like on perls system call_
 
-### bashReadLine($prompt)
+### bash\_readline($prompt)
 
-reads a line using bash
+**bashReadLine($prompt)** _WILL BE DEPRECATED_
+
+reads a line from STDIN using Bash
 
 $prompt: _prompt, by default &#39;&#39;_
 
 return value: _line_
 
-### commandArgs(\[$prefs, \]@argv)
+### cmdargs(\[$prefs, \]@argv)
+
+**commandArgs(\[$prefs, \]@argv)** _WILL BE DEPRECATED_
+
+**cmdArgs(\[$prefs, \]@argv)** _WILL BE DEPRECATED_
 
 resolves command line arguments
 
@@ -154,11 +162,9 @@ return value: eg;
         { -opt1 => '', -opt2 => 'val2', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
         { -opt1 => '', -opt2 => '', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
 
-### cmdArgs(\[$prefs, \]@argv)
+### whereis($name, $path)
 
-synonym with **commandArgs()**
-
-### whereisBin($name, $path)
+**whereisBin($name, $path)** _WILL BE DEPRECATED_
 
 searches valid binary in search path
 
@@ -168,7 +174,9 @@ $path: _search path, by default &quot;/usr/local/sbin:/usr/local/bin:/usr/sbin:/
 
 return value: _array of binary path founded in search path_
 
-### fileCache($tag, $expiry, $subref)
+### file\_cache($tag, $expiry, $subref)
+
+**fileCache($tag, $expiry, $subref)** _WILL BE DEPRECATED_
 
 gets most recent cached value in file cache by given tag and caller function if there is cached value in expiry period. Otherwise tries to get current value using $subref, puts value in cache and cleanups old cache values.
 
@@ -182,21 +190,35 @@ $expiry: _cache expiry period_
 >
 > &gt;0: _gets most recent cached value in cache if there is cached value in expiry period. Otherwise tries to get current value using $subref, puts and cleanups._
 
-$subref: _sub reference to get current value_
+$subref: _sub reference in CodeRef to get current value_
 
 return value: _cached or current value, otherwise undef if there isn&#39;t cached value and current value doesn&#39;t get_
 
-### getPodText($fileName, $section, $exclude\_section)
+### get\_pod\_text($file\_name, $section, $exclude\_section)
+
+**getPodText($file\_name, $section, $exclude\_section)** _WILL BE DEPRECATED_
 
 gets a text of pod contents in given file
 
-$fileName: _file name of searching pod, by default running file_
+$file\_name: _file name of searching pod, by default running file_
 
 $section: _searching head1 section of pod, by default undef gets all of contents_
 
 $exclude\_section: _excludes section name, by default undef_
 
 return value: _text of pod in string or array by line, otherwise undef if an error occurs_
+
+### term\_readline($prompt, $default, $history)
+
+reads a line from STDIN
+
+$prompt: _prompt, by default &#39;&#39;_
+
+$default: _initial value of line, by default &#39;&#39;_
+
+$history: _lines history in ArrayRef, by default undef_
+
+return value: _line_
 
 # INSTALLATION
 
@@ -217,6 +239,7 @@ This module requires these other modules and libraries:
 
 - JSON
 - Pod::Simple::Text
+- Term::ReadKey
 
 # REPOSITORY
 
