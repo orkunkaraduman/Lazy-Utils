@@ -271,6 +271,7 @@ sub bashReadLine
 =head3 cmdargs([$prefs, ]@argv)
 
 B<commandArgs([$prefs, ]@argv)> I<WILL BE DEPRECATED>
+
 B<cmdArgs([$prefs, ]@argv)> I<WILL BE DEPRECATED>
 
 resolves command line arguments
@@ -647,12 +648,20 @@ sub term_readline
 		$s = "";
 		for my $c (split(/(.)/, $text))
 		{
-			if ($c =~ /[\x00-\x1F]/)
+			given ($c)
 			{
-				$c = "^".chr(0x40+ord($c));
-			} elsif ($c =~ /[\x7F]/)
-			{
-				$c = "^".chr(0x3F);
+				when (/\t/)
+				{
+					$c = "";
+				}
+				when (/[\x00-\x1F]/)
+				{
+					$c = "^".chr(0x40+ord($c));
+				}
+				when ($c =~ /[\x7F]/)
+				{
+					$c = "^".chr(0x3F);
+				}
 			}
 			$s .= $c;
 		}
