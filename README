@@ -109,8 +109,9 @@ DESCRIPTION
     return value: *line*
 
    cmdargs([$prefs, ]@argv)
-    commandArgs([$prefs, ]@argv) *WILL BE DEPRECATED* cmdArgs([$prefs,
-    ]@argv) *WILL BE DEPRECATED*
+    commandArgs([$prefs, ]@argv) *WILL BE DEPRECATED*
+
+    cmdArgs([$prefs, ]@argv) *WILL BE DEPRECATED*
 
     resolves command line arguments
 

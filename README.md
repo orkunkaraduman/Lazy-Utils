@@ -121,6 +121,7 @@ return value: _line_
 ### cmdargs(\[$prefs, \]@argv)
 
 **commandArgs(\[$prefs, \]@argv)** _WILL BE DEPRECATED_
+
 **cmdArgs(\[$prefs, \]@argv)** _WILL BE DEPRECATED_
 
 resolves command line arguments
