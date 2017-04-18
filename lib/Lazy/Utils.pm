@@ -650,10 +650,6 @@ sub term_readline
 		{
 			given ($c)
 			{
-				when (/\t/)
-				{
-					$c = "";
-				}
 				when (/[\x00-\x1F]/)
 				{
 					$c = "^".chr(0x40+ord($c));
@@ -668,6 +664,7 @@ sub term_readline
 		$text = $s;
 		substr($line, $index) = $text.substr($line, $index);
 		$index += length($text);
+		print $out "\e[0J";
 		print $out $text;
 		$s = substr($line, $index);
 		print $out $s;
@@ -753,7 +750,9 @@ sub term_readline
 				when (/\e/)
 				{
 					$esc = "";
-					next;
+				}
+				when (/\t/)
+				{
 				}
 				when (/\n|\r/)
 				{
