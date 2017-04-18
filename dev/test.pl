@@ -25,10 +25,6 @@ use lib "${FindBin::Bin}/../lib";
 use Lazy::Utils;
 
 
-my @hist = ("abc", "def", "ghi", "jkl");
-say term_readline("prompt: ", "def", \@hist);
-say join(",", @hist);
-
 exit 0;
 __END__
 =head1 AUTHOR
