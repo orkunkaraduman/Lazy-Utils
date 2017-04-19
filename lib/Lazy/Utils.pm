@@ -750,7 +750,7 @@ sub term_readline
 	}
 
 	my ($char, $esc) = ("", undef);
-	while (read($in, $char, 1))
+	while (defined($char = getc($in)))
 	{
 		unless (defined($esc))
 		{
