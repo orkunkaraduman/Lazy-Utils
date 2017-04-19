@@ -25,32 +25,8 @@ use lib "${FindBin::Bin}/../lib";
 use Lazy::Utils;
 
 
-=pod
-my $in = \*STDIN;
-my $s;
-$in->blocking(0);
-while (1)
-{
-	$s = <$in>;
-	last if defined($s);
-}
-#$s = $in->getline();
-say $s;
-exit;
-=cut
-
-
-sub abc
-{
-	my ($a, $b) = @_;
-	say ref($a);
-	say ref(\$a);
-}
-abc(*STDIN);
-
-my @hist = ("abc", "def", "ghi", "jkl");
-say term_readline("", "", \@hist, *STDIN);
-say join(",", @hist);
+my $char = term_readkey();
+print $char;
 
 exit 0;
 __END__

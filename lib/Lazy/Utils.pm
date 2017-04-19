@@ -25,7 +25,8 @@ Utility functions
 	whereis($name, $path);
 	file_cache($tag, $expiry, $subref);
 	get_pod_text($file_name, $section, $exclude_section);
-	term_readline($prompt, $default, $history);
+	term_readline($prompt, $default, $history, $in, $out);
+	term_readkey($in);
 
 =head1 DESCRIPTION
 
@@ -50,7 +51,7 @@ BEGIN
 	our @ISA         = qw(Exporter);
 	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta system2 _system
 		bash_readline bashReadLine cmdargs commandArgs cmdArgs whereis whereisBin file_cache fileCache
-		get_pod_text getPodText term_readline);
+		get_pod_text getPodText term_readline term_readkey);
 	our @EXPORT_OK   = qw();
 }
 
@@ -252,9 +253,10 @@ sub bash_readline
 {
 	my ($prompt) = @_;
 	$prompt = "" unless defined($prompt);
-	unless (-t *STDIN)
+	my $in = \*STDIN;
+	unless (-t $in)
 	{
-		my $line = <*STDIN>;
+		my $line = <$in>;
 		chomp $line if defined $line;
 		return $line;
 	}
@@ -615,9 +617,9 @@ sub term_readline
 	my $out = $a_out if ref($a_out) eq "GLOB";
 	$out = \$a_out if ref(\$a_out) eq "GLOB";
 	$out = \*STDOUT unless defined($out);
-	unless (-t *$in)
+	unless (-t $in)
 	{
-		my $line = <*$in>;
+		my $line = <$in>;
 		chomp $line if defined $line;
 		return $line;
 	}
@@ -823,6 +825,85 @@ sub term_readline
 	}
 	Term::ReadKey::ReadMode('restore', $in);
 	return $line;
+}
+
+=head3 term_readkey($in)
+
+reads key from terminal
+
+$in: I<terminal input file handle, by default \*STDIN>
+
+return value: I<key in string type>
+
+=cut
+sub term_readkey
+{
+	my ($a_in) = @_;
+	my $in = $a_in if ref($a_in) eq "GLOB";
+	$in = \$a_in if ref(\$a_in) eq "GLOB";
+	$in = \*STDIN unless defined($in);
+	unless (-t $in)
+	{
+		return getc($in);
+	}
+	local $\ = undef;
+
+	my $old_sigint = $SIG{INT};
+	local $SIG{INT} = sub {
+		Term::ReadKey::ReadMode('restore', $in);
+		if (defined($old_sigint))
+		{
+			$old_sigint->();
+		} else
+		{
+			print "\n";
+			exit 130;
+		}
+	};
+	my $old_sigterm = $SIG{TERM};
+	local $SIG{TERM} = sub {
+		Term::ReadKey::ReadMode('restore', $in);
+		if (defined($old_sigterm))
+		{
+			$old_sigterm->();
+		} else
+		{
+			print "\n";
+			exit 143;
+		}
+	};
+	Term::ReadKey::ReadMode('cbreak', $in);
+
+	my $result;
+	my ($char, $esc) = ("", undef);
+	while (defined($char = getc($in)))
+	{
+		unless (defined($esc))
+		{
+			given ($char)
+			{
+				when (/\e/)
+				{
+					$esc = "";
+				}
+				default
+				{
+					$result = $char;
+					last;
+				}
+			}
+			next;
+		}
+		$esc .= $char;
+		if ($esc =~ /^.\d?\D/)
+		{
+			$result = "\e$esc";
+			$esc = undef;
+			last;
+		}
+	}
+	Term::ReadKey::ReadMode('restore', $in);
+	return $result;
 }
 
 
