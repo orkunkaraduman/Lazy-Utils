@@ -803,10 +803,6 @@ sub term_readline
 				{
 					$left->();
 				}
-				when (/^\[3~/)
-				{
-					$delete->();
-				}
 				when (/^\[H/)
 				{
 					$home->();
@@ -814,6 +810,31 @@ sub term_readline
 				when (/^\[F/)
 				{
 					$end->();
+				}
+				when (/^\[(\d)~/)
+				{
+					given ($1)
+					{
+						when (1)
+						{
+							$home->();
+						}
+						when (2)
+						{
+							#insert
+						}
+						when (3)
+						{
+							$delete->();
+						}
+						when (4)
+						{
+							$end->();
+						}
+						default
+						{
+						}
+					}
 				}
 				default
 				{
