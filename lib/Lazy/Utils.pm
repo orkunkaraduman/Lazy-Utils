@@ -775,6 +775,9 @@ sub term_readline
 				{
 					$backspace->();
 				}
+				when (/[\x00-\x1F]|\x7F/)
+				{
+				}
 				default
 				{
 					$write->($char);
@@ -831,14 +834,31 @@ sub term_readline
 						{
 							$end->();
 						}
+						when (5)
+						{
+							#pageup
+						}
+						when (6)
+						{
+							#pagedown
+						}
+						when (7)
+						{
+							$home->();
+						}
+						when (8)
+						{
+							$end->();
+						}
 						default
 						{
+							#$write->("\e$esc");
 						}
 					}
 				}
 				default
 				{
-					$write->("\e$esc");
+					#$write->("\e$esc");
 				}
 			}
 			$esc = undef;
