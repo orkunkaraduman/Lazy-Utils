@@ -19,7 +19,7 @@ Utility functions
 	file_get_contents($path, $prefs);
 	file_put_contents($path, $contents, $prefs);
 	shellmeta($s, $nonquoted);
-	alt_system($cmd, @argv);
+	system2($cmd, @argv);
 	bash_readline($prompt);
 	cmdargs($prefs, @argv);
 	whereis($name, $path);
@@ -48,7 +48,7 @@ BEGIN
 	require Exporter;
 	our $VERSION     = '1.16';
 	our @ISA         = qw(Exporter);
-	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta alt_system _system
+	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta system2 _system
 		bash_readline bashReadLine cmdargs commandArgs cmdArgs whereis whereisBin file_cache fileCache
 		get_pod_text getPodText term_readline);
 	our @EXPORT_OK   = qw();
@@ -196,7 +196,7 @@ sub shellmeta
 	return $s;
 }
 
-=head3 alt_system($cmd, @argv)
+=head3 system2($cmd, @argv)
 
 B<_system($cmd, @argv)> I<WILL BE DEPRECATED>
 
@@ -213,7 +213,7 @@ returned $?: I<return code of wait call like on perls system call>
 returned $!: I<system error message like on perls system call>
 
 =cut
-sub alt_system
+sub system2
 {
 	my $pid;
 	if (not defined($pid = fork))
@@ -234,7 +234,7 @@ sub alt_system
 }
 sub _system
 {
-	return alt_system(@_);
+	return system2(@_);
 }
 
 =head3 bash_readline($prompt)
