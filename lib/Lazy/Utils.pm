@@ -597,9 +597,9 @@ $default: I<initial value of line, by default ''>
 
 $history: I<lines history in ArrayRef, by default undef>
 
-$in: I<terminal input file handle, by default \\*STDIN>
+$in: I<terminal input file handle, by default \*STDIN>
 
-$out: I<terminal output file handle, by default \\*STOUT>
+$out: I<terminal output file handle, by default \*STDOUT>
 
 return value: I<line>
 

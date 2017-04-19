@@ -218,9 +218,9 @@ $default: _initial value of line, by default &#39;&#39;_
 
 $history: _lines history in ArrayRef, by default undef_
 
-$in: _terminal input file handle, by default \\\\\*STDIN_
+$in: _terminal input file handle, by default \\\*STDIN_
 
-$out: _terminal output file handle, by default \\\\\*STOUT_
+$out: _terminal output file handle, by default \\\*STDOUT_
 
 return value: _line_
 

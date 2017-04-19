@@ -218,9 +218,9 @@ DESCRIPTION
 
     $history: *lines history in ArrayRef, by default undef*
 
-    $in: *terminal input file handle, by default \\*STDIN*
+    $in: *terminal input file handle, by default \*STDIN*
 
-    $out: *terminal output file handle, by default \\*STOUT*
+    $out: *terminal output file handle, by default \*STDOUT*
 
     return value: *line*
 
