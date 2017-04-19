@@ -24,7 +24,8 @@ Utility functions
         whereis($name, $path);
         file_cache($tag, $expiry, $subref);
         get_pod_text($file_name, $section, $exclude_section);
-        term_readline($prompt, $default, $history);
+        term_readline($prompt, $default, $history, $in, $out);
+        term_readkey($in);
 
 # DESCRIPTION
 
@@ -223,6 +224,14 @@ $in: _terminal input file handle, by default \\\*STDIN_
 $out: _terminal output file handle, by default \\\*STDOUT_
 
 return value: _line_
+
+### term\_readkey($in)
+
+reads key from terminal
+
+$in: _terminal input file handle, by default \\\*STDIN_
+
+return value: _key in string type_
 
 # INSTALLATION
 

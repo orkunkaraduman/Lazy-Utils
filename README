@@ -21,7 +21,8 @@ SYNOPSIS
             whereis($name, $path);
             file_cache($tag, $expiry, $subref);
             get_pod_text($file_name, $section, $exclude_section);
-            term_readline($prompt, $default, $history);
+            term_readline($prompt, $default, $history, $in, $out);
+            term_readkey($in);
 
 DESCRIPTION
     Collection of utility functions all of exported by default
@@ -223,6 +224,13 @@ DESCRIPTION
     $out: *terminal output file handle, by default \*STDOUT*
 
     return value: *line*
+
+   term_readkey($in)
+    reads key from terminal
+
+    $in: *terminal input file handle, by default \*STDIN*
+
+    return value: *key in string type*
 
 INSTALLATION
     To install this module type the following
