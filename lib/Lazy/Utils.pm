@@ -587,9 +587,9 @@ sub getPodText
 	return get_pod_text(@_);
 }
 
-=head3 term_readline($prompt, $default, $history)
+=head3 term_readline($prompt, $default, $history, $in, $out)
 
-reads a line from STDIN
+reads a line from terminal
 
 $prompt: I<prompt, by default ''>
 
@@ -597,15 +597,24 @@ $default: I<initial value of line, by default ''>
 
 $history: I<lines history in ArrayRef, by default undef>
 
+$in: I<terminal input file handle, by default \\*STDIN>
+
+$out: I<terminal output file handle, by default \\*STOUT>
+
 return value: I<line>
 
 =cut
 sub term_readline
 {
-	my ($prompt, $default, $history) = @_;
+	my ($prompt, $default, $history, $a_in, $a_out) = @_;
 	$prompt = "" unless defined($prompt);
 	$default = "" unless defined($default);
-	my ($in, $out) = (\*STDIN, \*STDOUT);
+	my $in = $a_in if ref($a_in) eq "GLOB";
+	$in = \$a_in if ref(\$a_in) eq "GLOB";
+	$in = \*STDIN unless defined($in);
+	my $out = $a_out if ref($a_out) eq "GLOB";
+	$out = \$a_out if ref(\$a_out) eq "GLOB";
+	$out = \*STDOUT unless defined($out);
 	unless (-t *$in)
 	{
 		my $line = <*$in>;

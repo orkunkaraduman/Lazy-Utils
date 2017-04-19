@@ -40,8 +40,16 @@ exit;
 =cut
 
 
+sub abc
+{
+	my ($a, $b) = @_;
+	say ref($a);
+	say ref(\$a);
+}
+abc(*STDIN);
+
 my @hist = ("abc", "def", "ghi", "jkl");
-say term_readline("", "", \@hist);
+say term_readline("", "", \@hist, *STDIN);
 say join(",", @hist);
 
 exit 0;

@@ -1,5 +1,6 @@
 1.16	2017-04-19
 		- alt_system() changed to system2() immediately
+		- added $in, $out args into term_readline()
 
 1.15	2017-04-17
 		- Naming convention changed to snake_case from lowerCamelCase
