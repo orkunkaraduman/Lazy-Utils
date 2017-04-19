@@ -664,17 +664,17 @@ sub term_readline
 		$text = $s;
 		substr($line, $index) = $text.substr($line, $index);
 		$index += length($text);
-		print $out "\e[0J";
-		print $out $text;
 		$s = substr($line, $index);
+		print $out "\e[J";
+		print $out $text;
 		print $out $s;
 		print $out "\e[D" x length($s);
 	};
 	my $set = sub {
 		my ($text) = @_;
 		print $out "\e[D" x $index;
+		print $out "\e[J";
 		$index = 0;
-		print $out "\e[0J";
 		$line = "";
 		$write->($text);
 	};
@@ -683,16 +683,16 @@ sub term_readline
 		return if $index <= 0;
 		$index--;
 		substr($line, $index, 1) = "";
-		print $out "\e[D\e[0J";
 		$s = substr($line, $index);
+		print $out "\e[D\e[J";
 		print $out $s;
 		print $out "\e[D" x length($s);
 	};
 	my $delete = sub {
 		my $s;
 		substr($line, $index, 1) = "";
-		print $out "\e[0J";
 		$s = substr($line, $index);
+		print $out "\e[J";
 		print $out $s;
 		print $out "\e[D" x length($s);
 	};
@@ -702,10 +702,10 @@ sub term_readline
 	};
 	my $end = sub {
 		my $s;
-		print $out "\e[0J";
 		$s = substr($line, $index);
-		print $out $s;
 		$index += length($s);
+		print $out "\e[J";
+		print $out $s;
 	};
 	my $left = sub {
 		return if $index <= 0;

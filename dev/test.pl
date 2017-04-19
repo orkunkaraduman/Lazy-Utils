@@ -25,6 +25,25 @@ use lib "${FindBin::Bin}/../lib";
 use Lazy::Utils;
 
 
+=pod
+my $in = \*STDIN;
+my $s;
+$in->blocking(0);
+while (1)
+{
+	$s = <$in>;
+	last if defined($s);
+}
+#$s = $in->getline();
+say $s;
+exit;
+=cut
+
+
+my @hist = ("abc", "def", "ghi", "jkl");
+say term_readline("", "", \@hist);
+say join(",", @hist);
+
 exit 0;
 __END__
 =head1 AUTHOR
