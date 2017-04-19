@@ -25,6 +25,12 @@ use lib "${FindBin::Bin}/../lib";
 use Lazy::Utils;
 
 
+#my $char = term_readkey();
+#print $char;
+
+my $line = term_readline();
+say $line;
+
 exit 0;
 __END__
 =head1 AUTHOR

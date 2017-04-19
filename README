@@ -2,7 +2,7 @@ NAME
     Lazy::Utils - Utility functions
 
 VERSION
-    version 1.15
+    version 1.16
 
 SYNOPSIS
     Utility functions
@@ -15,13 +15,14 @@ SYNOPSIS
             file_get_contents($path, $prefs);
             file_put_contents($path, $contents, $prefs);
             shellmeta($s, $nonquoted);
-            alt_system($cmd, @argv);
+            system2($cmd, @argv);
             bash_readline($prompt);
             cmdargs($prefs, @argv);
             whereis($name, $path);
             file_cache($tag, $expiry, $subref);
             get_pod_text($file_name, $section, $exclude_section);
-            term_readline($prompt, $default, $history);
+            term_readline($prompt, $default, $history, $in, $out);
+            term_readkey($in);
 
 DESCRIPTION
     Collection of utility functions all of exported by default
@@ -83,7 +84,7 @@ DESCRIPTION
 
     return value: *escaped string*
 
-   alt_system($cmd, @argv)
+   system2($cmd, @argv)
     _system($cmd, @argv) *WILL BE DEPRECATED*
 
     alternative implementation of perls core system subroutine that executes
@@ -209,8 +210,8 @@ DESCRIPTION
     return value: *text of pod in string or array by line, otherwise undef
     if an error occurs*
 
-   term_readline($prompt, $default, $history)
-    reads a line from STDIN
+   term_readline($prompt, $default, $history, $in, $out)
+    reads a line from terminal
 
     $prompt: *prompt, by default ''*
 
@@ -218,7 +219,18 @@ DESCRIPTION
 
     $history: *lines history in ArrayRef, by default undef*
 
+    $in: *terminal input file handle, by default \*STDIN*
+
+    $out: *terminal output file handle, by default \*STDOUT*
+
     return value: *line*
+
+   term_readkey($in)
+    reads key from terminal
+
+    $in: *terminal input file handle, by default \*STDIN*
+
+    return value: *key in string type*
 
 INSTALLATION
     To install this module type the following

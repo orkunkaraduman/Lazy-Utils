@@ -4,7 +4,7 @@ Lazy::Utils - Utility functions
 
 # VERSION
 
-version 1.15
+version 1.16
 
 # SYNOPSIS
 
@@ -18,13 +18,14 @@ Utility functions
         file_get_contents($path, $prefs);
         file_put_contents($path, $contents, $prefs);
         shellmeta($s, $nonquoted);
-        alt_system($cmd, @argv);
+        system2($cmd, @argv);
         bash_readline($prompt);
         cmdargs($prefs, @argv);
         whereis($name, $path);
         file_cache($tag, $expiry, $subref);
         get_pod_text($file_name, $section, $exclude_section);
-        term_readline($prompt, $default, $history);
+        term_readline($prompt, $default, $history, $in, $out);
+        term_readkey($in);
 
 # DESCRIPTION
 
@@ -92,7 +93,7 @@ $nonquoted: _also escapes whitespaces and \* character for non-quoted interpolat
 
 return value: _escaped string_
 
-### alt\_system($cmd, @argv)
+### system2($cmd, @argv)
 
 **\_system($cmd, @argv)** _WILL BE DEPRECATED_
 
@@ -208,9 +209,9 @@ $exclude\_section: _excludes section name, by default undef_
 
 return value: _text of pod in string or array by line, otherwise undef if an error occurs_
 
-### term\_readline($prompt, $default, $history)
+### term\_readline($prompt, $default, $history, $in, $out)
 
-reads a line from STDIN
+reads a line from terminal
 
 $prompt: _prompt, by default &#39;&#39;_
 
@@ -218,7 +219,19 @@ $default: _initial value of line, by default &#39;&#39;_
 
 $history: _lines history in ArrayRef, by default undef_
 
+$in: _terminal input file handle, by default \\\*STDIN_
+
+$out: _terminal output file handle, by default \\\*STDOUT_
+
 return value: _line_
+
+### term\_readkey($in)
+
+reads key from terminal
+
+$in: _terminal input file handle, by default \\\*STDIN_
+
+return value: _key in string type_
 
 # INSTALLATION
 

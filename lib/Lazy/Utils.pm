@@ -5,7 +5,7 @@ Lazy::Utils - Utility functions
 
 =head1 VERSION
 
-version 1.15
+version 1.16
 
 =head1 SYNOPSIS
 
@@ -19,13 +19,14 @@ Utility functions
 	file_get_contents($path, $prefs);
 	file_put_contents($path, $contents, $prefs);
 	shellmeta($s, $nonquoted);
-	alt_system($cmd, @argv);
+	system2($cmd, @argv);
 	bash_readline($prompt);
 	cmdargs($prefs, @argv);
 	whereis($name, $path);
 	file_cache($tag, $expiry, $subref);
 	get_pod_text($file_name, $section, $exclude_section);
-	term_readline($prompt, $default, $history);
+	term_readline($prompt, $default, $history, $in, $out);
+	term_readkey($in);
 
 =head1 DESCRIPTION
 
@@ -46,11 +47,11 @@ use Term::ReadKey;
 BEGIN
 {
 	require Exporter;
-	our $VERSION     = '1.15';
+	our $VERSION     = '1.16';
 	our @ISA         = qw(Exporter);
-	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta alt_system _system
+	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta system2 _system
 		bash_readline bashReadLine cmdargs commandArgs cmdArgs whereis whereisBin file_cache fileCache
-		get_pod_text getPodText term_readline);
+		get_pod_text getPodText term_readline term_readkey);
 	our @EXPORT_OK   = qw();
 }
 
@@ -196,7 +197,7 @@ sub shellmeta
 	return $s;
 }
 
-=head3 alt_system($cmd, @argv)
+=head3 system2($cmd, @argv)
 
 B<_system($cmd, @argv)> I<WILL BE DEPRECATED>
 
@@ -213,7 +214,7 @@ returned $?: I<return code of wait call like on perls system call>
 returned $!: I<system error message like on perls system call>
 
 =cut
-sub alt_system
+sub system2
 {
 	my $pid;
 	if (not defined($pid = fork))
@@ -234,7 +235,7 @@ sub alt_system
 }
 sub _system
 {
-	return alt_system(@_);
+	return system2(@_);
 }
 
 =head3 bash_readline($prompt)
@@ -252,9 +253,10 @@ sub bash_readline
 {
 	my ($prompt) = @_;
 	$prompt = "" unless defined($prompt);
-	unless (-t *STDIN)
+	my $in = \*STDIN;
+	unless (-t $in)
 	{
-		my $line = <*STDIN>;
+		my $line = <$in>;
 		chomp $line if defined $line;
 		return $line;
 	}
@@ -587,9 +589,9 @@ sub getPodText
 	return get_pod_text(@_);
 }
 
-=head3 term_readline($prompt, $default, $history)
+=head3 term_readline($prompt, $default, $history, $in, $out)
 
-reads a line from STDIN
+reads a line from terminal
 
 $prompt: I<prompt, by default ''>
 
@@ -597,18 +599,27 @@ $default: I<initial value of line, by default ''>
 
 $history: I<lines history in ArrayRef, by default undef>
 
+$in: I<terminal input file handle, by default \*STDIN>
+
+$out: I<terminal output file handle, by default \*STDOUT>
+
 return value: I<line>
 
 =cut
 sub term_readline
 {
-	my ($prompt, $default, $history) = @_;
+	my ($prompt, $default, $history, $a_in, $a_out) = @_;
 	$prompt = "" unless defined($prompt);
 	$default = "" unless defined($default);
-	my ($in, $out) = (\*STDIN, \*STDOUT);
-	unless (-t *$in)
+	my $in = $a_in if ref($a_in) eq "GLOB";
+	$in = \$a_in if ref(\$a_in) eq "GLOB";
+	$in = \*STDIN unless defined($in);
+	my $out = $a_out if ref($a_out) eq "GLOB";
+	$out = \$a_out if ref(\$a_out) eq "GLOB";
+	$out = \*STDOUT unless defined($out);
+	unless (-t $in)
 	{
-		my $line = <*$in>;
+		my $line = <$in>;
 		chomp $line if defined $line;
 		return $line;
 	}
@@ -664,17 +675,17 @@ sub term_readline
 		$text = $s;
 		substr($line, $index) = $text.substr($line, $index);
 		$index += length($text);
-		print $out "\e[0J";
-		print $out $text;
 		$s = substr($line, $index);
+		print $out "\e[J";
+		print $out $text;
 		print $out $s;
 		print $out "\e[D" x length($s);
 	};
 	my $set = sub {
 		my ($text) = @_;
 		print $out "\e[D" x $index;
+		print $out "\e[J";
 		$index = 0;
-		print $out "\e[0J";
 		$line = "";
 		$write->($text);
 	};
@@ -683,16 +694,16 @@ sub term_readline
 		return if $index <= 0;
 		$index--;
 		substr($line, $index, 1) = "";
-		print $out "\e[D\e[0J";
 		$s = substr($line, $index);
+		print $out "\e[D\e[J";
 		print $out $s;
 		print $out "\e[D" x length($s);
 	};
 	my $delete = sub {
 		my $s;
 		substr($line, $index, 1) = "";
-		print $out "\e[0J";
 		$s = substr($line, $index);
+		print $out "\e[J";
 		print $out $s;
 		print $out "\e[D" x length($s);
 	};
@@ -702,10 +713,10 @@ sub term_readline
 	};
 	my $end = sub {
 		my $s;
-		print $out "\e[0J";
 		$s = substr($line, $index);
-		print $out $s;
 		$index += length($s);
+		print $out "\e[J";
+		print $out $s;
 	};
 	my $left = sub {
 		return if $index <= 0;
@@ -741,7 +752,7 @@ sub term_readline
 	}
 
 	my ($char, $esc) = ("", undef);
-	while (read($in, $char, 1))
+	while (defined($char = getc($in)))
 	{
 		unless (defined($esc))
 		{
@@ -763,6 +774,9 @@ sub term_readline
 				when (/[\b]|\x7F/)
 				{
 					$backspace->();
+				}
+				when (/[\x00-\x1F]|\x7F/)
+				{
 				}
 				default
 				{
@@ -792,10 +806,6 @@ sub term_readline
 				{
 					$left->();
 				}
-				when (/^\[3~/)
-				{
-					$delete->();
-				}
 				when (/^\[H/)
 				{
 					$home->();
@@ -804,9 +814,51 @@ sub term_readline
 				{
 					$end->();
 				}
+				when (/^\[(\d)~/)
+				{
+					given ($1)
+					{
+						when (1)
+						{
+							$home->();
+						}
+						when (2)
+						{
+							#insert
+						}
+						when (3)
+						{
+							$delete->();
+						}
+						when (4)
+						{
+							$end->();
+						}
+						when (5)
+						{
+							#pageup
+						}
+						when (6)
+						{
+							#pagedown
+						}
+						when (7)
+						{
+							$home->();
+						}
+						when (8)
+						{
+							$end->();
+						}
+						default
+						{
+							#$write->("\e$esc");
+						}
+					}
+				}
 				default
 				{
-					$write->("\e$esc");
+					#$write->("\e$esc");
 				}
 			}
 			$esc = undef;
@@ -814,6 +866,85 @@ sub term_readline
 	}
 	Term::ReadKey::ReadMode('restore', $in);
 	return $line;
+}
+
+=head3 term_readkey($in)
+
+reads key from terminal
+
+$in: I<terminal input file handle, by default \*STDIN>
+
+return value: I<key in string type>
+
+=cut
+sub term_readkey
+{
+	my ($a_in) = @_;
+	my $in = $a_in if ref($a_in) eq "GLOB";
+	$in = \$a_in if ref(\$a_in) eq "GLOB";
+	$in = \*STDIN unless defined($in);
+	unless (-t $in)
+	{
+		return getc($in);
+	}
+	local $\ = undef;
+
+	my $old_sigint = $SIG{INT};
+	local $SIG{INT} = sub {
+		Term::ReadKey::ReadMode('restore', $in);
+		if (defined($old_sigint))
+		{
+			$old_sigint->();
+		} else
+		{
+			print "\n";
+			exit 130;
+		}
+	};
+	my $old_sigterm = $SIG{TERM};
+	local $SIG{TERM} = sub {
+		Term::ReadKey::ReadMode('restore', $in);
+		if (defined($old_sigterm))
+		{
+			$old_sigterm->();
+		} else
+		{
+			print "\n";
+			exit 143;
+		}
+	};
+	Term::ReadKey::ReadMode('cbreak', $in);
+
+	my $result;
+	my ($char, $esc) = ("", undef);
+	while (defined($char = getc($in)))
+	{
+		unless (defined($esc))
+		{
+			given ($char)
+			{
+				when (/\e/)
+				{
+					$esc = "";
+				}
+				default
+				{
+					$result = $char;
+					last;
+				}
+			}
+			next;
+		}
+		$esc .= $char;
+		if ($esc =~ /^.\d?\D/)
+		{
+			$result = "\e$esc";
+			$esc = undef;
+			last;
+		}
+	}
+	Term::ReadKey::ReadMode('restore', $in);
+	return $result;
 }
 
 
