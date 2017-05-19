@@ -52,9 +52,9 @@ BEGIN
 }
 
 
-=head2 Functions
+=head1 Functions
 
-=head3 trim($str)
+=head2 trim($str)
 
 trims given string
 
@@ -70,7 +70,7 @@ sub trim
 	return $s
 }
 
-=head3 ltrim($str)
+=head2 ltrim($str)
 
 trims left given string
 
@@ -86,7 +86,7 @@ sub ltrim
 	return $s
 }
 
-=head3 rtrim($str)
+=head2 rtrim($str)
 
 trims right given string
 
@@ -102,7 +102,7 @@ sub rtrim
 	return $s
 }
 
-=head3 file_get_contents($path, $prefs)
+=head2 file_get_contents($path, $prefs)
 
 gets all contents of file in string type
 
@@ -136,7 +136,7 @@ sub file_get_contents
 	return $result;
 }
 
-=head3 file_put_contents($path, $contents, $prefs)
+=head2 file_put_contents($path, $contents, $prefs)
 
 puts all contents of file in string type
 
@@ -173,7 +173,7 @@ sub file_put_contents
 	return $result;
 }
 
-=head3 shellmeta($s, $nonquoted)
+=head2 shellmeta($s, $nonquoted)
 
 escapes metacharacters of interpolated shell string
 
@@ -193,9 +193,9 @@ sub shellmeta
 	return $s;
 }
 
-=head3 system2($cmd, @argv)
+=head2 system2($cmd, @argv)
 
-B<_system($cmd, @argv)> I<WILL BE DEPRECATED>
+B<_system($cmd, @argv)> I<OBSOLETE>
 
 alternative implementation of perls core system subroutine that executes a system command
 
@@ -234,9 +234,9 @@ sub _system
 	return system2(@_);
 }
 
-=head3 bash_readline($prompt)
+=head2 bash_readline($prompt)
 
-B<bashReadLine($prompt)> I<WILL BE DEPRECATED>
+B<bashReadLine($prompt)> I<OBSOLETE>
 
 reads a line from STDIN using Bash
 
@@ -266,11 +266,11 @@ sub bashReadLine
 	return bash_readline(@_);
 }
 
-=head3 cmdargs([$prefs, ]@argv)
+=head2 cmdargs([$prefs, ]@argv)
 
-B<commandArgs([$prefs, ]@argv)> I<WILL BE DEPRECATED>
+B<commandArgs([$prefs, ]@argv)> I<OBSOLETE>
 
-B<cmdArgs([$prefs, ]@argv)> I<WILL BE DEPRECATED>
+B<cmdArgs([$prefs, ]@argv)> I<OBSOLETE>
 
 resolves command line arguments
 
@@ -395,9 +395,9 @@ sub cmdArgs
 	return cmdargs(@_);
 }
 
-=head3 whereis($name, $path)
+=head2 whereis($name, $path)
 
-B<whereisBin($name, $path)> I<WILL BE DEPRECATED>
+B<whereisBin($name, $path)> I<OBSOLETE>
 
 searches valid binary in search path
 
@@ -420,9 +420,9 @@ sub whereisBin
 	return whereis(@_);
 }
 
-=head3 file_cache($tag, $expiry, $subref)
+=head2 file_cache($tag, $expiry, $subref)
 
-B<fileCache($tag, $expiry, $subref)> I<WILL BE DEPRECATED>
+B<fileCache($tag, $expiry, $subref)> I<OBSOLETE>
 
 gets most recent cached value in file cache by given tag and caller function if there is cached value in expiry period. Otherwise tries to get current value using $subref, puts value in cache and cleanups old cache values.
 
@@ -524,9 +524,9 @@ sub fileCache
 	return file_cache(@_);
 }
 
-=head3 get_pod_text($file_name, $section, $exclude_section)
+=head2 get_pod_text($file_name, $section, $exclude_section)
 
-B<getPodText($file_name, $section, $exclude_section)> I<WILL BE DEPRECATED>
+B<getPodText($file_name, $section, $exclude_section)> I<OBSOLETE>
 
 gets a text of pod contents in given file
 
