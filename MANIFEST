@@ -7,4 +7,4 @@ MANIFEST			This list of files
 MANIFEST.SKIP
 README
 README.md
-t/Lazy-Utils.t
+t/00-load.t
