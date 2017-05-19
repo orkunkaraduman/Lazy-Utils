@@ -20,7 +20,7 @@ version 1.17
         bash_readline($prompt);
         cmdargs($prefs, @argv);
         whereis($name, $path);
-        file_cache($tag, $expiry, $subref);
+        file_cache($tag, $expiry, $coderef);
         get_pod_text($file_name, $section, $exclude_section);
 
 # DESCRIPTION
@@ -171,23 +171,23 @@ $path: _search path, by default &quot;/usr/local/sbin:/usr/local/bin:/usr/sbin:/
 
 return value: _array of binary path founded in search path_
 
-## file\_cache($tag, $expiry, $subref)
+## file\_cache($tag, $expiry, $coderef)
 
-**fileCache($tag, $expiry, $subref)** _OBSOLETE_
+**fileCache($tag, $expiry, $coderef)** _OBSOLETE_
 
-gets most recent cached value in file cache by given tag and caller function if there is cached value in expiry period. Otherwise tries to get current value using $subref, puts value in cache and cleanups old cache values.
+gets most recent cached value in file cache by given tag and caller function if there is cached value in expiry period. Otherwise tries to get current value using $coderef, puts value in cache and cleanups old cache values.
 
 $tag: _tag for cache_
 
 $expiry: _cache expiry period_
 
-> &lt;0: _always gets most recent cached value if there is any cached value. Otherwise tries to get current value using $subref, puts and cleanups._
+> &lt;0: _always gets most recent cached value if there is any cached value. Otherwise tries to get current value using $coderef, puts and cleanups._
 >
-> &#x3d;0: _never gets cached value. Always tries to get current value using $subref, puts and cleanups._
+> &#x3d;0: _never gets cached value. Always tries to get current value using $coderef, puts and cleanups._
 >
-> &gt;0: _gets most recent cached value in cache if there is cached value in expiry period. Otherwise tries to get current value using $subref, puts and cleanups._
+> &gt;0: _gets most recent cached value in cache if there is cached value in expiry period. Otherwise tries to get current value using $coderef, puts and cleanups._
 
-$subref: _sub reference in CodeRef to get current value_
+$coderef: _code reference to get current value_
 
 return value: _cached or current value, otherwise undef if there isn&#39;t cached value and current value doesn&#39;t get_
 
@@ -233,7 +233,7 @@ This module requires these other modules and libraries:
 
 # AUTHOR
 
-Orkun Karaduman &lt;orkunkaraduman@gmail.com&gt;
+Orkun Karaduman (ORKUN) &lt;orkun@cpan.org&gt;
 
 # COPYRIGHT AND LICENSE
 

@@ -21,7 +21,7 @@ version 1.17
 	bash_readline($prompt);
 	cmdargs($prefs, @argv);
 	whereis($name, $path);
-	file_cache($tag, $expiry, $subref);
+	file_cache($tag, $expiry, $coderef);
 	get_pod_text($file_name, $section, $exclude_section);
 
 =head1 DESCRIPTION
@@ -420,11 +420,11 @@ sub whereisBin
 	return whereis(@_);
 }
 
-=head2 file_cache($tag, $expiry, $subref)
+=head2 file_cache($tag, $expiry, $coderef)
 
-B<fileCache($tag, $expiry, $subref)> I<OBSOLETE>
+B<fileCache($tag, $expiry, $coderef)> I<OBSOLETE>
 
-gets most recent cached value in file cache by given tag and caller function if there is cached value in expiry period. Otherwise tries to get current value using $subref, puts value in cache and cleanups old cache values.
+gets most recent cached value in file cache by given tag and caller function if there is cached value in expiry period. Otherwise tries to get current value using $coderef, puts value in cache and cleanups old cache values.
 
 $tag: I<tag for cache>
 
@@ -432,22 +432,22 @@ $expiry: I<cache expiry period>
 
 =over
 
-E<lt>0: I<always gets most recent cached value if there is any cached value. Otherwise tries to get current value using $subref, puts and cleanups.>
+E<lt>0: I<always gets most recent cached value if there is any cached value. Otherwise tries to get current value using $coderef, puts and cleanups.>
 
-=0: I<never gets cached value. Always tries to get current value using $subref, puts and cleanups.>
+=0: I<never gets cached value. Always tries to get current value using $coderef, puts and cleanups.>
 
-E<gt>0: I<gets most recent cached value in cache if there is cached value in expiry period. Otherwise tries to get current value using $subref, puts and cleanups.>
+E<gt>0: I<gets most recent cached value in cache if there is cached value in expiry period. Otherwise tries to get current value using $coderef, puts and cleanups.>
 
 =back
 
-$subref: I<sub reference in CodeRef to get current value>
+$coderef: I<code reference to get current value>
 
 return value: I<cached or current value, otherwise undef if there isn't cached value and current value doesn't get>
 
 =cut
 sub file_cache
 {
-	my ($tag, $expiry, $subref) = @_;
+	my ($tag, $expiry, $coderef) = @_;
 	my $result;
 	my $now = time();
 	my @cleanup;
@@ -496,7 +496,7 @@ sub file_cache
 	}
 	if (not defined($result))
 	{
-		$result = $subref->() if ref($subref) eq 'CODE';
+		$result = $coderef->() if ref($coderef) eq 'CODE';
 		if (defined($result))
 		{
 			my $tmp;
@@ -625,7 +625,7 @@ B<CPAN> L<https://metacpan.org/release/Lazy-Utils>
 
 =head1 AUTHOR
 
-Orkun Karaduman <orkunkaraduman@gmail.com>
+Orkun Karaduman (ORKUN) <orkun@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 

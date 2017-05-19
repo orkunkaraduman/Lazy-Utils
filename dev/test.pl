@@ -7,7 +7,7 @@ test.pl - for internal tests
 
 version not defined
 
-=head1 ABSTRACT
+=head1 SYNOPSIS
 
 for internal tests
 
@@ -25,17 +25,11 @@ use lib "${FindBin::Bin}/../lib";
 use Lazy::Utils;
 
 
-#my $char = term_readkey();
-#print $char;
-
-my $line = term_readline();
-say $line;
-
 exit 0;
 __END__
 =head1 AUTHOR
 
-Orkun Karaduman <orkunkaraduman@gmail.com>
+Orkun Karaduman (ORKUN) <orkun@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
