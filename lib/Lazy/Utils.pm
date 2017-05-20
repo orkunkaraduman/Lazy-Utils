@@ -5,7 +5,7 @@ Lazy::Utils - Utility functions
 
 =head1 VERSION
 
-version 1.17
+version 1.18
 
 =head1 SYNOPSIS
 
@@ -43,7 +43,7 @@ use Term::ReadKey;
 BEGIN
 {
 	require Exporter;
-	our $VERSION     = '1.17';
+	our $VERSION     = '1.18';
 	our @ISA         = qw(Exporter);
 	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta system2 _system
 		bash_readline bashReadLine cmdargs commandArgs cmdArgs whereis whereisBin file_cache fileCache
