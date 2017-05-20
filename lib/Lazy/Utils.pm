@@ -58,9 +58,9 @@ BEGIN
 
 trims given string
 
-$str: I<string will be trimed>
+$str: I<string will be trimmed>
 
-return value: I<trimed string>
+return value: I<trimmed string>
 
 =cut
 sub trim
@@ -74,9 +74,9 @@ sub trim
 
 trims left given string
 
-$str: I<string will be trimed>
+$str: I<string will be trimmed>
 
-return value: I<trimed string>
+return value: I<trimmed string>
 
 =cut
 sub ltrim
@@ -90,9 +90,9 @@ sub ltrim
 
 trims right given string
 
-$str: I<string will be trimed>
+$str: I<string will be trimmed>
 
-return value: I<trimed string>
+return value: I<trimmed string>
 
 =cut
 sub rtrim
