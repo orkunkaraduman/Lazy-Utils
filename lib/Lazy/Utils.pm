@@ -37,7 +37,6 @@ no if ($] >= 5.018), 'warnings' => 'experimental';
 use FindBin;
 use JSON;
 use Pod::Simple::Text;
-use Term::ReadKey;
 
 
 BEGIN
