@@ -2,7 +2,7 @@ NAME
     Lazy::Utils - Utility functions
 
 VERSION
-    version 1.17
+    version 1.18
 
 SYNOPSIS
             use Lazy::Utils;
@@ -27,23 +27,23 @@ Functions
   trim($str)
     trims given string
 
-    $str: *string will be trimed*
+    $str: *string will be trimmed*
 
-    return value: *trimed string*
+    return value: *trimmed string*
 
   ltrim($str)
     trims left given string
 
-    $str: *string will be trimed*
+    $str: *string will be trimmed*
 
-    return value: *trimed string*
+    return value: *trimmed string*
 
   rtrim($str)
     trims right given string
 
-    $str: *string will be trimed*
+    $str: *string will be trimmed*
 
-    return value: *trimed string*
+    return value: *trimmed string*
 
   file_get_contents($path, $prefs)
     gets all contents of file in string type

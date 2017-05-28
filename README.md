@@ -4,7 +4,7 @@ Lazy::Utils - Utility functions
 
 # VERSION
 
-version 1.17
+version 1.18
 
 # SYNOPSIS
 
@@ -33,25 +33,25 @@ Collection of utility functions all of exported by default.
 
 trims given string
 
-$str: _string will be trimed_
+$str: _string will be trimmed_
 
-return value: _trimed string_
+return value: _trimmed string_
 
 ## ltrim($str)
 
 trims left given string
 
-$str: _string will be trimed_
+$str: _string will be trimmed_
 
-return value: _trimed string_
+return value: _trimmed string_
 
 ## rtrim($str)
 
 trims right given string
 
-$str: _string will be trimed_
+$str: _string will be trimmed_
 
-return value: _trimed string_
+return value: _trimmed string_
 
 ## file\_get\_contents($path, $prefs)
 

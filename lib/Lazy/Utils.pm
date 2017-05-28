@@ -5,7 +5,7 @@ Lazy::Utils - Utility functions
 
 =head1 VERSION
 
-version 1.17
+version 1.18
 
 =head1 SYNOPSIS
 
@@ -37,13 +37,12 @@ no if ($] >= 5.018), 'warnings' => 'experimental';
 use FindBin;
 use JSON;
 use Pod::Simple::Text;
-use Term::ReadKey;
 
 
 BEGIN
 {
 	require Exporter;
-	our $VERSION     = '1.17';
+	our $VERSION     = '1.18';
 	our @ISA         = qw(Exporter);
 	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta system2 _system
 		bash_readline bashReadLine cmdargs commandArgs cmdArgs whereis whereisBin file_cache fileCache
@@ -58,9 +57,9 @@ BEGIN
 
 trims given string
 
-$str: I<string will be trimed>
+$str: I<string will be trimmed>
 
-return value: I<trimed string>
+return value: I<trimmed string>
 
 =cut
 sub trim
@@ -74,9 +73,9 @@ sub trim
 
 trims left given string
 
-$str: I<string will be trimed>
+$str: I<string will be trimmed>
 
-return value: I<trimed string>
+return value: I<trimmed string>
 
 =cut
 sub ltrim
@@ -90,9 +89,9 @@ sub ltrim
 
 trims right given string
 
-$str: I<string will be trimed>
+$str: I<string will be trimmed>
 
-return value: I<trimed string>
+return value: I<trimmed string>
 
 =cut
 sub rtrim
