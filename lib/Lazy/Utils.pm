@@ -51,7 +51,7 @@ BEGIN
 }
 
 
-=head1 Functions
+=head1 FUNCTIONS
 
 =head2 trim($str)
 
