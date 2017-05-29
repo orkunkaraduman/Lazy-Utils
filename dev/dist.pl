@@ -20,6 +20,8 @@ use open qw(:utf8 :std);
 use open IO => ':bytes';
 use FindBin;
 use Cwd;
+use Pod::Markdown;
+use Pod::Text;
 
 
 my $main_pkg = "Lazy::Utils";
