@@ -90,7 +90,7 @@ FUNCTIONS
 
     @argv: *command line arguments*
 
-    return value: *exit code of command. 511 if fatal error occurs*
+    return value: *exit code of command. -1 if fatal error occurs*
 
     returned $?: *return code of wait call like on perls system call*
 

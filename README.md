@@ -99,7 +99,7 @@ $cmd: _command_
 
 @argv: _command line arguments_
 
-return value: _exit code of command. 511 if fatal error occurs_
+return value: _exit code of command. -1 if fatal error occurs_
 
 returned $?: _return code of wait call like on perls system call_
 

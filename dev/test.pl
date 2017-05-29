@@ -25,10 +25,6 @@ use lib "${FindBin::Bin}/../lib";
 use Lazy::Utils;
 
 
-my $r = cmdargs({optionAtAll => 0}, @ARGV);
-#my $r = cmdargs(@ARGV);
-say Dumper($r);
-
 exit 0;
 __END__
 =head1 AUTHOR
