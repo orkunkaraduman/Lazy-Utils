@@ -211,21 +211,25 @@ returned $!: I<system error message like on perls system call>
 =cut
 sub system2
 {
-	my $pid;
-	if (not defined($pid = fork))
+	eval
 	{
-		return -1;
-	}
-	if (not $pid)
-	{
-		no warnings FATAL => 'exec';
-		exec(@_);
-		die $!;
-	}
-	if (waitpid($pid, 0) <= 0)
-	{
-		return -1;
-	}
+		my $pid;
+		if (not defined($pid = fork))
+		{
+			return -1;
+		}
+		if (not $pid)
+		{
+			no warnings FATAL => 'exec';
+			exec(@_);
+			die $!;
+		}
+		if (waitpid($pid, 0) <= 0)
+		{
+			return -1;
+		}
+	};
+	return -1 if $@;
 	return $? >> 8;
 }
 sub _system
