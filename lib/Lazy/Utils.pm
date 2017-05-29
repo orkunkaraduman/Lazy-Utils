@@ -273,26 +273,6 @@ B<cmdArgs([$prefs, ]@argv)> I<OBSOLETE>
 
 resolves command line arguments
 
-valuableArgs is off, eg;
-
-	--opt1 --opt2=val2 cmd param1 param2 param3
-	-opt1 -opt2=val2 cmd param1 param2 param3
-	-opt1 -opt2=val2 cmd param1 -- param2 param3
-	-opt1 cmd param1 -opt2=val2 param2 param3
-	-opt1 cmd param1 -opt2=val2 -- param2 param3
-	cmd -opt1 param1 -opt2=val2 param2 param3
-	cmd -opt1 param1 -opt2=val2 -- param2 param3
-
-valuableArgs is on, eg;
-
-	-opt1 -opt2=val2 cmd param1 param2 param3
-	-opt1 -opt2 val2 cmd param1 param2 param3
-	-opt1 -opt2 -- cmd param1 param2 param3
-	cmd -opt1 -opt2 val2 param1 param2 param3
-	cmd -opt1 -opt2 -- param1 param2 param3
-	cmd param1 -opt1 -opt2 val2 param2 param3
-	cmd param1 -opt1 -opt2 -- param2 param3
-
 $prefs: I<preferences in HashRef, optional>
 
 =over
@@ -301,17 +281,29 @@ valuableArgs: I<accepts option value after option if next argument is not an opt
 
 noCommand: I<use first parameter instead of command, by default 0>
 
-optionAtAll: I<DEPRECATED: now, it is always on. accepts options after command or first parameter otherwise evaluates as parameter, by default 0>
+optionAtAll: I<accepts options after command or first parameter otherwise evaluates as parameter, by default 1>
 
 =back
 
 @argv: I<command line arguments>
 
-return value: eg;
+	-a -b=c -d e --f g --h --i=j k l -- m n
 
-	{ --opt1 => '', --opt2 => 'val2', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
-	{ -opt1 => '', -opt2 => 'val2', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
-	{ -opt1 => '', -opt2 => '', command => 'cmd', parameters => ['param1', 'param2', 'param3'] }
+by default, return value:
+
+	{ -a => '', -b => 'c', -d => '', --f => '', --h => '', --i => 'j', command => 'e', parameters => ['g', 'k', 'l'], late_parameters => ['m', 'n'] }
+
+if valuableArgs is on, return value;
+
+	{ -a => '', -b => 'c', -d => 'e', --f => 'g', --h => '', --i => 'j', command => 'k', parameters => ['l'], late_parameters => ['m', 'n'] }
+
+if noCommand is on, return value:
+
+	{ -a => '', -b => 'c', -d => '', --f => '', --h => '', --i => 'j', command => undef, parameters => ['e', 'g', 'k', 'l'], late_parameters => ['m', 'n'] }
+
+if optionAtAll is off, return value:
+
+	{ -a => '', -b => 'c', -d => '', command => 'e', parameters => ['--f', 'g', '--h', '--i=j', 'k', 'l', '--','m', 'n'], late_parameters => [] }
 
 =cut
 sub cmdargs
@@ -324,30 +316,36 @@ sub cmdargs
 	$result{parameters} = undef;
 
 	my @parameters;
+	my @late_parameters;
+	my $late;
 	my $opt;
-	my $long;
 	while (@argv)
 	{
 		my $argv = shift @argv;
 		next unless defined($argv) and not ref($argv);
 
-		if ($long)
+		if (not (not defined($prefs->{optionAtAll}) or $prefs->{optionAtAll}) and @parameters)
 		{
 			push @parameters, $argv;
 			next;
 		}
 
+		if ($late)
+		{
+			push @late_parameters, $argv;
+			next;
+		}
+
 		if (substr($argv, 0, 2) eq '--')
 		{
+			$opt = undef;
 			if (length($argv) == 2)
 			{
-				$opt = undef;
-				$long = 1;
+				$late = 1;
 				next;
 			}
 			my @arg = split('=', $argv, 2);
 			$result{$arg[0]} = $arg[1];
-			$opt = undef;
 			unless (defined($result{$arg[0]}))
 			{
 				$result{$arg[0]} = "";
@@ -358,9 +356,9 @@ sub cmdargs
 
 		if (substr($argv, 0, 1) eq '-' and length($argv) != 1)
 		{
+			$opt = undef;
 			my @arg = split('=', $argv, 2);
 			$result{$arg[0]} = $arg[1];
-			$opt = undef;
 			unless (defined($result{$arg[0]}))
 			{
 				$result{$arg[0]} = "";
@@ -380,8 +378,9 @@ sub cmdargs
 		push @parameters, $argv;
 	}
 
-	$result{command} = shift @parameters if not $prefs->{noCommand};
+	$result{command} = shift @parameters unless $prefs->{noCommand};
 	$result{parameters} = \@parameters;
+	$result{late_parameters} = \@late_parameters;
 
 	return \%result;
 }
