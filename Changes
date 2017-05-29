@@ -1,5 +1,6 @@
 1.19	2017-05-29
 		- optionAtAll come back in cmdargs()
+		- Improved system2()
 
 1.18	2017-05-28
 		- POD changes

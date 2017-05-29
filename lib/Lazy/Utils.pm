@@ -202,7 +202,7 @@ $cmd: I<command>
 
 @argv: I<command line arguments>
 
-return value: I<exit code of command. 511 if fatal error occurs>
+return value: I<exit code of command. -1 if fatal error occurs>
 
 returned $?: I<return code of wait call like on perls system call>
 
@@ -214,17 +214,17 @@ sub system2
 	my $pid;
 	if (not defined($pid = fork))
 	{
-		return 511;
+		return -1;
 	}
 	if (not $pid)
 	{
 		no warnings FATAL => 'exec';
 		exec(@_);
-		exit 511;
+		die $!;
 	}
 	if (waitpid($pid, 0) <= 0)
 	{
-		return 511;
+		return -1;
 	}
 	return $? >> 8;
 }
