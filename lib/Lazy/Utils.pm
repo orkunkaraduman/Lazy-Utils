@@ -5,7 +5,7 @@ Lazy::Utils - Utility functions
 
 =head1 VERSION
 
-version 1.19
+version 1.20
 
 =head1 SYNOPSIS
 
@@ -42,7 +42,7 @@ use Pod::Simple::Text;
 BEGIN
 {
 	require Exporter;
-	our $VERSION     = '1.19';
+	our $VERSION     = '1.20';
 	our @ISA         = qw(Exporter);
 	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta system2 _system
 		bash_readline bashReadLine cmdargs commandArgs cmdArgs whereis whereisBin file_cache fileCache
@@ -211,21 +211,25 @@ returned $!: I<system error message like on perls system call>
 =cut
 sub system2
 {
-	my $pid;
-	if (not defined($pid = fork))
+	eval
 	{
-		return -1;
-	}
-	if (not $pid)
-	{
-		no warnings FATAL => 'exec';
-		exec(@_);
-		die $!;
-	}
-	if (waitpid($pid, 0) <= 0)
-	{
-		return -1;
-	}
+		my $pid;
+		if (not defined($pid = fork))
+		{
+			return -1;
+		}
+		if (not $pid)
+		{
+			no warnings FATAL => 'exec';
+			exec(@_);
+			die $!;
+		}
+		if (waitpid($pid, 0) <= 0)
+		{
+			return -1;
+		}
+	};
+	return -1 if $@;
 	return $? >> 8;
 }
 sub _system
