@@ -212,25 +212,14 @@ returned $?: I<return code of wait call like on perls system call>
 sub system2
 {
 	my $pid;
-	eval
+	return -1 unless defined($pid = fork);
+	unless ($pid)
 	{
-		if (not defined($pid = fork))
-		{
-			return -1;
-		}
-		unless ($pid)
-		{
-			no warnings FATAL => 'exec';
-			exec(@_);
-			die "$!\n";
-		}
-		if (waitpid($pid, 0) <= 0)
-		{
-			return -1;
-		}
-	};
-	die $@ unless $pid;
-	return -1 if $@;
+		no warnings FATAL => 'exec';
+		exec(@_);
+		exit 255;
+	}
+	return -1 unless waitpid($pid, 0) > 0;
 	return $? >> 8;
 }
 sub _system
