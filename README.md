@@ -4,7 +4,7 @@ Lazy::Utils - Utility functions
 
 # VERSION
 
-version 1.20
+version 1.21
 
 # SYNOPSIS
 
@@ -101,9 +101,9 @@ $cmd: _command_
 
 return value: _exit code of command. -1 if fatal error occurs_
 
-returned $?: _return code of wait call like on perls system call_
+returned $!: _system error message_
 
-returned $!: _system error message like on perls system call_
+returned $?: _return code of wait call like on perls system call_
 
 ## bash\_readline($prompt)
 
