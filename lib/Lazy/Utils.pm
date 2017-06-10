@@ -222,7 +222,7 @@ sub system2
 		{
 			no warnings FATAL => 'exec';
 			exec(@_);
-			die $!;
+			die "$!\n";
 		}
 		if (waitpid($pid, 0) <= 0)
 		{
