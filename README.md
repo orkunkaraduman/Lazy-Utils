@@ -22,6 +22,7 @@ version 1.21
         whereis($name, $path);
         file_cache($tag, $expiry, $coderef);
         get_pod_text($file_name, $section, $exclude_section);
+        array_to_hash(@array);
 
 # DESCRIPTION
 
@@ -196,6 +197,14 @@ $section: _searching head1 section of pod, by default undef gets all of contents
 $exclude\_section: _excludes section name, by default undef_
 
 return value: _text of pod in string or array by line, otherwise undef if an error occurs_
+
+## array\_to\_hash(@array)
+
+returns hash with indexes for given array
+
+@array: _command line arguments_
+
+return value: _Hash or HashRef by **wantarray**_
 
 # INSTALLATION
 

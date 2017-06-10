@@ -23,6 +23,7 @@ version 1.21
 	whereis($name, $path);
 	file_cache($tag, $expiry, $coderef);
 	get_pod_text($file_name, $section, $exclude_section);
+	array_to_hash(@array);
 
 =head1 DESCRIPTION
 
@@ -46,7 +47,7 @@ BEGIN
 	our @ISA         = qw(Exporter);
 	our @EXPORT      = qw(trim ltrim rtrim file_get_contents file_put_contents shellmeta system2 _system
 		bash_readline bashReadLine cmdargs commandArgs cmdArgs whereis whereisBin file_cache fileCache
-		get_pod_text getPodText);
+		get_pod_text getPodText array_to_hash);
 	our @EXPORT_OK   = qw();
 }
 
@@ -575,6 +576,24 @@ sub get_pod_text
 sub getPodText
 {
 	return get_pod_text(@_);
+}
+
+=head2 array_to_hash(@array)
+
+returns hash with indexes for given array
+
+@array: I<command line arguments>
+
+return value: I<Hash or HashRef by B<wantarray>>
+
+=cut
+sub array_to_hash
+{
+	my %h;
+	my $i = 0;
+	%h = map { $i++ => $_ } @_;
+	return \%h unless wantarray;
+	return %h;
 }
 
 
