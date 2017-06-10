@@ -204,21 +204,21 @@ $cmd: I<command>
 
 return value: I<exit code of command. -1 if fatal error occurs>
 
-returned $?: I<return code of wait call like on perls system call>
+returned $!: I<system error message>
 
-returned $!: I<system error message like on perls system call>
+returned $?: I<return code of wait call like on perls system call>
 
 =cut
 sub system2
 {
+	my $pid;
 	eval
 	{
-		my $pid;
 		if (not defined($pid = fork))
 		{
 			return -1;
 		}
-		if (not $pid)
+		unless ($pid)
 		{
 			no warnings FATAL => 'exec';
 			exec(@_);
@@ -229,6 +229,7 @@ sub system2
 			return -1;
 		}
 	};
+	die $@ unless $pid;
 	return -1 if $@;
 	return $? >> 8;
 }
