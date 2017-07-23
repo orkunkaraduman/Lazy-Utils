@@ -35,6 +35,7 @@ use warnings;
 use v5.10.1;
 use feature qw(switch);
 no if ($] >= 5.018), 'warnings' => 'experimental';
+require bytes;
 use FindBin;
 use JSON;
 use Pod::Simple::Text;
